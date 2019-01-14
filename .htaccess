@@ -1,6 +1,6 @@
 RewriteEngine on
 
-RewriteBase /TPPHP-2018/
+RewriteBase /GESTCO/
 
 RewriteCond %{REQUEST_FILENAME} !-l
 RewriteCond %{REQUEST_FILENAME} !-f
