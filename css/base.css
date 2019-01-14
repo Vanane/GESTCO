@@ -119,3 +119,23 @@ pre strong {
 	text-decoration: underline;
 }
 
+/* --- STYLES MISE EN PAGE --- */
+.left_sidebar
+{
+	float:left;
+	width:75%;
+}
+
+.right_sidebar
+{
+	float:left;
+	width:25%;
+}
+
+
+.menu-bar
+{
+	
+	
+	
+}

@@ -9,14 +9,15 @@
     $params = array_filter($params);
 	if (!isset($params[1]))
 	{
-		$params[1]='accueil';
+		$params[1]='Accueil';
 	}
 	switch ($params[1]) {
-		case 'accueil' :
+		case 'Accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
 			$site-> left_sidebar=$controleur->retourne_article($site->titre);
 			$site->affiche();
+
 			break;
 		case 'connexion' :
 			$site->titre='Connexion';

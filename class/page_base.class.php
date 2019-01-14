@@ -7,9 +7,9 @@ class page_base {
 	protected $js=array('jquery-3.3.1.min','bootstrap.min');
 	protected $css=array('perso','bootstrap.min','base', 'modele');
 	protected $page;
-	protected $metadescription="Bienvenue sur le site de promotion des sites touristiques de FRANCE";
-	protected $metakeyword=array('france','site touristique','tourisme','géolocalisation' );
-	protected $path='http://localhost/tpphp-2018';
+	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
+	protected $metakeyword=array('logistique','greta','gestion','commande' );
+	protected $path='http://localhost/GESTCO';
 
 	public function __construct() {
 		$numargs = func_num_args();
@@ -120,10 +120,10 @@ class page_base {
 				
 				<img  class="img-responsive"  width="292" height="136" src="'.$this->path.'/image/logo.jpg" alt="logo" style="float:left;padding: 0 10px 10px 0;"/>
 				<h1>
-					Sites de france
+					GestCo
 				</h1>
 				<h3>
-					<strong>Bienvenue</strong> sur le site de promotion des sites touristiques de FRANCE
+					<strong>Bienvenue</strong> sur l\'application web de gestion de commandes du GRETA.
 				</h3>
              </header>
 		';
@@ -133,7 +133,7 @@ class page_base {
 	protected function affiche_menu() {
 		echo '
 				<ul >
-					<li ><a   href="'.$this->path.'/Accueil" >Accueil </a></li>
+					<li ><a href="'.$this->path.'/Accueil" >Accueil</a></li>
 				</ul>';
 	}
 	protected function affiche_menu_connexion() {
@@ -157,7 +157,7 @@ class page_base {
 		echo '
 		<div id="menu_horizontal">
 			<nav >
-				<div >
+				<div>
 
 				';
 						
@@ -178,13 +178,12 @@ class page_base {
 
 			
 				<article>
-					<h3>Association de la valorisation des sites touristiques de FRANCE</h3>
-										<p>12 rue des gones</br>
-										44000 NANTES</br>
-										Tel : 02.40.27.11.71</br>
-										Mail : avst44@gmai.com</p>
-										
-											<a  href="Contact" class="button">Contact</a>
+					<h3>GRETA de Loire-Atlantique</h3>
+										<p>16 Rue Dufour</br>
+										44000 Nantes</br>
+										Tel : 02 40 14 56 56</br>
+                                        </p>									
+										<a  href="Contact" class="button">Contact</a>
                 </article>
 				';
 							
@@ -195,10 +194,10 @@ class page_base {
 		echo '
 		<!-- Footer -->
 			<footer>
-				<p>Site de travail Lycée CARCOUET 2018-2019 - servant de base à  l\'apprentissage PHP objet - jquery - Ajax  - Bootstrap</p>
+				<p></p>
 				<p id="copyright">
 				Mise en page PFR &copy; 2018
-				<a href="http://carcouet.paysdelaloire.e-lyco.fr/">Lycée CARCOUET NANTES</a> 
+				<a href="https://www.greta-paysdelaloire.fr">GRETA Nantes</a> 
 				</p>
             </footer>
 		';
@@ -232,10 +231,10 @@ class page_base {
 						<?php $this->affiche_footer_menu(); ?>
 						
   						<div style="clear:both;">
-    						<div style="float:left;width:75%;">
+    						<div class="left_sidebar">
      							<?php echo $this->left_sidebar; ?>
     						</div>
-    						<div style="float:left;width:25%;">
+    						<div class="right_sidebar" >
 								<?php echo $this->right_sidebar;?>
     						</div>
   						</div>
