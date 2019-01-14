@@ -118,7 +118,7 @@ class page_base {
 		echo'
            <header>
 				
-				<img  class="img-responsive"  width="292" height="136" src="'.$this->path.'/image/logo.jpg" alt="logo" style="float:left;padding: 0 10px 10px 0;"/>
+				<a href="'.$this->path.'/Accueil"><img  class="img-responsive"  width="250"  src="'.$this->path.'/image/logo.png" alt="logo" style="float:left;padding: 0 10px 10px 0;"/></a>
 				<h1>
 					GestCo
 				</h1>
@@ -156,18 +156,11 @@ class page_base {
 	public function affiche_entete_menu() {
 		echo '
 		<div id="menu_horizontal">
-			<nav >
-				<div>
-
 				';
 						
 	}
 	public function affiche_footer_menu(){
 		echo '
-						
-					
-				</div>
-			</nav>
 		</div>';
 
 	}
@@ -196,7 +189,7 @@ class page_base {
 			<footer>
 				<p></p>
 				<p id="copyright">
-				Mise en page PFR &copy; 2018
+                GRETA de Loire-Atlantique - 16 Rue Dufour,  44000 Nantes - Tel : 02 40 14 56 56									
 				<a href="https://www.greta-paysdelaloire.fr">GRETA Nantes</a> 
 				</p>
             </footer>
@@ -210,7 +203,7 @@ class page_base {
 		
 		
 		?>
-			<!DOCCTYPE html>
+			<!DOCTYPE html>
 			<html lang='fr'>
 				<head>
 					<title><?php echo $this->titre; ?></title>

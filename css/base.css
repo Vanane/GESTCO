@@ -1,27 +1,28 @@
 
 
 /* --- STYLES DE BASE POUR LE TEXTE ET LES PRINCIPAUX ÉLÉMENTS --- */
-
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 /* Page */
 html {
 	font-size: 100%; 
+
 }
 body {
 	margin: 0;
 	padding: 10px 20px; 
-	font-family: Verdana, "Bitstream Vera Sans", "Lucida Grande", sans-serif; /* 3 */
+	font-family: 'Source Sans Pro', sans-serif !important;
 	font-size: .8em;
 	line-height: 1.25; 
 	color: black;
-	background: white;
+	background: #ddd;
 }
+
 
 /* Titres */
 h1, h2, h3, h4, h5, h6 {
 	margin: 1em 0 .5em 0; 
 }
 h1, h2 {
-	font-family: Georgia, "Bitstream Vera Serif", Norasi, serif;
 	font-weight: normal; 
 }
 h1 {
@@ -55,7 +56,6 @@ li p, blockquote p {
 blockquote, q {
 	font-size: 1.1em;
 	font-style: italic;
-	font-family: Georgia, "Bitstream Vera Serif", Norasi, serif;
 }
 blockquote {
 	margin: .75em 0 .75em 24px;
@@ -131,11 +131,20 @@ pre strong {
 	float:left;
 	width:25%;
 }
-
-
-.menu-bar
+ 
+#menu_horizontal
 {
+	width:auto;
+}
+
+#menu_horizontal ul
+{
+	display:block;
+	float:left;
 	
-	
-	
+}
+
+#menu_horizontal li
+{
+	list-style: none;
 }

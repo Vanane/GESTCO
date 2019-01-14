@@ -16,7 +16,7 @@ class mypdo extends PDO{
     	{
     		echo 'hote: '.$this->PARAM_hote.' '.$_SERVER['DOCUMENT_ROOT'].'<br />';
     		echo 'Erreur : '.$e->getMessage().'<br />';
-    		echo 'NÂ° : '.$e->getCode();
+    		echo 'N° : '.$e->getCode();
     		$this->connexion=false;
     		//echo '<script>alert ("pbs acces bdd");</script>)';
     	}
