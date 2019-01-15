@@ -1,0 +1,2 @@
+
+<?= realpath('connexion.php'); ?>

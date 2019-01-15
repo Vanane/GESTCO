@@ -9,7 +9,6 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );
-	protected $path='http://localhost/GESTCO';
 
 	public function __construct() {
 		$numargs = func_num_args();
@@ -70,11 +69,6 @@ class page_base {
 					return $this->titre;
 					break;
 				}
-				case 'path' :
-				{
-					return $this->path;
-					break;
-				}
 				default:
 			{
 				$trace = debug_backtrace();
@@ -93,7 +87,7 @@ class page_base {
 	/* Insertion des feuilles de style */
 	private function affiche_style() {
 		foreach ($this->css as $s) {
-			echo "<link rel='stylesheet'  href='".$this->path."/css/".$s.".css' />\n";
+			echo "<link rel='stylesheet'  href='css/".$s.".css' />\n";
 		}
 
 	}
@@ -101,7 +95,7 @@ class page_base {
 	/* Insertion  js */
 	private function affiche_javascript() {
 		foreach ($this->js as $s) {
-			echo "<script src='".$this->path."/js/".$s.".js'></script>\n";
+			echo "<script src='js/".$s.".js'></script>\n";
 		}
 	}
 	/******************************affichage metakeyword **********************************************/
@@ -118,7 +112,7 @@ class page_base {
 		echo'
            <header>
 				
-				<a href="'.$this->path.'/Accueil"><img  class="img-responsive"  width="250"  src="'.$this->path.'/image/logo.png" alt="logo" style="float:left;padding: 0 10px 10px 0;"/></a>
+				<a href="Accueil"><img  class="img-responsive"  width="250"  src="image/logo.png" alt="logo" style="float:left;padding: 0 10px 10px 0;"/></a>
 				<h1>
 					GestCo
 				</h1>
@@ -133,7 +127,7 @@ class page_base {
 	protected function affiche_menu() {
 		echo '
 				<ul >
-					<li ><a href="'.$this->path.'/Accueil" >Accueil</a></li>
+					<li ><a href="Accueil" >Accueil</a></li>
 				</ul>';
 	}
 	protected function affiche_menu_connexion() {
@@ -142,15 +136,17 @@ class page_base {
 		{	
 			echo '
 					<ul >
-<li><a  href="'.$this->path.'/Connexion">Connexion</a></li>
-						<li><a  href="'.$this->path.'/Connexion">Connexion</a></li>
-					</ul>';
+						<li><a  href="Connexion">Connexion</a></li>
+					</ul>
+	           		<ul >
+	               		<li><a  href="TestConnexion">Test Connexion</a></li>
+		          	</ul>';
 		} 
 		else
 		{
 			echo '
 					<ul >
-						<li><a  href="'.$this->path.'/Deconnexion">Déconnexion</a></li>
+						<li><a  href="Deconnexion">Déconnexion</a></li>
 					</ul>';
 		}
 	}
