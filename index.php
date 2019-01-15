@@ -1,3 +1,4 @@
+
 <?php
 	session_start();
 
@@ -15,7 +16,7 @@
 		case 'accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar=$controleur->retourne_article($site->titre);
+			$site-> left_sidebar=$controleur->retourne_article($site->titre)."<p>texte de remplissage à retirer( index.php l18)</p>";
 			$site->affiche();
 
 			break;
@@ -29,6 +30,10 @@
 			$site-> left_sidebar=$controleur->retourne_formulaire_login();
 			$site->affiche();
 			break;
+		case 'confirmation':
+		    $site->titre='Confirmation';
+		    $site-> left_sidebar=$controleur->confirmation_login('Jack','test');
+		    break;
 		case 'deconnexion' :
 			$_SESSION=array();
 			session_destroy();
@@ -37,13 +42,44 @@
 
 		case 'testconnexion' :
 		    $_SESSION['id'] = 'admin';
-		    $_SESSION['type'] = '666';
+		    $_SESSION['type'] = '4';
 		    echo '<script>document.location.href="Accueil"; </script>';		   
 		    break;
+		    
+		case 'devis':
+		    $site->left_sidebar = 'Page devis';
+		    $site->affiche();
+		    break;
+		case 'commandes':
+		    $site->left_sidebar = 'Page commandes';
+		    $site->affiche();
+		    break;
+		case 'preparations':
+		    $site->left_sidebar = 'Page préparations';
+		    $site->affiche();
+		    break;
+		case 'livraisons':
+		    $site->left_sidebar = 'Page livraisons';
+		    $site->affiche();
+		    break;
+		case 'facturations':
+		    $site->left_sidebar = 'Page facturations';
+		    $site->affiche();
+		    break;
+		case 'ventes':
+		    $site->left_sidebar = 'Page ventes';
+		    $site->affiche();
+		    break;
+		    
+		case 'articles':
+		    $site->left_sidebar = 'Page articles';
+		    $site->affiche();
+		    break;
+		    
 		default: 
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar='<img src="image/erreur-404.png" alt="Erreur de liens">';
+			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();
 			break;
 	}	
