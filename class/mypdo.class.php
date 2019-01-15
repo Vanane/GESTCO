@@ -31,30 +31,14 @@ class mypdo extends PDO{
     	}
     }
     
-    public function liste_article($title)
+    public  function liste_compte($identifiant,$mdp)
     {
     
-		$requete='select a.h3,a.corps from article a,page p where a.page=p.id and p.title="'.$title.'";';
-
+    	$requete='SELECT prenom, mdp FROM employe WHERE prenom = $identifiant and mdp = $mdp;';
+        
     	$result=$this->connexion ->query($requete);
-    	if ($result)
-    
-    	{
-  		
-    			return ($result);
-   		}
-    	return null;
-    }
-    public function liste_dep()
-    {
-    
-    	$requete='SELECT departement_code,departement_nom,libel FROM departement,region,departement_region WHERE departement_code= code_dep and code_reg=code order by departement_code;';
-    
-    	$result=$this->connexion ->query($requete);
-    	if ($result)
-    
-    	{
-    
+    	if ($result)    
+    	{    
     		return ($result);
     	}
     	return null;

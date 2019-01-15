@@ -22,6 +22,43 @@ class controleur {
 				}
 		}
 	}
+	
+	public function confirmation_login($login,$mdp)
+	{
+	    $login='Jack';
+	    $mdp='098f6bcd4621d373cade4e832627b4f6';
+	    if($this-> vpdo ->liste_compte($login,$mdp)!=null)
+	    {
+	        echo 'connecté';
+	        session_start ();
+	        // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+	        $_SESSION['login'] = $_POST['login'];
+	        $_SESSION['pwd'] = $_POST['pwd'];
+	        
+	        // on redirige notre visiteur vers une page de notre section membre
+	        header ('location: accueil.php');  
+	    }
+	    else {
+	        // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
+	        echo ' pas connecté';
+	        // puis on le redirige vers la page d'accueil
+	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
+	    }
+	}
+	   
+	   
+	public function retourne_formulaire_login()
+	{
+	    
+	   return '    <form action="login.php" method="post">
+    Votre login : <input type="text" name="login">
+    <br />
+    Votre mot de passe : <input type="password" name="pwd"><br />
+    <input type="submit" value="Connexion">
+    </form>';
+	  
+	}
 	public function retourne_article($title)
 	{
 		
