@@ -15,7 +15,7 @@
 		case 'accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar=$controleur->retourne_article($site->titre);
+			$site-> left_sidebar=$controleur->retourne_article($site->titre)."<p>texte de remplissage à retirer( index.php l18)</p>";
 			$site->affiche();
 
 			break;
@@ -43,7 +43,7 @@
 		default: 
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar='<img src="image/erreur-404.png" alt="Erreur de liens">';
+			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();
 			break;
 	}	

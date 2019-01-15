@@ -8,6 +8,7 @@ html {
 
 }
 body {
+	position:relative;
 	margin: 0;
 	padding: 10px 20px; 
 	font-family: 'Source Sans Pro', sans-serif !important;
@@ -32,6 +33,9 @@ h1 {
 h2 {font-size: 1.8em;}
 h3 {font-size: 1.2em;}
 h4 {font-size: 1em;}
+
+a, p{font-size:1.2em;}
+
 
 /* Listes */
 ul, ol {
@@ -140,6 +144,7 @@ pre strong {
 	width:25%;
 }
 
+/* --- STYLE MENU --- */
 #menu_horizontal
 {
 	width:auto;	
@@ -156,7 +161,55 @@ pre strong {
 	list-style: none;
 }
 
+#menu_horizontal ul, #menu_horizontal li
+{
+	display:block;
+	height:1.2em;
+	text-align:center;		
+}
 
+#menu_horizontal ul
+{
+	width:20%;
+	margin:0;
+	padding:0px;
+	height:auto;
+	box-sizing:border-box;	
+}
+
+#menu_horizontal ul:nth-child(odd)
+{
+	background-color:#eee;
+}
+
+#menu_horizontal li
+{
+	padding:25px;	
+	margin:0;
+	height:100%;
+	box-sizing:border-box;	
+	
+}
+
+#menu_horizontal a
+{
+	display:block;
+	width:100%;
+	height:100%;
+	text-decoration:none;	
+}
+		
+#bou-connexion
+{
+	background-color: #ccffcc !important;
+}
+
+#bou-deconnexion
+{
+	background-color: #ffcccc !important;	
+}
+	
+/* --- STYLE SMARTPHONE --- */	
 @media screen and (max-width: 980px)
 {
 	body
@@ -168,15 +221,20 @@ pre strong {
 	
 	#img-greta
 	{
-		padding:0px 50px 0px 50px;
-		margin-top: -0px;
-		width:100%;
+		display:block;
+		padding:0px 0px 0px 0px;
+		margin-left:20%;
+		width:60%;
 		top:0;
+	}
+	
+	#titre-gestco
+	{
+	display:none;
 	}
 	
 	.left_sidebar
 	{
-		background-color:yellow;
 		float:left;
 		width:100%;
 	}
@@ -188,14 +246,19 @@ pre strong {
 		text-align:center;
 	}
 	
-	#menu_horizontal *
+	
+	#menu_horizontal ul
 	{
-		display:block;
-		width:100%;
-		height:1em;
-		text-align:center;
-		margin:15px 0px;
-		padding:0;
+		width:50%;
+		height:3em;
+		box-sizing:border-box;
+		border:solid 5px #ddd;
+		background-color: #EEE;	
+	}
+		
+	#bou-connexion, #bou-deconnexion
+	{
+		width:100% !important;
 	}
 }
 

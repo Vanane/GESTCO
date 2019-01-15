@@ -112,8 +112,8 @@ class page_base {
 		echo'
            <header>
 				
-				<a href="Accueil"><img  class="img-responsive"  width="250"  src="image/logo.png" alt="logo" style="float:left;padding: 0 10px 10px 0;"/></a>
-				<h1>
+				<a href="Accueil"><img  id="img-greta" src="image/logo.png" alt="logo"/></a><br>
+				<h1 id="titre-gestco">
 					GestCo
 				</h1>
 				<h3>
@@ -135,21 +135,27 @@ class page_base {
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{	
 			echo '
-					<ul >
-						<li><a  href="Connexion">Connexion</a></li>
-					</ul>
 	           		<ul >
 	               		<li><a  href="TestConnexion">Test Connexion</a></li>
-		          	</ul>';
+		          	</ul>
+					<ul id="bou-connexion">
+						<li><a href="Connexion">Connexion</a></li>
+					</ul>';
 		} 
 		else
 		{
 			echo '
 					<ul >
-						<li><a  href="Ventes">Voir les Ventes</a></li>
+						<li><a  href="Ventes">Les Ventes</a></li>
 					</ul>
 					<ul >
-						<li><a  href="Deconnexion">Déconnexion</a></li>
+						<li><a  href="Preparation">Les Commandes</a></li>
+					</ul>
+					<ul >
+						<li><a  href="Articles">Les Articles</a></li>
+					</ul>
+					<ul id="bou-deconnexion">
+						<li><a href="Deconnexion">Déconnexion</a></li>
 					</ul>';
 		}
 	}
