@@ -39,12 +39,12 @@
 		case 'deconnexion' :
 			$_SESSION=array();
 			session_destroy();
-			echo '<script>document.location.href="index.php"; </script>';
+			echo '<script>document.location.href="Accueil"; </script>';
 			break;
 		case 'testconnexion' :
 		    $_SESSION['id'] = 'admin';
 		    $_SESSION['type'] = '666';
-		    echo '<script>document.location.href="index.php"; </script>';		   
+		    echo '<script>document.location.href="Accueil"; </script>';		   
 		    break;
 		default: 
 			$site->titre='Accueil';
