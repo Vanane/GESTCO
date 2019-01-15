@@ -8,7 +8,7 @@ class page_base {
 	protected $css=array('perso','bootstrap.min','base', 'modele');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
-	protected $metakeyword=array('logistique','greta','gestion','commande');
+	protected $metakeyword=array('logistique','greta','gestion','commande' );
 
 	public function __construct() {
 		$numargs = func_num_args();
@@ -112,7 +112,7 @@ class page_base {
 		echo'
            <header>
 				
-				<a href="Accueil"><img id="img-greta" src="image/logo.png" alt="logo"/></a>
+				<a href="'.$this->path.'/Accueil"><img  class="img-responsive"  width="250"  src="'.$this->path.'/image/logo.png" alt="logo" style="float:left;padding: 0 10px 10px 0;"/></a>
 				<h1>
 					GestCo
 				</h1>
@@ -125,23 +125,10 @@ class page_base {
 	/****************************** Affichage du menu ***************************************/	
 	
 	protected function affiche_menu() {
-	    $menu = '
+		echo '
 				<ul >
-					<li ><a href="Accueil" >Accueil</a></li>
-				</ul>
-				<ul >
-					<li ><a href="Ventes" >Ventes</a></li>
-				</ul>
-        	    <ul >
-        	       <li ><a href="TestConnexion" >Test Connexion</a></li>
-	            </ul>';
-	    if (isset($_SESSION['type']) &&  $_SESSION['type'] == 666) {
-	        $menu = $menu.'
-           	    <ul >
-        	       <li ><a href="TestConnexion" >Test Connexion</a></li>
-	            </ul>';
-	    }
-	    echo $menu;
+					<li ><a href="'.$this->path.'/Accueil" >Accueil</a></li>
+				</ul>';
 	}
 	protected function affiche_menu_connexion() {
 		
@@ -149,14 +136,14 @@ class page_base {
 		{	
 			echo '
 					<ul >
-						<li><a  href="Connexion">Connexion</a></li>
+						<li><a  href="'.$this->path.'/Connexion">Connexion</a></li>
 					</ul>';
 		} 
 		else
 		{
 			echo '
 					<ul >
-						<li><a  href="Deconnexion">Déconnexion</a></li>
+						<li><a  href="'.$this->path.'/Deconnexion">Déconnexion</a></li>
 					</ul>';
 		}
 	}

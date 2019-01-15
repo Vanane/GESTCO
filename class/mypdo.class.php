@@ -7,9 +7,7 @@ class mypdo extends PDO{
     private $PARAM_nom_bd='gestco';
     private $connexion;
     public function __construct() {
-        /*Connexion avec MySQL*/
-        
-        try {
+    	try {
     		
     		$this->connexion = new PDO('mysql:host='.$this->PARAM_hote.';dbname='.$this->PARAM_nom_bd, $this->PARAM_utilisateur, $this->PARAM_mot_passe,array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
     		//echo '<script>alert ("ok connex");</script>)';echo $this->PARAM_nom_bd;
@@ -22,7 +20,6 @@ class mypdo extends PDO{
     		$this->connexion=false;
     		//echo '<script>alert ("pbs acces bdd");</script>)';
     	}
-    	
     }
     public function __get($propriete) {
     	switch ($propriete) {
@@ -34,20 +31,16 @@ class mypdo extends PDO{
     	}
     }
     
-    public function liste_ventes()
-    {
-        $requete='select idVente from VENTE';
-        return $this->connexion->query($requete);
-    }
-    
     public function liste_article($title)
     {
     
 		$requete='select a.h3,a.corps from article a,page p where a.page=p.id and p.title="'.$title.'";';
 
     	$result=$this->connexion ->query($requete);
-    	if ($result)    
-    	{  		
+    	if ($result)
+    
+    	{
+  		
     			return ($result);
    		}
     	return null;
@@ -60,10 +53,12 @@ class mypdo extends PDO{
     	$result=$this->connexion ->query($requete);
     	if ($result)
     
-    	{    
+    	{
+    
     		return ($result);
     	}
     	return null;
-    }    
+    }
+    
 }
 ?>

@@ -9,24 +9,17 @@
     $params = array_filter($params);
 	if (!isset($params[1]))
 	{
-		$params[1]='accueil';
+		$params[1]='Accueil';
 	}
 	switch ($params[1]) {
-	    case 'accueil' :
-	        $site->titre='Accueil';
-	        $site-> right_sidebar=$site->rempli_right_sidebar();
-	        $site-> left_sidebar=$controleur->retourne_article($site->titre).'Je suis un texte de remplissage, dans index.php, l.18';
-	        $site->affiche();
-	        break;
-	        
-	    case 'ventes' :
-	        $site->titre='Ventes';
-	        $site-> right_sidebar=$site->rempli_right_sidebar();
-	        $site-> left_sidebar=$controleur->retourne_ventes();
-	        $site->affiche();
-	        
-	        break;
-	    case 'connexion' :
+		case 'Accueil' :
+			$site->titre='Accueil';
+			$site-> right_sidebar=$site->rempli_right_sidebar();
+			$site-> left_sidebar=$controleur->retourne_article($site->titre);
+			$site->affiche();
+
+			break;
+		case 'connexion' :
 			$site->titre='Connexion';
 			$site->js='jquery.validate.min';
 			$site->js='messages_fr';
@@ -41,6 +34,7 @@
 			session_destroy();
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
+
 		case 'testconnexion' :
 		    $_SESSION['id'] = 'admin';
 		    $_SESSION['type'] = '666';
