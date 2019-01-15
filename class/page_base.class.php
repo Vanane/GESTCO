@@ -146,6 +146,9 @@ class page_base {
 		{
 			echo '
 					<ul >
+						<li><a  href="Ventes">Voir les Ventes</a></li>
+					</ul>
+					<ul >
 						<li><a  href="Deconnexion">Déconnexion</a></li>
 					</ul>';
 		}
