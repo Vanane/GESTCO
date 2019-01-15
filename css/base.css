@@ -119,7 +119,15 @@ pre strong {
 	text-decoration: underline;
 }
 
-/* --- STYLES MISE EN PAGE --- */
+/* --- STYLES DE MISE EN PAGE --- */
+
+#img-greta
+{
+	width:250px;
+	float:left;
+	padding: 0 10px 10px 0;
+}
+
 .left_sidebar
 {
 	float:left;
@@ -131,7 +139,37 @@ pre strong {
 	float:left;
 	width:25%;
 }
- 
+
+@media screen and (max-width: 721px)
+{
+	body
+	{
+		padding-top:0px;
+		margin:0px;
+	}
+	
+	#img-greta
+	{
+		padding:0px 50px 0px 50px;
+		margin-top: -0px;
+		width:100%;
+		top:0;
+	}
+	
+	.left_sidebar
+	{
+		background-color:yellow;
+		float:left;
+		width:100%;
+	}
+	
+	.right_sidebar, #copyright
+	{
+		float:left;
+		width:100%;
+		text-align:center;
+	}
+}
 #menu_horizontal
 {
 	width:auto;
@@ -148,3 +186,4 @@ pre strong {
 {
 	list-style: none;
 }
+

@@ -22,6 +22,28 @@ class controleur {
 				}
 		}
 	}
+	
+	public function retourne_ventes()	
+	{
+	    $retour='
+                <table>
+                    <th><td>num</td></th>
+                ';
+	    
+	    $result=$this->vpdo->liste_ventes();
+	    
+	    if ($result != false) {
+	        while ($row = $result->fetch ( PDO::FETCH_OBJ ))
+	            $retour=$retour.'<tr><td>'.$row->idVente.'</td></tr>';
+	            
+	    $retour=$retour.'
+                    </tr>
+                </table>';
+	    return $retour;
+	   }
+	}
+	
+	
 	public function retourne_article($title)
 	{
 		
