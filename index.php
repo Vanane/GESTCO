@@ -37,9 +37,40 @@
 
 		case 'testconnexion' :
 		    $_SESSION['id'] = 'admin';
-		    $_SESSION['type'] = '666';
+		    $_SESSION['type'] = '4';
 		    echo '<script>document.location.href="Accueil"; </script>';		   
 		    break;
+		    
+		case 'devis':
+		    $site->left_sidebar = 'Page devis';
+		    $site->affiche();
+		    break;
+		case 'commandes':
+		    $site->left_sidebar = 'Page commandes';
+		    $site->affiche();
+		    break;
+		case 'preparations':
+		    $site->left_sidebar = 'Page préparations';
+		    $site->affiche();
+		    break;
+		case 'livraisons':
+		    $site->left_sidebar = 'Page livraisons';
+		    $site->affiche();
+		    break;
+		case 'facturations':
+		    $site->left_sidebar = 'Page facturations';
+		    $site->affiche();
+		    break;
+		case 'ventes':
+		    $site->left_sidebar = 'Page ventes';
+		    $site->affiche();
+		    break;
+		    
+		case 'articles':
+		    $site->left_sidebar = 'Page articles';
+		    $site->affiche();
+		    break;
+		    
 		default: 
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();

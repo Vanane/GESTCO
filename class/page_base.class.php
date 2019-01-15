@@ -130,33 +130,82 @@ class page_base {
 					<li ><a href="Accueil" >Accueil</a></li>
 				</ul>';
 	}
-	protected function affiche_menu_connexion() {
+	protected function affiche_menu_connexion() {		
+	    $lesMenus=array(
+		    'testconnexion'=>'
+                <ul>
+                    <li><a  href="TestConnexion">Test Connexion</a></li>
+      	        </ul>',
+	        
+	        'devis'=>'
+				<ul>
+					<li><a  href="Devis">Créer Devis</a></li>
+                </ul>',
+	        
+	        'commandes'=>'
+				<ul>
+					<li><a  href="commandes">Commandes</a></li>
+				</ul>',
+	        
+	        'preparations'=>'
+				<ul>
+					<li><a  href="Preparations">Préparations</a></li>
+				</ul>',
+	        
+	        'livraisons'=>'
+                <ul>
+                    <li><a href="Livraisons">Livraisons</a></li>
+                </ul>',
+	        
+	        'facturations'=>'
+                <ul>
+                    <li><a href="Facturations">Facturations</a></li>
+                </ul>',
+	        
+		    'ventes'=>'
+				<ul>
+    				<li><a  href="Ventes">Ventes</a></li>
+				</ul>',		    
+		    
+	        'articles'=>'
+				<ul>
+					<li><a  href="Articles">Articles</a></li>
+                </ul>',	        	       
+	        
+	        'connexion'=>'
+				<ul id="bou-connexion">
+					<li><a href="Connexion">Connexion</a></li>
+				</ul>',
+	        'deconnexion'=>'
+				<ul id="bou-deconnexion">
+					<li><a href="Deconnexion">Déconnexion</a></li>
+				</ul>');
 		
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
-		{	
-			echo '
-	           		<ul >
-	               		<li><a  href="TestConnexion">Test Connexion</a></li>
-		          	</ul>
-					<ul id="bou-connexion">
-						<li><a href="Connexion">Connexion</a></li>
-					</ul>';
+		{
+		    echo $lesMenus['testconnexion'].$lesMenus['connexion'];
 		} 
 		else
-		{
-			echo '
-					<ul >
-						<li><a  href="Ventes">Les Ventes</a></li>
-					</ul>
-					<ul >
-						<li><a  href="Preparation">Les Commandes</a></li>
-					</ul>
-					<ul >
-						<li><a  href="Articles">Les Articles</a></li>
-					</ul>
-					<ul id="bou-deconnexion">
-						<li><a href="Deconnexion">Déconnexion</a></li>
-					</ul>';
+		{		    
+		    switch($_SESSION['type'])
+		    {
+		        case 1:   //Cas utilisateur est commercial
+		            echo $lesMenus['articles'].$lesMenus['ventes'].$lesMenus['devis'].$lesMenus['commandes'].$lesMenus['facturations'];
+		            break;
+		        case 2:   //Cas utilisateur est préparateur 
+		            echo $lesMenus['articles'].$lesMenus['preparations'];
+		            break;
+		        case 3:   //Cas utilisateur est livreur
+		            echo $lesMenus['articles'].$lesMenus['livraisons'];
+		            break;
+		        case 4:   //Cas utilisateur est informaticien
+		            foreach($lesMenus as $key => $value)
+		            {
+		              if($key != 'connexion')
+		                echo $value;
+		            }
+		            break;
+		    }
 		}
 	}
 	public function affiche_entete_menu() {
