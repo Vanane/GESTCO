@@ -142,6 +142,7 @@ class page_base {
 		{	
 			echo '
 					<ul >
+<li><a  href="'.$this->path.'/Connexion">Connexion</a></li>
 						<li><a  href="'.$this->path.'/Connexion">Connexion</a></li>
 					</ul>';
 		} 
