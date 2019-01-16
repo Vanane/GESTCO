@@ -227,6 +227,39 @@ pre strong {
 {
 	background-color: #E95122 !important;	
 }
+
+#btn-voirDetail
+{
+	padding:6px 0 6px 0;
+	font:bold 14px Arial;
+	background:#478bf9;
+	color:#fff;
+	border-radius:2px;
+	width:150px;
+	border:none;
+	/*display: block;
+   	margin : auto;*/
+   	float:right;
+}
+
+#btn-ajouterUnDevis
+{
+	padding:6px 0 6px 0;
+	font:bold 18px Arial;
+	background:#478bf9;
+	color:#fff;
+	border-radius:2px;
+	width:250px;
+	border:none;
+	/*display: block;
+   	margin : auto;*/
+   	float:right;
+}
+
+#bloc-devis
+{
+	background:#B2C3C0;
+}	
 	
 	
 	
@@ -341,7 +374,7 @@ pre strong {
 	
 	#menu_horizontal ul
 	{
-		width:50%;
+		width:50% !important;
 		box-sizing:border-box;
 		border:solid 5px #ddd;
 		background-color: #EEE;	

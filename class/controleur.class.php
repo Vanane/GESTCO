@@ -90,11 +90,7 @@ class controleur {
     </form>';
 	}	
 	
-<<<<<<< HEAD
 	public function confirmationLogin($login,$mdp)
-=======
-	public function confirmation_login($login,$mdp)
->>>>>>> refs/remotes/origin/master
 	{  // v�rifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
@@ -117,8 +113,6 @@ class controleur {
 	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
 	    }
 	}
-<<<<<<< HEAD
-	   
     public function estConnecte()
     {
         if(isset($_SESSION['id']) && isset($_SESSION['type']))
@@ -126,8 +120,6 @@ class controleur {
         else return false;
         
     }
-=======
->>>>>>> refs/remotes/origin/master
 	
 	public function listeDevis()
 	{
@@ -136,7 +128,7 @@ class controleur {
     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voie Détail".
     Si vous souhaitez ajouter un devis cliquer sur le bouton "Ajouter un devis" tout en bas de la page.
 	</fieldset></p>';
-	$a = $this->vpdo->listeVente();
+	$a = $this->vpdo->listeVentes();
 	while($ligneIdVente = $a->fetch(PDO::FETCH_OBJ))
     { 
         
