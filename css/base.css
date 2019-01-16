@@ -154,41 +154,28 @@ pre strong {
 {
 	display:block;
 	float:left;	
+	width:20%;
+	height:auto;
 }
 
 #menu_horizontal li
 {
 	list-style: none;
+	height:auto;
 }
 
 #menu_horizontal ul, #menu_horizontal li
 {
-	display:block;
 	height:1.2em;
-	text-align:center;		
-}
-
-#menu_horizontal ul
-{
-	width:20%;
-	height:auto;
+	text-align:center;
 	margin:0;
-	padding:0;	
-	box-sizing:border-box;	
+	padding:0;
+	box-sizing:border-box;				
 }
 
 #menu_horizontal ul:nth-child(odd)
 {
 	background-color:#eee;
-}
-
-#menu_horizontal li
-{
-	height:auto;
-	margin:0;
-	padding:0;
-	box-sizing:border-box;	
-	
 }
 
 #menu_horizontal a

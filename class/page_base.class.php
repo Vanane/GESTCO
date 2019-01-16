@@ -124,27 +124,16 @@ class page_base {
 	}
 	/****************************** Affichage du menu ***************************************/	
 	
-	protected function affiche_menu() {
-		echo '
-				<ul >
-					<li ><a href="Accueil" >Accueil</a></li>
-				</ul>';
-	}
-	protected function affiche_menu_connexion() {		
-	    $lesMenus=array(
-		    'testconnexion'=>'
-                <ul>
-                    <li><a  href="TestConnexion">Test Connexion</a></li>
-      	        </ul>',
-	        
+	protected function affiche_menu() {		
+	    $lesMenus=array(	        
 	        'devis'=>'
 				<ul>
-					<li><a  href="Devis">Créer Devis</a></li>
+					<li><a href="Devis">Devis</a></li>
                 </ul>',
 	        
 	        'commandes'=>'
 				<ul>
-					<li><a  href="commandes">Commandes</a></li>
+					<li><a  href="Commandes">Commandes</a></li>
 				</ul>',
 	        
 	        'preparations'=>'
@@ -162,30 +151,33 @@ class page_base {
                     <li><a href="Facturations">Facturations</a></li>
                 </ul>',
 	        
-		    'ventes'=>'
+		    'conflits'=>'
 				<ul>
-    				<li><a  href="Ventes">Ventes</a></li>
+    				<li><a  href="Conflits">Conflits</a></li>
 				</ul>',		    
 		    
 	        'articles'=>'
 				<ul>
 					<li><a  href="Articles">Articles</a></li>
-                </ul>',	        	       
+                </ul>');      	       
 	        
-	        'connexion'=>'
-				<ul id="bou-connexion">
-					<li><a href="Connexion">Connexion</a></li>
-				</ul>');		
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{
-		    echo $lesMenus['testconnexion'].$lesMenus['connexion'];
+		    echo'
+				<ul id="bou-connexion">
+					<li><a href="Connexion">Connexion</a></li>
+				</ul>';		    
 		} 
 		else
-		{		    
+		{
+		    echo '
+              <ul id="bou-deconnexion">
+		        <li><a href="Deconnexion">Déconnexion</a></li>
+		      </ul>';		    		   
 		    switch($_SESSION['type'])
 		    {
 		        case 1:   //Cas utilisateur est commercial
-		            echo $lesMenus['articles'].$lesMenus['ventes'].$lesMenus['devis'].$lesMenus['commandes'].$lesMenus['facturations'];
+		            echo $lesMenus['articles'].$lesMenus['devis'].$lesMenus['commandes'].$lesMenus['facturations'].$lesMenus['conflits'];
 		            break;
 		        case 2:   //Cas utilisateur est préparateur 
 		            echo $lesMenus['articles'].$lesMenus['preparations'];
@@ -201,11 +193,6 @@ class page_base {
 		            }
 		            break;
 		    }
-		    echo '
-              <ul id="bou-deconnexion">
-		        <li><a href="Deconnexion">Déconnexion</a></li>
-		      </ul>';
-		    
 		}
 	}
 	public function affiche_entete_menu() {
@@ -275,7 +262,6 @@ class page_base {
 						<?php $this->affiche_entete(); ?>
 						<?php $this->affiche_entete_menu(); ?>
 						<?php $this->affiche_menu(); ?>
-						<?php $this->affiche_menu_connexion(); ?>
 						<?php $this->affiche_footer_menu(); ?>
 						
   						<div style="clear:both;">
