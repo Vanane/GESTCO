@@ -38,14 +38,14 @@ class controleur {
 	}
 	
 	public function confirmation_login($login,$mdp)
-	{  // vérifie si l'identifiant et le mots de passe est valide
+	{  // vï¿½rifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->liste_compte($login,$mdp)->fetch(PDO::FETCH_OBJ);
 	    if($result != null)
 	    {
 	        echo 'connecte';
 	        session_start ();
-	        // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+	        // on enregistre les paramï¿½tres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
 	        $_SESSION['id'] = $result->prenom;
 	        $_SESSION['type'] = $result->idType;
 	        
@@ -53,16 +53,49 @@ class controleur {
 	        header ('location: accueil');  
 	    }
 	    else {
-	        // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+	        // Le visiteur n'a pas ï¿½tï¿½ reconnu comme ï¿½tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
-	        echo ' pas connecté';
+	        echo ' pas connectï¿½';
 	        // puis on le redirige vers la page d'accueil
 	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
 	    }
 	}
-	   
-
 	
+	public function listeDevis()
+	{
+	    
+	$return='<p><fieldset> Voici l outil de gestion des devis. Ci-dessous la liste des devis existants.
+    Vous pouvez accÃ©der au detail de chaque devis en cliquant sur "Voie DÃ©tail".
+    Si vous souhaitez ajouter un devis cliquer sur le bouton "Ajouter un devis" tout en bas de la page.
+	</fieldset></p>';
+	$a = $this->vpdo->listeVente();
+	while($ligneIdVente = $a->fetch(PDO::FETCH_OBJ))
+    { 
+        
+        $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    $return = $return.'<form IdVenteaction="Devis/'.$ligneIdVente->idVente.'" id=bloc-devis method="post">
+    <fieldset>
+    Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
+    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
+    Date devis :&emsp;<input type="text" readonly value="Date devis"> &emsp;
+    <br /> <br /> 
+    Nom de l Entreprise :&emsp;<input type="text" readonly value="nomEntreprise">&emsp;
+    Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value="code du client">&emsp;  
+    Prix Total :&emsp;<input type="text" readonly value="prix">&emsp;
+     <br /><br /><br /><a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
+    </fieldset>
+    </form>';
+	    }
+    $return = $return.'    <p> <br /> <br /><fieldset>
+   <a href="ajouterDevis"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
+    </fieldset>
+    </p>';
+
+return $return;
+	}
+	
+
+	   
 	public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp
 		$mdp = "";

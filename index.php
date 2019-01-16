@@ -16,7 +16,7 @@
 		case 'accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar="<p>texte de remplissage à retirer( index.php l18)</p>";
+			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
 			$site->affiche();
 
 			break;
@@ -47,8 +47,9 @@
 		    break;
 		    
 		case 'devis':
-		    $site->left_sidebar = 'Page devis';
-		    $site->affiche();
+		    $site-> left_sidebar=$controleur->listeDevis();
+
+		    $site->affiche();    
 		    break;
 		case 'commandes':
 		    $site->left_sidebar = 'Page commandes';

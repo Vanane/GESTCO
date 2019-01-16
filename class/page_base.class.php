@@ -139,7 +139,7 @@ class page_base {
 	        
 	        'devis'=>'
 				<ul>
-					<li><a  href="Devis">Créer Devis</a></li>
+					<li><a  href="Devis"> Devis</a></li>
                 </ul>',
 	        
 	        'commandes'=>'
