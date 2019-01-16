@@ -89,8 +89,12 @@ class controleur {
     <input type="submit" value="Connexion">
     </form>';
 	}	
-
+	
+<<<<<<< HEAD
+	public function confirmationLogin($login,$mdp)
+=======
 	public function confirmation_login($login,$mdp)
+>>>>>>> refs/remotes/origin/master
 	{  // v�rifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
@@ -113,6 +117,7 @@ class controleur {
 	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
 	    }
 	}
+<<<<<<< HEAD
 	   
     public function estConnecte()
     {
@@ -121,6 +126,8 @@ class controleur {
         else return false;
         
     }
+=======
+>>>>>>> refs/remotes/origin/master
 	
 	public function listeDevis()
 	{
