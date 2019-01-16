@@ -175,12 +175,7 @@ class page_base {
 	        'connexion'=>'
 				<ul id="bou-connexion">
 					<li><a href="Connexion">Connexion</a></li>
-				</ul>',
-	        'deconnexion'=>'
-				<ul id="bou-deconnexion">
-					<li><a href="Deconnexion">Déconnexion</a></li>
-				</ul>');
-		
+				</ul>');		
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{
 		    echo $lesMenus['testconnexion'].$lesMenus['connexion'];
@@ -206,6 +201,11 @@ class page_base {
 		            }
 		            break;
 		    }
+		    echo '
+              <ul id="bou-deconnexion">
+		        <li><a href="Deconnexion">Déconnexion</a></li>
+		      </ul>';
+		    
 		}
 	}
 	public function affiche_entete_menu() {

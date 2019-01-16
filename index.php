@@ -16,7 +16,7 @@
 		case 'accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar=$controleur->retourne_article($site->titre)."<p>texte de remplissage à retirer( index.php l18)</p>";
+			$site-> left_sidebar="<p>texte de remplissage à retirer( index.php l18)</p>";
 			$site->affiche();
 
 			break;
