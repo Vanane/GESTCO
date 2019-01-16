@@ -15,8 +15,13 @@
 	switch ($params[1]) {
 		case 'accueil' :
 			$site->titre='Accueil';
+<<<<<<< HEAD
 			$site-> right_sidebar=$site->rempliRightSidebar();
 			$site-> left_sidebar="<p>texte de remplissage à retirer( index.php l18)</p>";
+=======
+			$site-> right_sidebar=$site->rempli_right_sidebar();
+			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
+>>>>>>> refs/remotes/origin/master
 			$site->affiche();
 
 			break;
@@ -41,6 +46,7 @@
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
 		case 'devis':
+<<<<<<< HEAD
 		    if($controleur->estConnecte() == 1)
 		    {
     		    if(isset($params[2]))
@@ -53,6 +59,11 @@
     		    }
 		    }
 		    $site->affiche();		    
+=======
+		    $site-> left_sidebar=$controleur->listeDevis();
+
+		    $site->affiche();    
+>>>>>>> refs/remotes/origin/master
 		    break;
 		case 'commandes':
 		    $site->left_sidebar = 'Page commandes';
