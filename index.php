@@ -16,7 +16,7 @@
 		case 'accueil' :
 			$site->titre='Accueil';
 			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar=$controleur->retourne_article($site->titre)."<p>texte de remplissage à retirer( index.php l18)</p>";
+			$site-> left_sidebar="<p>texte de remplissage à retirer( index.php l18)</p>";
 			$site->affiche();
 
 			break;
@@ -29,10 +29,10 @@
 			$site-> right_sidebar=$site->rempli_right_sidebar();
 			$site-> left_sidebar=$controleur->retourne_formulaire_login();
 			$site->affiche();
-			break;
+			break;			
 		case 'confirmation':
 		    $site->titre='Confirmation';
-		    $site-> left_sidebar=$controleur->confirmation_login('Jack','test');
+		    $site->left_sidebar=$controleur->confirmation_login($_POST['login'],$_POST['pwd']);
 		    break;
 		case 'deconnexion' :
 			$_SESSION=array();
