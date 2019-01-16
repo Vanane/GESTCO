@@ -23,20 +23,34 @@ class controleur {
 		}
 	}
 	
-	public function confirmation_login($login,$mdp)
+	
+	public function retourne_formulaire_login()
 	{
-	    $login='Jack';
-	    $mdp='098f6bcd4621d373cade4e832627b4f6';
-	    if($this-> vpdo ->liste_compte($login,$mdp)!=null)
+	    
+	    return '    <form action="confirmation" method="post">
+    Votre login : <input type="text" name="login">
+    <br />
+    Votre mot de passe : <input type="password" name="pwd"><br />
+    <input type="submit" value="Connexion">
+    </form>';
+	    
+	    
+	}
+	
+	public function confirmation_login($login,$mdp)
+	{  // vÈrifie si l'identifiant et le mots de passe est valide
+	    $mdp=md5($mdp);
+	    $result = $this->vpdo->liste_compte($login,$mdp)->fetch(PDO::FETCH_OBJ);
+	    if($result != null)
 	    {
-	        echo 'connectÈ';
+	        echo 'connecte';
 	        session_start ();
 	        // on enregistre les paramËtres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
-	        $_SESSION['login'] = $_POST['login'];
-	        $_SESSION['pwd'] = $_POST['pwd'];
+	        $_SESSION['id'] = $result->prenom;
+	        $_SESSION['type'] = $result->idType;
 	        
 	        // on redirige notre visiteur vers une page de notre section membre
-	        header ('location: accueil.php');  
+	        header ('location: accueil');  
 	    }
 	    else {
 	        // Le visiteur n'a pas ÈtÈ reconnu comme Ètant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
@@ -47,34 +61,6 @@ class controleur {
 	    }
 	}
 	   
-	   
-	public function retourne_formulaire_login()
-	{
-	    
-	   return '    <form action="login.php" method="post">
-    Votre login : <input type="text" name="login">
-    <br />
-    Votre mot de passe : <input type="password" name="pwd"><br />
-    <input type="submit" value="Connexion">
-    </form>';
-	  
-	}
-	public function retourne_article($title)
-	{
-		
-		$retour='<section>';
-		$result = $this->vpdo->liste_article($title);
-		if ($result != false) {
-			while ( $row = $result->fetch ( PDO::FETCH_OBJ ) )
-			// parcourir chaque ligne s√©lectionn√©e
-			{
-		
-				$retour = $retour . '<article><h3>'.$row->h3.'</h3><p>'.$row->corps.'</p></article>';
-			}
-		$retour = $retour .'</section>';
-		return $retour;
-		}
-	}
 
 	
 	public function genererMDP ($longueur = 8){

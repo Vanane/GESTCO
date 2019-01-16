@@ -34,9 +34,9 @@ class mypdo extends PDO{
     public  function liste_compte($identifiant,$mdp)
     {
     
-    	$requete='SELECT prenom, mdp FROM employe WHERE prenom = $identifiant and mdp = $mdp;';
+    	$requete='SELECT * FROM employe WHERE prenom = "'.$identifiant.'" and mdp = "'.$mdp.'";';
         
-    	$result=$this->connexion ->query($requete);
+    	$result=$this->connexion->query($requete);
     	if ($result)    
     	{    
     		return ($result);
