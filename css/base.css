@@ -171,9 +171,9 @@ pre strong {
 #menu_horizontal ul
 {
 	width:20%;
-	margin:0;
-	padding:0px;
 	height:auto;
+	margin:0;
+	padding:0;	
 	box-sizing:border-box;	
 }
 
@@ -184,9 +184,9 @@ pre strong {
 
 #menu_horizontal li
 {
-	padding:25px;	
+	height:auto;
 	margin:0;
-	height:100%;
+	padding:0;
 	box-sizing:border-box;	
 	
 }
@@ -194,8 +194,7 @@ pre strong {
 #menu_horizontal a
 {
 	display:block;
-	width:100%;
-	height:100%;
+	padding:1em;
 	text-decoration:none;	
 }
 		
