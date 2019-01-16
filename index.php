@@ -15,7 +15,7 @@
 	switch ($params[1]) {
 		case 'accueil' :
 			$site->titre='Accueil';
-			$site-> right_sidebar=$site->rempli_right_sidebar();
+			$site-> right_sidebar=$site->rempliRightSidebar();
 			$site-> left_sidebar="<p>texte de remplissage à retirer( index.php l18)</p>";
 			$site->affiche();
 
@@ -26,13 +26,14 @@
 			$site->js='messages_fr';
 			$site->js='jquery.tooltipster.min';
 			$site->css='tooltipster';
-			$site-> right_sidebar=$site->rempli_right_sidebar();
-			$site-> left_sidebar=$controleur->retourne_formulaire_login();
+			$site-> right_sidebar=$site->rempliRightSidebar();
+			$site-> left_sidebar=$controleur->formulaireLogin();
 			$site->affiche();
 			break;			
 		case 'confirmation':
 		    $site->titre='Confirmation';
-		    $site->left_sidebar=$controleur->confirmation_login($_POST['login'],$_POST['pwd']);
+		    $site-> right_sidebar=$site->rempliRightSidebar();		   
+		    $site->left_sidebar=$controleur->confirmationLogin($_POST['login'],$_POST['pwd']);
 		    break;
 		case 'deconnexion' :
 			$_SESSION=array();
@@ -40,27 +41,42 @@
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
 		case 'devis':
-		    $site->left_sidebar = 'Page devis';
-		    $site->affiche();
+		    if($controleur->estConnecte() == 1)
+		    {
+    		    if(isset($params[2]))
+    		    {
+    		        $site->left_sidebar =$controleur->detailsDevis($params[2]);
+    		    }
+    		    else
+    		    {
+        		    $site->left_sidebar = 'Page devis'.'<a href="Devis/1"> détails </a>';
+    		    }
+		    }
+		    $site->affiche();		    
 		    break;
 		case 'commandes':
 		    $site->left_sidebar = 'Page commandes';
+		    $site-> right_sidebar=$site->rempliRightSidebar();
 		    $site->affiche();
 		    break;
 		case 'preparations':
 		    $site->left_sidebar = 'Page préparations';
+		    $site-> right_sidebar=$site->rempliRightSidebar();
 		    $site->affiche();
 		    break;
 		case 'livraisons':
 		    $site->left_sidebar = 'Page livraisons';
+		    $site-> right_sidebar=$site->rempliRightSidebar();
 		    $site->affiche();
 		    break;
 		case 'facturations':
 		    $site->left_sidebar = 'Page facturations';
+		    $site-> right_sidebar=$site->rempliRightSidebar();
 		    $site->affiche();
 		    break;
 		case 'conflits':
 		    $site->left_sidebar = 'Page conflits';
+		    $site-> right_sidebar=$site->rempliRightSidebar();
 		    $site->affiche();
 		    break;
 		    
@@ -71,7 +87,7 @@
 		    
 		default: 
 			$site->titre='Accueil';
-			$site-> right_sidebar=$site->rempli_right_sidebar();
+			$site-> right_sidebar=$site->rempliRightSidebar();
 			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();
 			break;

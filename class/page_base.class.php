@@ -9,6 +9,7 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );
+	protected $path="http://192.168.168.194/GESTCO/";
 
 	public function __construct() {
 		$numargs = func_num_args();
@@ -85,22 +86,22 @@ class page_base {
 	}
 	/******************************Gestion des styles **********************************************/
 	/* Insertion des feuilles de style */
-	private function affiche_style() {
+	private function afficheStyle() {
 		foreach ($this->css as $s) {
-			echo "<link rel='stylesheet'  href='css/".$s.".css' />\n";
+			echo "<link rel='stylesheet'  href='".$this->path."css/".$s.".css' />\n";
 		}
 
 	}
 	/******************************Gestion du javascript **********************************************/
 	/* Insertion  js */
-	private function affiche_javascript() {
+	private function afficheJavascript() {
 		foreach ($this->js as $s) {
-			echo "<script src='js/".$s.".js'></script>\n";
+			echo "<script src='".$this->path."js/".$s.".js'></script>\n";
 		}
 	}
 	/******************************affichage metakeyword **********************************************/
 
-	private function affiche_keyword() {
+	private function afficheKeyword() {
 		echo '<meta name="keywords" content="';
 		foreach ($this->metakeyword as $s) {
 			echo utf8_encode($s).',';
@@ -108,11 +109,11 @@ class page_base {
 		echo '" />';
 	}	
 	/****************************** Affichage de la partie entÃªte ***************************************/	
-	protected function affiche_entete() {
+	protected function afficheEntete() {
 		echo'
            <header>
 				
-				<a href="Accueil"><img  id="img-greta" src="image/logo.png" alt="logo"/></a><br>
+				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/logo.png" alt="logo"/></a><br>
 				<h1 id="titre-gestco">
 					GestCo
 				</h1>
@@ -124,55 +125,55 @@ class page_base {
 	}
 	/****************************** Affichage du menu ***************************************/	
 	
-	protected function affiche_menu() {		
+	protected function afficheMenu() {		
 	    $lesMenus=array(	        
 	        'devis'=>'
 				<ul>
-					<li><a href="Devis">Devis</a></li>
+					<li><a href="'.$this->path.'Devis">Devis</a></li>
                 </ul>',
 	        
 	        'commandes'=>'
 				<ul>
-					<li><a  href="Commandes">Commandes</a></li>
+					<li><a  href="'.$this->path.'Commandes">Commandes</a></li>
 				</ul>',
 	        
 	        'preparations'=>'
 				<ul>
-					<li><a  href="Preparations">Préparations</a></li>
+					<li><a  href="'.$this->path.'Preparations">Préparations</a></li>
 				</ul>',
 	        
 	        'livraisons'=>'
                 <ul>
-                    <li><a href="Livraisons">Livraisons</a></li>
+                    <li><a href="'.$this->path.'Livraisons">Livraisons</a></li>
                 </ul>',
 	        
 	        'facturations'=>'
                 <ul>
-                    <li><a href="Facturations">Facturations</a></li>
+                    <li><a href="'.$this->path.'Facturations">Facturations</a></li>
                 </ul>',
 	        
 		    'conflits'=>'
 				<ul>
-    				<li><a  href="Conflits">Conflits</a></li>
+    				<li><a  href="'.$this->path.'Conflits">Conflits</a></li>
 				</ul>',		    
 		    
 	        'articles'=>'
 				<ul>
-					<li><a  href="Articles">Articles</a></li>
+					<li><a  href="'.$this->path.'Articles">Articles</a></li>
                 </ul>');      	       
 	        
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{
 		    echo'
 				<ul id="bou-connexion">
-					<li><a href="Connexion">Connexion</a></li>
+					<li><a href="'.$this->path.'Connexion">Connexion</a></li>
 				</ul>';		    
 		} 
 		else
 		{
 		    echo '
               <ul id="bou-deconnexion">
-		        <li><a href="Deconnexion">Déconnexion</a></li>
+		        <li><a href="'.$this->path.'Deconnexion">Déconnexion</a></li>
 		      </ul>';		    		   
 		    switch($_SESSION['type'])
 		    {
@@ -195,20 +196,20 @@ class page_base {
 		    }
 		}
 	}
-	public function affiche_entete_menu() {
+	public function afficheEnteteMenu() {
 		echo '
 		<div id="menu_horizontal">
 				';
 						
 	}
-	public function affiche_footer_menu(){
+	public function afficheFooterMenu(){
 		echo '
 		</div>';
 
 	}
 
 		/****************************************** remplissage affichage colonne ***************************/
-	public function rempli_right_sidebar() {
+	public function rempliRightSidebar() {
 		return'
 
 			
@@ -225,7 +226,7 @@ class page_base {
 	}
 	
 	/****************************************** Affichage du pied de la page ***************************/
-	private function affiche_footer() {
+	private function afficheFooter() {
 		echo '
 		<!-- Footer -->
 			<footer>
@@ -252,17 +253,17 @@ class page_base {
 					<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 					<meta name="description" content="<?php echo $this->metadescription; ?>" />
 					
-					<?php $this->affiche_keyword(); ?>
-					<?php $this->affiche_javascript(); ?>
-					<?php $this->affiche_style(); ?>
+					<?php $this->afficheKeyword(); ?>
+					<?php $this->afficheJavascript(); ?>
+					<?php $this->afficheStyle(); ?>
 				</head>
 				<body>
-				<div class="global">
+					<div class="global">
 
-						<?php $this->affiche_entete(); ?>
-						<?php $this->affiche_entete_menu(); ?>
-						<?php $this->affiche_menu(); ?>
-						<?php $this->affiche_footer_menu(); ?>
+						<?php $this->afficheEntete(); ?>
+						<?php $this->afficheEnteteMenu(); ?>
+						<?php $this->afficheMenu(); ?>
+						<?php $this->afficheFooterMenu(); ?>
 						
   						<div style="clear:both;">
     						<div class="left_sidebar">
@@ -273,7 +274,7 @@ class page_base {
     						</div>
   						</div>
 						<div style="clear:both;">
-							<?php $this->affiche_footer(); ?>
+							<?php $this->afficheFooter(); ?>
 						</div>
 					</div>
 				</body>

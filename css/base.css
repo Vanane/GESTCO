@@ -1,5 +1,6 @@
 
-
+	
+}
 /* --- STYLES DE BASE POUR LE TEXTE ET LES PRINCIPAUX ÉLÉMENTS --- */
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 /* Page */
@@ -70,8 +71,9 @@ cite {
 
 /* Liens */
 a {
-	color: mediumblue;
-	text-decoration: underline;
+	color: white;
+	text-shadow:1px 1px 1px black;
+	text-decoration:none;
 }
 a:hover, a:focus {
 	color: crimson;
@@ -134,12 +136,16 @@ pre strong {
 
 .left_sidebar
 {
+	position:relative;
+	box-sizing:border-box;
+	border:solid 1px black;
 	float:left;
-	width:75%;
+	width:100%;
 }
 
 .right_sidebar
 {
+	position:relative;
 	float:left;
 	width:25%;
 }
@@ -154,7 +160,7 @@ pre strong {
 {
 	display:block;
 	float:left;	
-	width:20%;
+	width:33%;
 	height:auto;
 }
 
@@ -172,10 +178,38 @@ pre strong {
 	box-sizing:border-box;				
 }
 
-#menu_horizontal ul:nth-child(odd)
+#menu_horizontal ul:nth-child(3n+2)
 {
-	background-color:#eee;
+	width:34%;
 }
+
+#menu_horizontal ul:nth-child(6n+1)
+{
+	background-color:#F9DF19;
+}
+#menu_horizontal ul:nth-child(6n+2)
+{
+	background-color:#EE9600;
+	
+}
+#menu_horizontal ul:nth-child(6n+3)
+{
+	background-color:#D3D602;
+}
+#menu_horizontal ul:nth-child(6n+4)
+{
+	background-color:#F9DF19;
+}
+#menu_horizontal ul:nth-child(6n+5)
+{
+	background-color:#C4A0C4;
+}
+#menu_horizontal ul:nth-child(6n+6)
+{
+	background-color:#8ACABA
+;
+}
+
 
 #menu_horizontal a
 {
@@ -186,15 +220,88 @@ pre strong {
 		
 #bou-connexion
 {
-	background-color: #ccffcc !important;
+	background-color: D3D602 !important;
 }
 
 #bou-deconnexion
 {
-	background-color: #ffcccc !important;	
+	background-color: #E95122 !important;	
 }
 	
+	
+	
+	
+/* --- STYLE IHM DETAILS --- */
+
+#conteneur
+{
+	position:relative;
+	height:500px;
+	margin:10px;
+	box-sizing:border-box;
+	border:solid 1px black	
+}	
+
+
+#details-vente
+{
+	position:absolute;
+	width:100%;		
+	height:33%;
+	box-sizing:border-box;
+	border:solid 1px black;
+	margin-bottom:1%;		
+}
+
+#details-vente p
+{
+	float:left;
+	width:31%;
+	margin-left: 1%;
+	margin-right: 1%;
+	box-sizing:border-box;
+}
+
+#details-vente p input
+{
+	float:right;
+	width:50%;	
+}
+
+#details-vente row:first-child p input
+{
+	width:16%;
+}
+
+#details-vente row:first-child p
+{	
+	width:97%;
+}
+
+#details-article
+{
+	position:absolute;
+	width:100%;
+	height:65%;
+	top:35%;
+	box-sizing:border-box;
+	border:solid 1px black;		
+	overflow:scroll;
+	
+}
+
+
+#details-article table td, #details-article table th
+{
+	
+	width:200px;
+	border-left:solid 1px black;
+	box-sizing:border-box;
+}
+
+
 /* --- STYLE SMARTPHONE --- */	
+
 @media screen and (max-width: 980px)
 {
 	body
@@ -235,7 +342,6 @@ pre strong {
 	#menu_horizontal ul
 	{
 		width:50%;
-		height:3em;
 		box-sizing:border-box;
 		border:solid 5px #ddd;
 		background-color: #EEE;	

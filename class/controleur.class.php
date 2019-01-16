@@ -23,8 +23,63 @@ class controleur {
 		}
 	}
 	
-	
-	public function retourne_formulaire_login()
+	public function detailsDevis($idVente)
+	{
+	    $v = $this->vpdo->venteParSonId($idVente);
+	    $c = $this->vpdo->clientParSonId($v->idClient);
+	    $s = $this->vpdo->societeParSonId($c->idSociete);
+	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
+	    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
+	    $retour = '
+            <div id="conteneur">
+                <div id="details-vente">
+                    <row>
+                        <p>Responsable Devis : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                    </row>                    
+                    <row>
+                        <p>NÂ° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
+                        <p>NÂ° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
+                        <p>Date : <input type="text" value="'.substr($v->dateDevis,0 ).'" readonly></p>
+                    </row>
+                    <row>
+                        <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
+                        <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
+                        <p>CoordonnÃ©es : <input type="text" value="'.$s->telephone.'" readonly></p>
+
+                    </row>
+                </div>
+
+                <div id="details-article">
+                    <table>
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>QuantitÃ©</th>   <th>Remise %</th>   <th>Remise â‚¬</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
+	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
+	    {	       
+	        $a = $this->vpdo->articleParSonId($d->idArticle);
+	        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
+	        $retour = $retour.'
+                        <tr>
+                                <td>'.$d->idArticle.'</td>
+                                <td>'.$a->libelle.'</td>
+                                <td>'.$a->dernierCMUP.'</td>
+                                <td>'.$d->qteDemandee.'</td>
+                                <td>'.$d->txRemise.'</td>
+                                <td>'.$d->remise.'</td>
+                                <td>'.$ht.'</td>
+                                <td>'.$a->txTVA.'</td>
+                                <td>'.$ht*(1+$a->txTVA).'</td>
+                                <td>'.$d->observation.'</td>
+                        </tr>';	       
+	    }    
+	    
+	  $retour = $retour.'
+                    </table>
+                </div>
+            </div>';
+	    return $retour;
+	}	
+		
+	public function formulaireLogin()
 	{
 	    
 	    return '    <form action="confirmation" method="post">
@@ -33,35 +88,39 @@ class controleur {
     Votre mot de passe : <input type="password" name="pwd"><br />
     <input type="submit" value="Connexion">
     </form>';
-	    
-	    
-	}
+	}	
 	
-	public function confirmation_login($login,$mdp)
-	{  // vérifie si l'identifiant et le mots de passe est valide
+	public function confirmationLogin($login,$mdp)
+	{  // vï¿½rifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
-	    $result = $this->vpdo->liste_compte($login,$mdp)->fetch(PDO::FETCH_OBJ);
+	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
 	    if($result != null)
 	    {
 	        echo 'connecte';
 	        session_start ();
-	        // on enregistre les paramètres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
+	        // on enregistre les paramï¿½tres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
 	        $_SESSION['id'] = $result->prenom;
 	        $_SESSION['type'] = $result->idType;
 	        
 	        // on redirige notre visiteur vers une page de notre section membre
-	        header ('location: accueil');  
+	        header ('location: Accueil');  
 	    }
 	    else {
-	        // Le visiteur n'a pas été reconnu comme étant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+	        // Le visiteur n'a pas ï¿½tï¿½ reconnu comme ï¿½tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
-	        echo ' pas connecté';
+	        echo ' pas connectï¿½';
 	        // puis on le redirige vers la page d'accueil
 	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
 	    }
 	}
 	   
-
+    public function estConnecte()
+    {
+        if(isset($_SESSION['id']) && isset($_SESSION['type']))
+            return $_SESSION['type'];
+        else return false;
+        
+    }
 	
 	public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp

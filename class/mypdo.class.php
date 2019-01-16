@@ -16,7 +16,7 @@ class mypdo extends PDO{
     	{
     		echo 'hote: '.$this->PARAM_hote.' '.$_SERVER['DOCUMENT_ROOT'].'<br />';
     		echo 'Erreur : '.$e->getMessage().'<br />';
-    		echo 'N° : '.$e->getCode();
+    		echo 'Nï¿½ : '.$e->getCode();
     		$this->connexion=false;
     		//echo '<script>alert ("pbs acces bdd");</script>)';
     	}
@@ -31,17 +31,105 @@ class mypdo extends PDO{
     	}
     }
     
-    public  function liste_compte($identifiant,$mdp)
-    {
     
-    	$requete='SELECT * FROM employe WHERE prenom = "'.$identifiant.'" and mdp = "'.$mdp.'";';
+    public function articleParSonId($id)
+    {
+        $r='SELECT * from ARTICLE WHERE idArticle = "'.$id.'";';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function venteParSonId($id)
+    {
+        $r='SELECT * from VENTE WHERE idVente = '.$id;
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function clientParSonId($id)
+    {
+        $r='SELECT * from CONTACT_CLIENT WHERE idClient = "'.$id.'"';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function societeParSonId($id)
+    {
+        $r='SELECT * from SOCIETE WHERE idSociete = '.$id;
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function employeParSonId($id)
+    {
+        $r='SELECT * from EMPLOYE WHERE idEmploye = '.$id;
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public  function listeComptes($identifiant,$mdp)
+    {
         
-    	$result=$this->connexion->query($requete);
-    	if ($result)    
-    	{    
-    		return ($result);
-    	}
-    	return null;
+        $requete='SELECT * FROM employe WHERE prenom = "'.$identifiant.'" and mdp = "'.$mdp.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
+    public  function listeDetailsDevis()
+    {
+        
+        $requete='SELECT * FROM DETAIL_DEVIS;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
+    public  function listeDetailsDevisParIdVente($idV)
+    {
+        
+        $requete='SELECT * FROM DETAIL_DEVIS WHERE idVente="'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
+    public function listeVentes()
+    {
+        $r="SELECT * from VENTE";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                
+                return null;
     }
     
 }
