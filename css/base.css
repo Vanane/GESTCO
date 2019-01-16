@@ -76,7 +76,7 @@ a {
 	text-decoration:none;
 }
 a:hover, a:focus {
-	color: crimson;
+	text-shadow:1px 1px 1px black;
 }
 a img {
 	border: none; 
@@ -159,6 +159,7 @@ pre strong {
 #menu_horizontal ul
 {
 	display:block;
+	position:relative;
 	float:left;	
 	width:33%;
 	height:auto;
@@ -181,6 +182,13 @@ pre strong {
 #menu_horizontal ul:nth-child(3n+2)
 {
 	width:34%;
+}
+
+#menu_horizontal ul:hover
+{
+	opacity:0.5;
+	overflow:visible;
+	transition:opacity ease-out 0.1s;
 }
 
 #menu_horizontal ul:nth-child(6n+1)
@@ -319,7 +327,7 @@ pre strong {
 	top:35%;
 	box-sizing:border-box;
 	border:solid 1px black;		
-	overflow:scroll;
+	overflow-y:scroll;
 	
 }
 
