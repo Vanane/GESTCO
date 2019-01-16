@@ -10,7 +10,7 @@
     $params = array_filter($params);
 	if (!isset($params[1]))
 	{
-		$params[1]='Accueil';
+		$params[1]='accueil';
 	}
 	switch ($params[1]) {
 		case 'accueil' :
@@ -39,13 +39,6 @@
 			session_destroy();
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
-
-		case 'testconnexion' :
-		    $_SESSION['id'] = 'admin';
-		    $_SESSION['type'] = '4';
-		    echo '<script>document.location.href="Accueil"; </script>';		   
-		    break;
-		    
 		case 'devis':
 		    $site-> left_sidebar=$controleur->listeDevis();
 
@@ -67,8 +60,8 @@
 		    $site->left_sidebar = 'Page facturations';
 		    $site->affiche();
 		    break;
-		case 'ventes':
-		    $site->left_sidebar = 'Page ventes';
+		case 'conflits':
+		    $site->left_sidebar = 'Page conflits';
 		    $site->affiche();
 		    break;
 		    
