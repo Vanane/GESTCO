@@ -123,11 +123,13 @@ class controleur {
 	public function listeDevis()
 	{
 	    
-	$return='<p><fieldset> 
-    Voici l outil de gestion des devis. Ci-dessous la liste des devis existants.
-    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".
-    Si vous souhaitez ajouter un devis cliquer sur le bouton "Ajouter un devis" tout en bas de la page.
-	</fieldset></p>';
+	$return='
+            <div id="conteneur">
+                <p style="margin-left: 1em">
+                    Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
+                    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
+                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
+                </p>';
 	
 	$l = $this->vpdo->listeVentes();
 	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))
@@ -138,28 +140,25 @@ class controleur {
     $c=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     
-    $return = $return.'<p><fieldset>
+    $return = $return.'<div id="bloc-devis"><p>
    
     Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
-    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
+    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'> &emsp;
     Date devis :&emsp;<input type="text" readonly value='.$v->dateDevis.'> &emsp;
 
     <br /> <br /> 
 
-    Nom de l Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
+    Nom de l\'Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
     Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value='.$c->idClient.'>&emsp; 
     Prix Total :&emsp;<input type="text" readonly value='.$p->prixTotal.'>&emsp;
 
-     <br /><br /><br />
-
-    <a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
+    <a href="devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail">Voir Details</a>
     
-    </fieldset></p>';
+   </p></div>';
 	}
 	
-    $return = $return.'<p><br/><br/><fieldset>
-    <a href="ajouterDevis"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
-    </fieldset></p>';
+    $return = $return.'</div>
+    <a href="Devis/Ajouter" id="btn-ajouterUnDevis">Ajouter un Devis</a>';
     
     return $return;
 	}
