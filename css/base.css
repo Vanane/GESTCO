@@ -35,7 +35,7 @@ h2 {font-size: 1.8em;}
 h3 {font-size: 1.2em;}
 h4 {font-size: 1em;}
 
-a, p{font-size:1.2em;}
+a, p, td, th{font-size:1.2em;}
 
 
 /* Listes */
@@ -138,7 +138,6 @@ pre strong {
 {
 	position:relative;
 	box-sizing:border-box;
-	border:solid 1px black;
 	float:left;
 	width:100%;
 }
@@ -151,12 +150,12 @@ pre strong {
 }
 
 /* --- STYLE MENU --- */
-#menu_horizontal
+.menu_horizontal
 {
 	width:auto;	
 }
 
-#menu_horizontal ul
+.menu_horizontal ul
 {
 	display:block;
 	position:relative;
@@ -165,13 +164,13 @@ pre strong {
 	height:auto;
 }
 
-#menu_horizontal li
+.menu_horizontal li
 {
 	list-style: none;
 	height:auto;
 }
 
-#menu_horizontal ul, #menu_horizontal li
+.menu_horizontal ul, .menu_horizontal li
 {
 	text-align:center;
 	margin:0;
@@ -179,47 +178,28 @@ pre strong {
 	box-sizing:border-box;				
 }
 
-#menu_horizontal ul:nth-child(3n+2)
+.menu_horizontal ul:nth-child(3n+2) /*Permet de prendre 100% de l'écran au lieu de 99%, avec 3 boutons.*/
 {
 	width:34%;
 }
 
-#menu_horizontal ul:hover
+.menu_horizontal ul:hover
 {
 	opacity:0.5;
 	overflow:visible;
 	transition:opacity ease-out 0.1s;
 }
 
-#menu_horizontal ul:nth-child(6n+1)
-{
-	background-color:#F9DF19;
-}
-#menu_horizontal ul:nth-child(6n+2)
-{
-	background-color:#EE9600;
-	
-}
-#menu_horizontal ul:nth-child(6n+3)
-{
-	background-color:#D3D602;
-}
-#menu_horizontal ul:nth-child(6n+4)
-{
-	background-color:#F9DF19;
-}
-#menu_horizontal ul:nth-child(6n+5)
-{
-	background-color:#C4A0C4;
-}
-#menu_horizontal ul:nth-child(6n+6)
-{
-	background-color:#8ACABA
-;
-}
+.menu_horizontal ul:nth-child(4n+1)
+{	background-color:#D3D601;}
+.menu_horizontal ul:nth-child(4n+2)
+{	background-color:#F29400;}
+.menu_horizontal ul:nth-child(4n+3)
+{	background-color:#8AC9BE;}
+.menu_horizontal ul:nth-child(4n+4)
+{	background-color:#FEDD16;}
 
-
-#menu_horizontal a
+.menu_horizontal a
 {
 	display:block;
 	padding:1em;
@@ -235,6 +215,28 @@ pre strong {
 {
 	background-color: #E95122 !important;	
 }
+
+
+.sous-menu
+{
+	padding:50px;	
+}
+
+.sous-menu ul
+{
+	width:25% !important;
+}
+
+
+.sous-menu p
+{
+	width:100%;
+	text-align:center;
+	margin:0;
+	margin-bottom:20px;
+}
+
+/* --- STYLE IHM LISTE DEVIS --- */
 
 #btn-voirDetail
 {
@@ -269,9 +271,6 @@ pre strong {
 	background:#B2C3C0;
 }	
 	
-	
-	
-	
 /* --- STYLE IHM DETAILS --- */
 
 #conteneur
@@ -280,7 +279,7 @@ pre strong {
 	height:500px;
 	margin:10px;
 	box-sizing:border-box;
-	border:solid 1px black	
+	border:solid 1px black;
 }	
 
 
@@ -290,7 +289,7 @@ pre strong {
 	width:100%;		
 	height:33%;
 	box-sizing:border-box;
-	border:solid 1px black;
+	border-bottom:solid 1px black;	
 	margin-bottom:1%;		
 }
 
@@ -326,20 +325,15 @@ pre strong {
 	height:65%;
 	top:35%;
 	box-sizing:border-box;
-	border:solid 1px black;		
-	overflow-y:scroll;
-	
+	overflow-y:scroll;	
 }
-
 
 #details-article table td, #details-article table th
-{
-	
+{	
 	width:200px;
-	border-left:solid 1px black;
 	box-sizing:border-box;
+	border-left:solid 1px black;
 }
-
 
 /* --- STYLE SMARTPHONE --- */	
 
@@ -380,13 +374,15 @@ pre strong {
 	}
 	
 	
-	#menu_horizontal ul
+	.menu_horizontal ul
 	{
 		width:50% !important;
 		box-sizing:border-box;
 		border:solid 5px #ddd;
 		background-color: #EEE;	
 	}
+
+
 		
 	#bou-connexion, #bou-deconnexion
 	{

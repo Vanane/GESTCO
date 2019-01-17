@@ -23,6 +23,8 @@ class controleur {
 		}
 	}
 	
+	
+	
 	public function detailsDevis($idVente)
 	{
 	    $v = $this->vpdo->venteParSonId($idVente);
@@ -39,13 +41,12 @@ class controleur {
                     <row>
                         <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="text" value="'.substr($v->dateDevis,0 ).'" readonly></p>
+                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
                         <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
                         <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
-
                     </row>
                 </div>
 
@@ -133,16 +134,16 @@ class controleur {
     { 
         
         $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
-    $return = $return.'<form IdVenteaction="Devis/'.$ligneIdVente->idVente.'" id=bloc-devis method="post">
+    $return = $return.'<form IdVente action="Devis'.$ligneIdVente->idVente.'" id=bloc-devis method="post">
     <fieldset>
     Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
-    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
+    Responsable devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
     Date devis :&emsp;<input type="text" readonly value="Date devis"> &emsp;
     <br /> <br /> 
     Nom de l Entreprise :&emsp;<input type="text" readonly value="nomEntreprise">&emsp;
     Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value="code du client">&emsp;  
     Prix Total :&emsp;<input type="text" readonly value="prix">&emsp;
-     <br /><br /><br /><a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
+     <br /><br /><br /><a href="Devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
     </fieldset>
     </form>';
 	    }
@@ -154,7 +155,6 @@ class controleur {
 return $return;
 	}
 	
-
 	   
 	public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp

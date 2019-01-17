@@ -9,7 +9,7 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );
-	protected $path="http://192.168.168.194/GESTCO/";
+	protected $path="http://localhost/GESTCO/";
 
 	public function __construct() {
 		$numargs = func_num_args();
@@ -127,6 +127,16 @@ class page_base {
 	
 	protected function afficheMenu() {		
 	    $lesMenus=array(	        
+	        'ventes'=>'
+				<ul>
+					<li><a href="'.$this->path.'Ventes">Ventes</a></li>
+                </ul>',
+	        
+	        'achats'=>'
+				<ul>
+					<li><a href="'.$this->path.'Achats">Achats</a></li>
+                </ul>',
+	        
 	        'devis'=>'
 				<ul>
 					<li><a href="'.$this->path.'Devis">Devis</a></li>
@@ -160,7 +170,28 @@ class page_base {
 	        'articles'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Articles">Articles</a></li>
-                </ul>');      	       
+                </ul>',
+	        
+	        'employes'=>'
+				<ul>
+					<li><a  href="'.$this->path.'Employes">Employés</a></li>
+                </ul>',
+	        
+	        'clients'=>'
+				<ul>
+					<li><a  href="'.$this->path.'Clients">Clients</a></li>
+                </ul>',
+	        
+	        'fournisseurs'=>'
+				<ul>
+					<li><a  href="'.$this->path.'Fournisseurs">Fournisseurs</a></li>
+                </ul>',
+	        
+	        'societes'=>'
+				<ul>
+					<li><a  href="'.$this->path.'Societes">Sociétés</a></li>
+                </ul>'
+	    );      	       
 	        
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{
@@ -178,27 +209,28 @@ class page_base {
 		    switch($_SESSION['type'])
 		    {
 		        case 1:   //Cas utilisateur est commercial
-		            echo $lesMenus['articles'].$lesMenus['devis'].$lesMenus['commandes'].$lesMenus['facturations'].$lesMenus['conflits'];
+		            echo $lesMenus['ventes'].$lesMenus['achats'].$lesMenus['articles'].$lesMenus['clients'].$lesMenus['fournisseurs'];
 		            break;
 		        case 2:   //Cas utilisateur est préparateur 
-		            echo $lesMenus['articles'].$lesMenus['preparations'];
+		            echo $lesMenus['preparations'].$lesMenus['articles'];
 		            break;
 		        case 3:   //Cas utilisateur est livreur
-		            echo $lesMenus['articles'].$lesMenus['livraisons'];
+		            echo $lesMenus['livraisons'].$lesMenus['clients'].$lesMenus['articles'];
 		            break;
 		        case 4:   //Cas utilisateur est informaticien
 		            foreach($lesMenus as $key => $value)
 		            {
-		              if($key != 'connexion')
 		                echo $value;
 		            }
 		            break;
 		    }
 		}
 	}
+	
+	
 	public function afficheEnteteMenu() {
 		echo '
-		<div id="menu_horizontal">
+		<div class="menu_horizontal">
 				';
 						
 	}
@@ -209,7 +241,7 @@ class page_base {
 	}
 
 		/****************************************** remplissage affichage colonne ***************************/
-	public function rempliRightSidebar() {
+	public function afficheBlocContact() {
 		return'
 
 			
@@ -223,6 +255,28 @@ class page_base {
                 </article>
 				';
 							
+	}
+	
+	/*************************** retourne sous-menu de la page vente selon le rôle ***************************/
+	
+	public function sousMenuVente()
+	{
+	    return '
+                <div class="sous-menu menu_horizontal">
+                    <p>Choisissez une option</p>
+                    <ul>
+                        <li><a href="Ventes/Devis">Devis</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="Ventes/Commandes">Commandes</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="Ventes/Facturations">Facturations</a></li>
+                    </ul>
+                    <ul>
+                        <li><a href="Ventes/Conflits">Reliquats</a></li>
+                    </ul>
+                </div>';
 	}
 	
 	/****************************************** Affichage du pied de la page ***************************/
