@@ -31,7 +31,18 @@ class mypdo extends PDO{
     	}
     }
     
-    
+    public  function listeArticle()
+    {
+        
+        $requete='SELECT * FROM ARTICLE ;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     public function articleParSonId($id)
     {
         $r='SELECT * from ARTICLE WHERE idArticle = "'.$id.'";';
@@ -167,7 +178,7 @@ class mypdo extends PDO{
     public  function prixTotalParIdVente($idVente)
     {
         
-        $requete='SELECT prixtotal FROM calcul_prix_total WHERE idVente ='.$idVente.'';
+        $requete='SELECT prixTotal FROM calcul_prix_total WHERE idVente ='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
         {

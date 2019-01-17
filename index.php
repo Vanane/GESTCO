@@ -54,6 +54,11 @@
 		    }
 		    $site->affiche();    
 		    break;
+		case 'ajouterDevis':
+		    $site->left_sidebar ->ajouterDevis();
+		    $site->affiche();
+		    break;
+		    
 		case 'commandes':
 		    $site->left_sidebar = 'Page commandes';
 		    $site-> right_sidebar=$site->rempliRightSidebar();

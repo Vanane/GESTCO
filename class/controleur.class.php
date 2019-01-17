@@ -124,36 +124,108 @@ class controleur {
 	public function listeDevis()
 	{
 	    
-	$return='<p><fieldset> Voici l outil de gestion des devis. Ci-dessous la liste des devis existants.
-    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voie Détail".
+	$return='<p><fieldset> 
+    Voici l outil de gestion des devis. Ci-dessous la liste des devis existants.
+    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".
     Si vous souhaitez ajouter un devis cliquer sur le bouton "Ajouter un devis" tout en bas de la page.
 	</fieldset></p>';
-	$a = $this->vpdo->listeVentes();
-	while($ligneIdVente = $a->fetch(PDO::FETCH_OBJ))
-    { 
-        
-        $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
-    $return = $return.'<form IdVenteaction="Devis/'.$ligneIdVente->idVente.'" id=bloc-devis method="post">
-    <fieldset>
+	
+	$l = $this->vpdo->listeVentes();
+	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))
+    {    
+    $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
+    $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    $c=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    
+    $return = $return.'<p><fieldset>
+   
     Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
     Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
-    Date devis :&emsp;<input type="text" readonly value="Date devis"> &emsp;
-    <br /> <br /> 
-    Nom de l Entreprise :&emsp;<input type="text" readonly value="nomEntreprise">&emsp;
-    Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value="code du client">&emsp;  
-    Prix Total :&emsp;<input type="text" readonly value="prix">&emsp;
-     <br /><br /><br /><a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
-    </fieldset>
-    </form>';
-	    }
-    $return = $return.'    <p> <br /> <br /><fieldset>
-   <a href="ajouterDevis"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
-    </fieldset>
-    </p>';
+    Date devis :&emsp;<input type="text" readonly value='.$v->dateDevis.'> &emsp;
 
-return $return;
+    <br /> <br /> 
+
+    Nom de l Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
+    Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value='.$c->idClient.'>&emsp; 
+    Prix Total :&emsp;<input type="text" readonly value='.$p->prixTotal.'>&emsp;
+
+     <br /><br /><br />
+
+    <a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
+    
+    </fieldset></p>';
 	}
 	
+    $return = $return.'<p><br/><br/><fieldset>
+    <a href="ajouterDevis"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
+    </fieldset></p>';
+    
+    return $return;
+	}
+	
+	/*public function ajouterDevis()
+	{
+	    
+	    $return='<p>
+        <fieldset> Voici l outil d ajout des devis. Ci-dessous les informations demandé pour créer un nouveau devis.</fieldset>
+        <div id="information_devis">
+                    <row>
+                        <p>Responsable Devis : <input type="text" value=""></p>
+                    </row>                    
+                    <row>
+                        <p>N° Vente : <input type="text" value=""></p>
+                        <p>N° Client : <input type="text" value=""></p>
+                        <p>Date : <input type="text" value=""> </p>
+                    </row>
+                    <row>
+                        <p>Entreprise : <input type="text" value=""></p>
+                        <p>Adresse : <input type="text" value=""> </p>
+                        <p>Coordonnées : <input type="text" value=""> </p>
+
+                    </row>
+                </div>
+          <div id="details-article">
+                    <table>
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
+	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
+	    {	       
+	        $a = $this->vpdo->articleParSonId($d->idArticle);
+	        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
+	        $retour = $retour.'
+                        <tr>
+                                <td><select name="codeArticle">'
+$lesArticles = $this->vpdo->listeArticle());
+ while($lesArticles->fetch(PDO::FETCH_OBJ))'
+
+<option value="France">France</option>
+<option value="Allemagne">Allemagne</option>
+<option value="autre">etc... </options>
+</select>'.$d->idArticle.'
+
+
+</td>
+                                <td>'.$a->libelle.'</td>
+                                <td>'.$a->dernierCMUP.'</td>
+                                <td>'.$d->qteDemandee.'</td>
+                                <td>'.$d->txRemise.'</td>
+                                <td>'.$d->remise.'</td>
+                                <td>'.$ht.'</td>
+                                <td>'.$a->txTVA.'</td>
+                                <td>'.$ht*(1+$a->txTVA).'</td>
+                                <td>'.$d->observation.'</td>
+                        </tr>';	       
+	    }    
+	    
+	  $retour = $retour.'
+                    </table>
+                </div>
+        </p>';
+	    return $return;
+	}
+	*/
 
 	   
 	public function genererMDP ($longueur = 8){
