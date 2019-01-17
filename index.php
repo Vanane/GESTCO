@@ -15,24 +15,20 @@
 	switch ($params[1]) {
 		case 'accueil' :
 			$site->titre='Accueil';
-			$site-> right_sidebar=$site->rempliRightSidebar();
+			$site-> right_sidebar=$site->afficheBlocContact();
 			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
 			$site->affiche();
 
 			break;
 		case 'connexion' :
 			$site->titre='Connexion';
-			$site->js='jquery.validate.min';
-			$site->js='messages_fr';
-			$site->js='jquery.tooltipster.min';
-			$site->css='tooltipster';
-			$site-> right_sidebar=$site->rempliRightSidebar();
+			$site-> right_sidebar=$site->afficheBlocContact();
 			$site-> left_sidebar=$controleur->formulaireLogin();
 			$site->affiche();
 			break;			
 		case 'confirmation':
 		    $site->titre='Confirmation';
-		    $site-> right_sidebar=$site->rempliRightSidebar();		   
+		    		   
 		    $site->left_sidebar=$controleur->confirmationLogin($_POST['login'],$_POST['pwd']);
 		    break;
 		case 'deconnexion' :
@@ -40,19 +36,46 @@
 			session_destroy();
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
-		case 'devis':
-		    if($controleur->estConnecte() == 1)
+			
+		case 'ventes' :
+		    if(isset($params[2]))
 		    {
-    		    if(isset($params[2]))
+    		    switch($params[2])
     		    {
-    		        $site->left_sidebar =$controleur->detailsDevis($params[2]);
-    		    }
-    		    else
-    		    {
-    		        $site-> left_sidebar=$controleur->listeDevis();
-    		    }
+    		        case 'devis' :
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+    		            {
+    		                if(isset($params[3]))
+    		                {
+    		                    $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                }
+    		                else
+    		                {
+    		                    $site-> left_sidebar=$controleur->listeDevis();
+    		                }
+    		            }
+    		            else
+    		            {
+    		                $site-> left_sidebar= "Vous n'êtes pas connecté !";    		                    		               
+    		            }
+    		            break;
+    		        case 'commande' :
+    		            break;
+    		        case 'preparation' :
+    		            break;
+    		        case 'livraison' :
+    		            break;
+    		        case 'facturation' :
+    		            break;
+    		        case 'conflit' :
+    		            break;		            		        
+		        }
 		    }
-		    $site->affiche();    
+		    else
+		    {
+		        $site->left_sidebar = $site->sousMenuVente();
+		    }
+		    $site->affiche();
 		    break;
 		case 'ajouterDevis':
 		    $site->left_sidebar ->ajouterDevis();
@@ -60,28 +83,23 @@
 		    break;
 		    
 		case 'commandes':
-		    $site->left_sidebar = 'Page commandes';
-		    $site-> right_sidebar=$site->rempliRightSidebar();
+		    $site->left_sidebar = 'Page commandes';		    
 		    $site->affiche();
 		    break;
 		case 'preparations':
-		    $site->left_sidebar = 'Page préparations';
-		    $site-> right_sidebar=$site->rempliRightSidebar();
+		    $site->left_sidebar = 'Page préparations';		   
 		    $site->affiche();
 		    break;
 		case 'livraisons':
-		    $site->left_sidebar = 'Page livraisons';
-		    $site-> right_sidebar=$site->rempliRightSidebar();
+		    $site->left_sidebar = 'Page livraisons';		    
 		    $site->affiche();
 		    break;
 		case 'facturations':
-		    $site->left_sidebar = 'Page facturations';
-		    $site-> right_sidebar=$site->rempliRightSidebar();
+		    $site->left_sidebar = 'Page facturations';		    
 		    $site->affiche();
 		    break;
 		case 'conflits':
-		    $site->left_sidebar = 'Page conflits';
-		    $site-> right_sidebar=$site->rempliRightSidebar();
+		    $site->left_sidebar = 'Page conflits';		    
 		    $site->affiche();
 		    break;
 		    
@@ -91,8 +109,7 @@
 		    break;
 		    
 		default: 
-			$site->titre='Accueil';
-			$site-> right_sidebar=$site->rempliRightSidebar();
+			$site->titre='Accueil';			
 			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();
 			break;

@@ -39,13 +39,12 @@ class controleur {
                     <row>
                         <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="text" value="'.substr($v->dateDevis,0 ).'" readonly></p>
+                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
                         <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
                         <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
-
                     </row>
                 </div>
 

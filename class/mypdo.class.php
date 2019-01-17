@@ -62,7 +62,7 @@ class mypdo extends PDO{
             else
                 return null;
     }
-    
+        
     public function clientParSonId($id)
     {
         $r='SELECT * from CONTACT_CLIENT WHERE idClient = "'.$id.'"';
