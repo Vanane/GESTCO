@@ -38,16 +38,23 @@
 			break;
 			
 		case 'ventes' :
-		    if(isset($params[2]))
-		    {
+		       if(isset($params[2]))
+		       {
     		    switch($params[2])
     		    {
     		        case 'devis' :
     		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
     		            {
     		                if(isset($params[3]))
-    		                {
+    		                {   
+    		                    if($params[3]=='ajouter')
+    		                    {
+    		                    $site->left_sidebar =$controleur->ajouter();
+    		                    }
+    		                    else 
+    		                    {
     		                    $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                    }
     		                }
     		                else
     		                {
@@ -56,7 +63,7 @@
     		            }
     		            else
     		            {
-    		                $site-> left_sidebar= "Vous n'êtes pas connecté !";    		                    		               
+    		                $site-> left_sidebar= "</br>Vous n'êtes pas connecté !";    		                    		               
     		            }
     		            break;
     		        case 'commande' :
@@ -70,37 +77,37 @@
     		        case 'conflit' :
     		            break;		            		        
 		        }
-		    }
-		    else
-		    {
-		        $site->left_sidebar = $site->sousMenuVente();
-		    }
-		    $site->affiche();
-		    break;
-		case 'ajouterDevis':
-		    $site->left_sidebar ->ajouterDevis();
-		    $site->affiche();
-		    break;
+		      }
+		       else
+		       {
+		          $site->left_sidebar = $site->sousMenuVente();
+		       }
 		    
-		case 'commandes':
+		    $site->affiche();
+		    break;
+		case 'commandes':		   
 		    $site->left_sidebar = 'Page commandes';		    
 		    $site->affiche();
+		    
 		    break;
-		case 'preparations':
+		case 'preparations':		    
 		    $site->left_sidebar = 'Page préparations';		   
 		    $site->affiche();
+		    
 		    break;
-		case 'livraisons':
+		case 'livraisons':	    
 		    $site->left_sidebar = 'Page livraisons';		    
 		    $site->affiche();
+		    
 		    break;
-		case 'facturations':
+		case 'facturations':		   
 		    $site->left_sidebar = 'Page facturations';		    
 		    $site->affiche();
+		    
 		    break;
-		case 'conflits':
+		case 'conflits':		    
 		    $site->left_sidebar = 'Page conflits';		    
-		    $site->affiche();
+		    $site->affiche();	   
 		    break;
 		    
 		case 'articles':

@@ -198,7 +198,7 @@ class page_base {
 		    echo'
 				<ul id="bou-connexion">
 					<li><a href="'.$this->path.'Connexion">Connexion</a></li>
-				</ul>';		    
+				</ul>';		  
 		} 
 		else
 		{

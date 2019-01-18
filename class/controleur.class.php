@@ -39,12 +39,13 @@ class controleur {
                     <row>
                         <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly></p>
+                        <p>Date : <input type="text" value="'.substr($v->dateDevis,0 ).'" readonly></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
                         <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
                         <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+
                     </row>
                 </div>
 
@@ -90,34 +91,34 @@ class controleur {
 	}	
 	
 	public function confirmationLogin($login,$mdp)
-	{  // v�rifie si l'identifiant et le mots de passe est valide
+	{  // verifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
 	    if($result != null)
 	    {
 	        echo 'connecte';
-	        session_start ();
-	        // on enregistre les param�tres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
-	        $_SESSION['id'] = $result->prenom;
-	        $_SESSION['type'] = $result->idType;
+	        session_start();
+	        // on enregistre les parametres du visiteur comme variables de session
+	        $_SESSION['id'] = $result->identifiant;    // son identifiant
+	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
 	        
-	        // on redirige notre visiteur vers une page de notre section membre
-	        header ('location: Accueil');  
+	        //Le visiteur pourra seulement rejoindre les pages ou son type (son rôle dans l'entreprise) le lui permet
+	        header ('location: Accueil'); 
+	        // l'envoi sur la page accueil afin qu'il puisse se diriger vers la page qu'il souhaite
 	    }
 	    else {
-	        // Le visiteur n'a pas �t� reconnu comme �tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
-	        echo ' pas connect�';
 	        // puis on le redirige vers la page d'accueil
-	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
+	        echo '<meta http-equiv="refresh" content="0;URL=Accueil">';
 	    }
 	}
+	
     public function estConnecte()
     {
         if(isset($_SESSION['id']) && isset($_SESSION['type']))
-            return $_SESSION['type'];
+        return $_SESSION['type'];
         else return false;
-        
     }
 	
 	public function listeDevis()
@@ -158,73 +159,66 @@ class controleur {
 	}
 	
     $return = $return.'<p><br/><br/><fieldset>
-    <a href="ajouterDevis"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
+    <a href="devis/ajouter"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
     </fieldset></p>';
     
     return $return;
 	}
 	
-	/*public function ajouterDevis()
+	
+	
+	public function ajouter()
 	{
 	    
-	    $return='<p>
-        <fieldset> Voici l outil d ajout des devis. Ci-dessous les informations demandé pour créer un nouveau devis.</fieldset>
-        <div id="information_devis">
+	    $vretour='
+        </br><fieldset>Voici l outil d ajout des devis. Ci-dessous les informations demandé pour créer un nouveau devis.</fieldset>
+        <div id="conteneur">
+        <div id="details-Ajouter">
+      
                     <row>
-                        <p>Responsable Devis : <input type="text" value=""></p>
-                    </row>                    
-                    <row>
-                        <p>N° Vente : <input type="text" value=""></p>
-                        <p>N° Client : <input type="text" value=""></p>
-                        <p>Date : <input type="text" value=""> </p>
-                    </row>
-                    <row>
-                        <p>Entreprise : <input type="text" value=""></p>
-                        <p>Adresse : <input type="text" value=""> </p>
-                        <p>Coordonnées : <input type="text" value=""> </p>
+                        <p>Responsable Devis : <input type="text" value="">
+                        N° Vente : <input type="text" value="">
+                        N° Client : <input type="text" value="">
+                        Date : <input type="text" value=""> </p>
+               
+                        <p>Entreprise : <input type="text" value="">
+                        Adresse : <input type="text" value=""> 
+                        Coordonnées : <input type="text" value=""> 
 
                     </row>
                 </div>
-          <div id="details-article">
-                    <table>
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
-	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
-	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
-	    {	       
-	        $a = $this->vpdo->articleParSonId($d->idArticle);
-	        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
-	        $retour = $retour.'
-                        <tr>
-                                <td><select name="codeArticle">'
-$lesArticles = $this->vpdo->listeArticle());
- while($lesArticles->fetch(PDO::FETCH_OBJ))'
+	        
+  <div id="details-article">
+                <table>
+            
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';       
 
-<option value="France">France</option>
-<option value="Allemagne">Allemagne</option>
-<option value="autre">etc... </options>
-</select>'.$d->idArticle.'
-
-
-</td>
-                                <td>'.$a->libelle.'</td>
-                                <td>'.$a->dernierCMUP.'</td>
-                                <td>'.$d->qteDemandee.'</td>
-                                <td>'.$d->txRemise.'</td>
-                                <td>'.$d->remise.'</td>
-                                <td>'.$ht.'</td>
-                                <td>'.$a->txTVA.'</td>
-                                <td>'.$ht*(1+$a->txTVA).'</td>
-                                <td>'.$d->observation.'</td>
-                        </tr>';	       
-	    }    
+	                            $vretour = $vretour.'<tr>
+                                <td><select name="codeArticle">';
+                                $l = $this->vpdo->listeArticle();
+	                            while($a= $l->fetch(PDO::FETCH_OBJ))
+                                {    
+                                $vretour = $vretour.'<option value="'.$a->idArticle.'">'.$a->idArticle.'</option>'; 
+                                }
+                                $vretour=$vretour.'</td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                <td><input type="text" value=""></td>
+                                </tr>';  
+	
 	    
-	  $retour = $retour.'
-                    </table>
+        $vretour=$vretour.' </table>
                 </div>
-        </p>';
-	    return $return;
+            </div>';
+	    return $vretour;
 	}
-	*/
+	
 
 	   
 	public function genererMDP ($longueur = 8){
