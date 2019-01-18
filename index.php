@@ -18,17 +18,22 @@
 			$site-> right_sidebar=$site->afficheBlocContact();			
 			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
 			$site->affiche();
-
 			break;
 		case 'connexion' :
+		    if($controleur->estConnecte() == false)
+		    {
 			$site->titre='Connexion';
 			$site-> right_sidebar=$site->afficheBlocContact();
 			$site-> left_sidebar=$controleur->formulaireLogin();
-			$site->affiche();
+		    }
+	        else
+	        {
+	        $site-> left_sidebar= "Vous êtes déjà connecté !";
+	        }
+	        $site->affiche();
 			break;			
 		case 'confirmation':
-		    $site->titre='Confirmation';
-		    		   
+		    $site->titre='Confirmation';		   
 		    $site->left_sidebar=$controleur->confirmationLogin($_POST['login'],$_POST['pwd']);
 		    break;
 		case 'deconnexion' :
@@ -36,7 +41,16 @@
 			session_destroy();
 			echo '<script>document.location.href="Accueil"; </script>';
 			break;
-			
+		case 'fournisseurs':
+		    $site-> left_sidebar=$controleur->listeFournisseurs();
+		    $site->affiche();
+		    break;
+		case 'clients':
+		    $site-> left_sidebar=$controleur->listeClients();
+		    $site->affiche();
+		    break;
+		case 'Achats':
+		    break;
 		case 'ventes' :
 		    $site->js = "pageAjoutDevis";
 		    $site->left_sidebar = $site->afficheSousMenuVente();		    
@@ -92,17 +106,15 @@
 		        }
 		    }
 		    $site->affiche();
-		    break;		    
+		    break;		
 		case 'articles':
 		    $site->left_sidebar = 'Page articles';
-		    $site->left_sidebar = ' <select id="blbl">
-                                         <option value="KEY">VALUE</option>
-                                    </select>';
+		    $site->left_sidebar = ' <select id="blbl"><option value="KEY">VALUE</option></select>';
 		    $site->right_sidebar = '<script>console.log(document.getElementById("blbl").options[document.getElementById("blbl").selectedIndex].text)</script>';
 		    $site->affiche();
 		    break;
 		    
-		default: 
+	    default: 
 			$site->titre='Accueil';			
 			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();

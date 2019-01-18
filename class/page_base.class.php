@@ -108,7 +108,7 @@ class page_base {
 		}
 		echo '" />';
 	}	
-	/****************************** Affichage de la partie entÃªte ***************************************/	
+	/****************************** Affichage de la partie entete ***************************************/	
 	protected function afficheEntete() {
 		echo'
            <header>

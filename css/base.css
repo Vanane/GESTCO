@@ -292,7 +292,7 @@ pre strong {
    	transition: background linear 0.1s;   	  
 }
 
-#btn-ajouterUnDevis
+#btn-ajouter
 {
 	display: block;
 	padding:0.5em;
@@ -302,7 +302,7 @@ pre strong {
    	transition: background linear 0.1s;   	  
 }
 
-#bloc-devis
+#bloc-liste
 {
 	position:relative;
 	background:#B2C3C0;
