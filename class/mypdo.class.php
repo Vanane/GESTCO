@@ -31,6 +31,23 @@ class mypdo extends PDO{
     	}
     }
     
+    /*------------------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------LES-LISTES-----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------------*/
+    
+    public  function listeDetailsDevis()
+    {
+        
+        $requete='SELECT * FROM DETAIL_DEVIS;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+     
     public  function listeArticle()
     {
         
@@ -43,6 +60,47 @@ class mypdo extends PDO{
         }
         return null;
     }
+    public  function listeContactFournisseurs()
+    {
+        
+        $requete='SELECT * FROM contact_FOURNISSEUR ;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    public  function listeSocieteFournisseurs()
+    {
+        
+        $requete='SELECT s.* FROM Societe s, contact_FOURNISSEUR c WHERE s.idSociete=c.idSociete ;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    public  function listeSocieteClients()
+    {
+        
+        $requete='SELECT s.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete ;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
+    /*------------------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------FIN-LISTE-----------------------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------------*/
+    
     public function articleParSonId($id)
     {
         $r='SELECT * from ARTICLE WHERE idArticle = "'.$id.'";';
@@ -96,7 +154,7 @@ class mypdo extends PDO{
     public  function listeComptes($identifiant,$mdp)
     {
         
-        $requete='SELECT * FROM employe WHERE prenom = "'.$identifiant.'" and mdp = "'.$mdp.'";';
+        $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
         
         $result=$this->connexion->query($requete);
         if ($result)
@@ -106,19 +164,7 @@ class mypdo extends PDO{
         return null;
     }
     
-    public  function listeDetailsDevis()
-    {
-        
-        $requete='SELECT * FROM DETAIL_DEVIS;';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
-    }
-    
+   
     public  function listeDetailsDevisParIdVente($idV)
     {
         
@@ -142,7 +188,7 @@ class mypdo extends PDO{
                 
                 return null;
     }
-    public  function listeVente()
+    public  function listeVente() // Peut-^^etre supprimer l'une des deux ? ^^
     {
         
         $requete='SELECT idVente FROM VENTE';
@@ -178,7 +224,7 @@ class mypdo extends PDO{
     public  function prixTotalParIdVente($idVente)
     {
         
-        $requete='SELECT prixTotal FROM calcul_prix_total WHERE idVente ='.$idVente.'';
+        $requete='SELECT prixTotal FROM calculPrixTotal WHERE idVente ='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
         {

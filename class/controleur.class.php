@@ -21,10 +21,10 @@ class controleur {
 					break;
 				}
 		}
-	}
+    }
 	
-	public function detailsDevis($idVente)
-	{
+public function detailsDevis($idVente)
+{
 	    $v = $this->vpdo->venteParSonId($idVente);
 	    $c = $this->vpdo->clientParSonId($v->idClient);
 	    $s = $this->vpdo->societeParSonId($c->idSociete);
@@ -76,10 +76,10 @@ class controleur {
                 </div>
             </div>';
 	    return $retour;
-	}	
+}	
 		
-	public function formulaireLogin()
-	{
+public function formulaireLogin()
+{
 	    
 	    return '    <form action="confirmation" method="post">
     Votre login : <input type="text" name="login">
@@ -87,41 +87,42 @@ class controleur {
     Votre mot de passe : <input type="password" name="pwd"><br />
     <input type="submit" value="Connexion">
     </form>';
-	}	
+}	
 	
-	public function confirmationLogin($login,$mdp)
-	{  // verifie si l'identifiant et le mots de passe est valide
+public function confirmationLogin($login,$mdp)
+{  // verifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
 	    if($result != null)
 	    {
 	        echo 'connecte';
-	        session_start();
+	        session_start ();
 	        // on enregistre les parametres du visiteur comme variables de session
 	        $_SESSION['id'] = $result->identifiant;    // son identifiant
 	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
 	        
-	        // on redirige notre visiteur vers une page de notre section membre
-	        header ('location: Accueil');  
+	        //Le visiteur pourra seulement rejoindre les pages ou son type (son rôle dans l'entreprise) le lui permet
+	        header ('location: Accueil');
+	        // l'envoi sur la page accueil afin qu'il puisse se diriger vers la page qu'il souhaite
 	    }
 	    else {
-	        // Le visiteur n'a pas �t� reconnu comme �tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
+	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
-	        echo ' pas connecté';
 	        // puis on le redirige vers la page d'accueil
 	        echo '<meta http-equiv="refresh" content="0;URL=Accueil">';
 	    }
-	}
+}
+	    
 	
-    public function estConnecte()
-    {
-        if(isset($_SESSION['id']) && isset($_SESSION['type']))
-            return $_SESSION['type'];
-        else return false;
-    }
+public function estConnecte()
+{
+        if(isset($_SESSION['id']) && isset($_SESSION['type'])) // on verfie que l'utilisateur a bien un id et un type
+            return $_SESSION['type'];// Si oui on retourne le type qui lui servira à ce connecter aux pages dont il a accès,
+            else return false;// Sinon retourne false et donc a seulement accès au page sans sécurité.
+}
 	
-	public function listeDevis()
-	{
+public function listeDevis()
+{
 	    
 	$return='
             <div id="conteneur">
@@ -129,18 +130,20 @@ class controleur {
                     Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
                     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
                     Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
-                </p>';
+                </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	
 	$l = $this->vpdo->listeVentes();
-	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))
+	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boulce tant que..des données sont présentes dans la requête liste. 
     {    
     $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
     $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $c=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
-    
-    $return = $return.'<div id="bloc-devis"><p>
+    //on prévoit des varibles pour nos appels
+    // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
+    //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
+    $return = $return.'<div id="bloc-liste"><p>
    
     Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
     Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'> &emsp;
@@ -157,16 +160,156 @@ class controleur {
    </p></div>';
 	}
 	
-
+    // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
-    <a href="Devis/Ajouter" id="btn-ajouterUnDevis">Ajouter un Devis</a>';
-    
+    <a href="Devis/Ajouter" id="btn-ajouter">Ajouter un Devis</a>';
+    // on retourne la totalité du texte
     return $return;
 	}
 	
+public function listeFournisseurs()
+{
+	    
+	    $return='
+            <div id="conteneur">
+                <p style="margin-left: 1em">
+                    Voici l\'outil de gestion des fournisseurs. Ci-dessous la liste des fournisseurs existants.<br>
+                    Vous pouvez accéder au contact que vous possèdez pour chaque fournisseur en cliquant sur "Voir Contact".<br>
+                    Si vous souhaitez ajouter un nouveau fournisseur, cliquez sur le bouton "Ajouter un fournisseur" en bas de la page.<br>
+                    Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Voir Contact"<br>
+                    Si vous souhaitez modifier les informations d\'un fournisseur ou d\'un contact, cliquez sur "Voir Contact"
 
-	   
-	public function genererMDP ($longueur = 8){
+                </p>';
+	    
+	    $lsf = $this->vpdo->listeSocieteFournisseurs();
+	    /*$lcf=$this->vpdo->listeContactFournisseurs();*/
+	    while($ligneIdSociete = $lsf->fetch(PDO::FETCH_OBJ))
+	    {
+	        /*$ligneIdContact = $lcf->fetch(PDO::FETCH_OBJ);*/
+	        $return = $return.'<br /><div id="bloc-liste"> <p>
+    <br /> 	       
+    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->idSociete.'> &emsp;
+    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->nom.'> &emsp;
+    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> &emsp;  
+    <br /> 
+    <br /> 
+    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->telephone.'> &emsp;
+    Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->adresse.'> &emsp;
+    Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->raison.'> &emsp;
+    <br /> 
+    <br /> 
+    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdSociete->mail.'> &emsp;
+    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
+    <br />  
+    <br />  
+    </p></div>';
+	}
+	   $return = $return.'</div>
+       <a href="Fournisseur/Ajouter" id="btn-ajouter">Ajouter un fournisseur </a>';
+	   //renvoie vers la page "Ajouter un Fournisseur" 
+	   return $return;
+}
+
+
+public function listeClients()
+{
+    
+    $return='
+            <div id="conteneur">
+                <p style="margin-left: 1em">
+                    Voici l\'outil de gestion des clients. Ci-dessous la liste des clients existants.<br>
+                    Vous pouvez accéder au contact que vous possèdez pour chaque client en cliquant sur "Voir Contact".<br>
+                    Si vous souhaitez ajouter un nouveau client, cliquez sur le bouton "Ajouter un client" en bas de la page.<br>
+                    Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Voir Contact"<br>
+                    Si vous souhaitez modifier les informations d\'un client ou d\'un contact, cliquez sur "Voir Contact"
+        
+                </p>';
+    
+    $lsc = $this->vpdo->listeSocieteClients();
+    while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
+    {
+        
+        $return = $return.'<br /><div id="bloc-liste"> <p>
+     <br /> 	       
+    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->idSociete.'> &emsp;
+    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->nom.'> &emsp;
+    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> &emsp;  
+    <br /> 
+    <br /> 
+    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->telephone.'> &emsp;
+    Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->adresse.'> &emsp;
+    Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->raison.'> &emsp;
+    <br /> 
+    <br /> 
+    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdSociete->mail.'> &emsp;
+    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
+    <br />  
+    <br />  
+    </p></div>';
+    }
+    $return = $return.'</div>
+       <a href="Contact/Ajouter" id="btn-ajouter">Ajouter une société </a>';
+    //renvoie vers la page "Ajouter un Contact"
+    return $return;
+}
+public function listeContactClients()
+{//récupérer l'id de la page ($id)
+    $s = $this->vpdo->societeParSonId($id);
+    $return='
+                <div id="conteneur">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client sélectionné.<br>
+                        Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Ajouter un Contact"<br>
+                        Si vous souhaitez modifier les informations d\'un client, cliquez sur "Modifier Client"<br>
+                        Si vous souhaitez modifier les informations d\'un contact, cliquez sur "Modifier Contact"
+                    </p>
+                <div id="bloc-Societe">
+                    <p>
+                    <br> 	       
+                         &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->idSociete.'> &emsp;
+                         Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->nom.'> &emsp;
+                         Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$s->siteWeb.'> &emsp;  
+                    <br> 
+                    <br> 
+                         &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$s->telephone.'> &emsp;
+                         Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$s->adresse.'> &emsp;
+                         Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->raison.'> &emsp;
+                    <br> 
+                    <br> 
+                         &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$s->mail.'> &emsp;
+                        <type=input id="btn-voirDetail" value=MODIFIER DONNEE ENTREPRISE>   
+                    <br>  
+
+                    <br>  
+                    </p>
+                </div>';
+    
+    $lcc = $this->vpdo->listeContactClients();
+    while($ligneIdContact = $lcc->fetch(PDO::FETCH_OBJ))
+    {
+    $return = $return.'<br /><div id="bloc-liste"> <p>
+    <br />
+    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdContact->idClient.'> &emsp;
+    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdContact->nom.'> &emsp;
+    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdContact->prenom.'> &emsp;
+    <br />
+    <br />
+    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdContact->telephone.'> &emsp;
+    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdContact->mail.'> &emsp;
+    <br />
+    <br />
+    <a href="fournisseurs/'.$ligneIdContact->idSociete.'" id="btn-voirDetail">Voir Contact</a>
+    <br />
+    <br />
+    </p></div>';
+    }
+    $return = $return.'</div>
+       <a href="Contact/Ajouter" id="btn-ajouter">Ajouter une société </a>';
+    //renvoie vers la page "Ajouter un Contact"
+    return $return;
+}
+
+public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp
 		$mdp = "";
 	
@@ -200,7 +343,7 @@ class controleur {
 	
 		// retourner le résultat final
 		return $mdp;
-	}
+}
 	
 	
 }

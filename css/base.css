@@ -299,7 +299,7 @@ pre strong {
    	float:right;
 }
 
-#btn-ajouterUnDevis
+#btn-ajouter
 {
 	display: block;
 	padding:0.5em;
@@ -309,7 +309,7 @@ pre strong {
    	float:right;
 }
 
-#bloc-devis
+#bloc-liste
 {
 	background:#B2C3C0;
 	border:solid 1px black;
