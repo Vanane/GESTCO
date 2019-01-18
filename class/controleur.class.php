@@ -90,16 +90,16 @@ class controleur {
 	}	
 	
 	public function confirmationLogin($login,$mdp)
-	{  // v�rifie si l'identifiant et le mots de passe est valide
+	{  // verifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
 	    if($result != null)
 	    {
 	        echo 'connecte';
-	        session_start ();
-	        // on enregistre les param�tres de notre visiteur comme variables de session ($login et $pwd) (notez bien que l'on utilise pas le $ pour enregistrer ces variables)
-	        $_SESSION['id'] = $result->prenom;
-	        $_SESSION['type'] = $result->idType;
+	        session_start();
+	        // on enregistre les parametres du visiteur comme variables de session
+	        $_SESSION['id'] = $result->identifiant;    // son identifiant
+	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
 	        
 	        // on redirige notre visiteur vers une page de notre section membre
 	        header ('location: Accueil');  
@@ -107,17 +107,17 @@ class controleur {
 	    else {
 	        // Le visiteur n'a pas �t� reconnu comme �tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
-	        echo ' pas connect�';
+	        echo ' pas connecté';
 	        // puis on le redirige vers la page d'accueil
-	        echo '<meta http-equiv="refresh" content="0;URL=index.htm">';
+	        echo '<meta http-equiv="refresh" content="0;URL=Accueil">';
 	    }
 	}
+	
     public function estConnecte()
     {
         if(isset($_SESSION['id']) && isset($_SESSION['type']))
             return $_SESSION['type'];
         else return false;
-        
     }
 	
 	public function listeDevis()
@@ -157,73 +157,13 @@ class controleur {
    </p></div>';
 	}
 	
+
     $return = $return.'</div>
     <a href="Devis/Ajouter" id="btn-ajouterUnDevis">Ajouter un Devis</a>';
     
     return $return;
 	}
 	
-	/*public function ajouterDevis()
-	{
-	    
-	    $return='<p>
-        <fieldset> Voici l outil d ajout des devis. Ci-dessous les informations demandé pour créer un nouveau devis.</fieldset>
-        <div id="information_devis">
-                    <row>
-                        <p>Responsable Devis : <input type="text" value=""></p>
-                    </row>                    
-                    <row>
-                        <p>N° Vente : <input type="text" value=""></p>
-                        <p>N° Client : <input type="text" value=""></p>
-                        <p>Date : <input type="text" value=""> </p>
-                    </row>
-                    <row>
-                        <p>Entreprise : <input type="text" value=""></p>
-                        <p>Adresse : <input type="text" value=""> </p>
-                        <p>Coordonnées : <input type="text" value=""> </p>
-
-                    </row>
-                </div>
-          <div id="details-article">
-                    <table>
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
-	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
-	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
-	    {	       
-	        $a = $this->vpdo->articleParSonId($d->idArticle);
-	        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
-	        $retour = $retour.'
-                        <tr>
-                                <td><select name="codeArticle">'
-$lesArticles = $this->vpdo->listeArticle());
- while($lesArticles->fetch(PDO::FETCH_OBJ))'
-
-<option value="France">France</option>
-<option value="Allemagne">Allemagne</option>
-<option value="autre">etc... </options>
-</select>'.$d->idArticle.'
-
-
-</td>
-                                <td>'.$a->libelle.'</td>
-                                <td>'.$a->dernierCMUP.'</td>
-                                <td>'.$d->qteDemandee.'</td>
-                                <td>'.$d->txRemise.'</td>
-                                <td>'.$d->remise.'</td>
-                                <td>'.$ht.'</td>
-                                <td>'.$a->txTVA.'</td>
-                                <td>'.$ht*(1+$a->txTVA).'</td>
-                                <td>'.$d->observation.'</td>
-                        </tr>';	       
-	    }    
-	    
-	  $retour = $retour.'
-                    </table>
-                </div>
-        </p>';
-	    return $return;
-	}
-	*/
 
 	   
 	public function genererMDP ($longueur = 8){
