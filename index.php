@@ -74,7 +74,8 @@
     		            break;
     		        case 'conflit' :
     		            break;		            		        
-		        }		    
+		        }
+		    }
 		    $site->affiche();
 		    break;		    
 		case 'articles':
@@ -91,6 +92,5 @@
 			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
 			$site->affiche();
 			break;
-	}	
-	
+	}		
 ?>
