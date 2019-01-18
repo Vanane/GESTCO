@@ -39,13 +39,12 @@ class controleur {
                     <row>
                         <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="text" value="'.substr($v->dateDevis,0 ).'" readonly></p>
+                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
                         <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
                         <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
-
                     </row>
                 </div>
 
@@ -102,13 +101,13 @@ class controleur {
 	        $_SESSION['id'] = $result->identifiant;    // son identifiant
 	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
 	        
-	        //Le visiteur pourra seulement rejoindre les pages ou son type (son rôle dans l'entreprise) le lui permet
-	        header ('location: Accueil'); 
-	        // l'envoi sur la page accueil afin qu'il puisse se diriger vers la page qu'il souhaite
+	        // on redirige notre visiteur vers une page de notre section membre
+	        header ('location: Accueil');  
 	    }
 	    else {
-	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
+	        // Le visiteur n'a pas �t� reconnu comme �tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
+	        echo ' pas connecté';
 	        // puis on le redirige vers la page d'accueil
 	        echo '<meta http-equiv="refresh" content="0;URL=Accueil">';
 	    }
@@ -117,18 +116,20 @@ class controleur {
     public function estConnecte()
     {
         if(isset($_SESSION['id']) && isset($_SESSION['type']))
-        return $_SESSION['type'];
+            return $_SESSION['type'];
         else return false;
     }
 	
 	public function listeDevis()
 	{
 	    
-	$return='<p><fieldset> 
-    Voici l outil de gestion des devis. Ci-dessous la liste des devis existants.
-    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".
-    Si vous souhaitez ajouter un devis cliquer sur le bouton "Ajouter un devis" tout en bas de la page.
-	</fieldset></p>';
+	$return='
+            <div id="conteneur">
+                <p style="margin-left: 1em">
+                    Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
+                    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
+                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
+                </p>';
 	
 	$l = $this->vpdo->listeVentes();
 	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))
@@ -139,84 +140,28 @@ class controleur {
     $c=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     
-    $return = $return.'<p><fieldset>
+    $return = $return.'<div id="bloc-devis"><p>
    
     Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
-    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.'-'.$e->nom.'-'.$e->prenom.'> &emsp;
+    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'> &emsp;
     Date devis :&emsp;<input type="text" readonly value='.$v->dateDevis.'> &emsp;
 
     <br /> <br /> 
 
-    Nom de l Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
+    Nom de l\'Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
     Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value='.$c->idClient.'>&emsp; 
     Prix Total :&emsp;<input type="text" readonly value='.$p->prixTotal.'>&emsp;
 
-     <br /><br /><br />
-
-    <a href="devis/'.$ligneIdVente->idVente.'"><input type="button" id="btn-voirDetail" value=" Voir Detail"></a>
+    <a href="devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail">Voir Details</a>
     
-    </fieldset></p>';
+   </p></div>';
 	}
 	
-    $return = $return.'<p><br/><br/><fieldset>
-    <a href="devis/ajouter"><input type="button" id="btn-ajouterUnDevis" value=" Ajouter un Devis"></a>
-    </fieldset></p>';
+
+    $return = $return.'</div>
+    <a href="Devis/Ajouter" id="btn-ajouterUnDevis">Ajouter un Devis</a>';
     
     return $return;
-	}
-	
-	
-	
-	public function ajouter()
-	{
-	    
-	    $vretour='
-        </br><fieldset>Voici l outil d ajout des devis. Ci-dessous les informations demandé pour créer un nouveau devis.</fieldset>
-        <div id="conteneur">
-        <div id="details-Ajouter">
-      
-                    <row>
-                        <p>Responsable Devis : <input type="text" value="">
-                        N° Vente : <input type="text" value="">
-                        N° Client : <input type="text" value="">
-                        Date : <input type="text" value=""> </p>
-               
-                        <p>Entreprise : <input type="text" value="">
-                        Adresse : <input type="text" value=""> 
-                        Coordonnées : <input type="text" value=""> 
-
-                    </row>
-                </div>
-	        
-  <div id="details-article">
-                <table>
-            
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';       
-
-	                            $vretour = $vretour.'<tr>
-                                <td><select name="codeArticle">';
-                                $l = $this->vpdo->listeArticle();
-	                            while($a= $l->fetch(PDO::FETCH_OBJ))
-                                {    
-                                $vretour = $vretour.'<option value="'.$a->idArticle.'">'.$a->idArticle.'</option>'; 
-                                }
-                                $vretour=$vretour.'</td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                <td><input type="text" value=""></td>
-                                </tr>';  
-	
-	    
-        $vretour=$vretour.' </table>
-                </div>
-            </div>';
-	    return $vretour;
 	}
 	
 

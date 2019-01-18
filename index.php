@@ -38,23 +38,21 @@
 			break;
 			
 		case 'ventes' :
-		       if(isset($params[2]))
-		       {
+		    $site->js = "ajoutLigneDevis";
+		    $site->left_sidebar = $site->afficheSousMenuVente();		    
+		    if(isset($params[2]))
+		    {
     		    switch($params[2])
     		    {
     		        case 'devis' :
-    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4 || $controleur->estConnecte() != false)
     		            {
     		                if(isset($params[3]))
-    		                {   
-    		                    if($params[3]=='ajouter')
-    		                    {
-    		                    $site->left_sidebar =$controleur->ajouter();
-    		                    }
+    		                {
+    		                    if($params[3] == "ajouter")
+    		                        $site->left_sidebar = $site->afficheAjoutDevis();
     		                    else 
-    		                    {
-    		                    $site->left_sidebar =$controleur->detailsDevis($params[3]);
-    		                    }
+                                        $site->left_sidebar =$controleur->detailsDevis($params[3]);
     		                }
     		                else
     		                {
@@ -63,7 +61,7 @@
     		            }
     		            else
     		            {
-    		                $site-> left_sidebar= "</br>Vous n'êtes pas connecté !";    		                    		               
+    		                $site-> left_sidebar= "Vous n'êtes pas connecté !";    		                    		               
     		            }
     		            break;
     		        case 'commande' :
@@ -76,42 +74,15 @@
     		            break;
     		        case 'conflit' :
     		            break;		            		        
-		        }
-		      }
-		       else
-		       {
-		          $site->left_sidebar = $site->sousMenuVente();
-		       }
-		    
+		        }		    
 		    $site->affiche();
-		    break;
-		case 'commandes':		   
-		    $site->left_sidebar = 'Page commandes';		    
-		    $site->affiche();
-		    
-		    break;
-		case 'preparations':		    
-		    $site->left_sidebar = 'Page préparations';		   
-		    $site->affiche();
-		    
-		    break;
-		case 'livraisons':	    
-		    $site->left_sidebar = 'Page livraisons';		    
-		    $site->affiche();
-		    
-		    break;
-		case 'facturations':		   
-		    $site->left_sidebar = 'Page facturations';		    
-		    $site->affiche();
-		    
-		    break;
-		case 'conflits':		    
-		    $site->left_sidebar = 'Page conflits';		    
-		    $site->affiche();	   
-		    break;
-		    
+		    break;		    
 		case 'articles':
 		    $site->left_sidebar = 'Page articles';
+		    $site->left_sidebar = ' <select id="blbl">
+                                         <option value="KEY">VALUE</option>
+                                    </select>';
+		    $site->right_sidebar = '<script>console.log(document.getElementById("blbl").options[document.getElementById("blbl").selectedIndex].text)</script>';
 		    $site->affiche();
 		    break;
 		    
