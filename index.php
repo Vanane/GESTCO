@@ -63,10 +63,18 @@
     		            {
     		                if(isset($params[3]))
     		                {
-    		                    if($params[3] == "ajouter")
-    		                        $site->left_sidebar = $site->afficheAjoutDevis();
-    		                    else 
-                                        $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                    switch($params[3])
+    		                    {
+    		                        case 'ajouter':
+                                        $site->left_sidebar = $site->afficheAjoutDevis();
+    		                            break;
+    		                        case 'confirmer':
+    		                            $site->left_sidebar = 'confirmation';
+    		                            break;
+    		                        default:    		                           
+    		                            $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                            break;
+    		                  }
     		                }
     		                else
     		                {
