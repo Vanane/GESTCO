@@ -74,7 +74,8 @@ class controleur {
 	  $retour = $retour.'
                     </table>
                 </div>
-            </div>';
+            </div>
+            <a id="btn-ajouterUnDevis" onclick=confirmerDevis()>Confirmer Devis</a>';
 	    return $retour;
 	}	
 		
@@ -98,19 +99,18 @@ class controleur {
 	        echo 'connecte';
 	        session_start();
 	        // on enregistre les parametres du visiteur comme variables de session
-	        $_SESSION['id'] = $result->identifiant;    // son identifiant
+	        $_SESSION['id'] = $result->identifiant;// son identifiant
+	        $_SESSION['idEmploye'] = $result->idEmploye; //Son id de base de données 
 	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
-	        
 	        // on redirige notre visiteur vers une page de notre section membre
-	        header ('location: Accueil');  
 	    }
 	    else {
 	        // Le visiteur n'a pas �t� reconnu comme �tant membre de notre site. On utilise alors un petit javascript lui signalant ce fait
 	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
 	        echo ' pas connecté';
 	        // puis on le redirige vers la page d'accueil
-	        echo '<meta http-equiv="refresh" content="0;URL=Accueil">';
 	    }
+	    header ('location: Accueil');	    
 	}
 	
     public function estConnecte()
@@ -137,24 +137,25 @@ class controleur {
     $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
     $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
-    $c=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+    $c=$v->idClient;
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     
-    $return = $return.'<div id="bloc-devis"><p>
+    $return = $return.'<div id="bloc-devis">
    
-    Code de la vente : &emsp;&emsp;<input type="text" readonly value='.$ligneIdVente->idVente.'> &emsp; 
-    Responsbale devis :&emsp;<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'> &emsp;
-    Date devis :&emsp;<input type="text" readonly value='.$v->dateDevis.'> &emsp;
-
-    <br /> <br /> 
-
-    Nom de l\'Entreprise :&emsp;<input type="text" readonly value='.$s->nom.'>&emsp;
-    Code du client :&emsp;&emsp;&emsp;<input type="text" readonly value='.$c->idClient.'>&emsp; 
-    Prix Total :&emsp;<input type="text" readonly value='.$p->prixTotal.'>&emsp;
-
-    <a href="devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail">Voir Details</a>
-    
-   </p></div>';
+                <row>
+                    <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
+                    <p>Responsbale devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
+                    <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
+                </row>
+                <row>
+                    <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
+                    <p>Code client :<input type="text" readonly value='.$c.'></p>
+                    <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
+                </row>
+                <row>
+                   <a href="Devis/'.$ligneIdVente->idVente.'/" id="btn-voirDetail">Voir Details</a>
+                </row>
+    </div>';
 	}
 	
 
@@ -164,7 +165,66 @@ class controleur {
     return $return;
 	}
 	
-
+	
+	
+	public function validationDevis()
+	{
+	    return "FAIRE insertDevis()";
+	    /*$this->vpdo->insertDevis();*/    
+	}
+	
+	public function afficheAjoutDevis()
+	{
+	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
+	    $emp = $this->vpdo->employeParSonId($_SESSION['idEmploye']);	  
+	    $lesClients = $this->vpdo->listeClients();	    
+	    $return = '
+            <div id="conteneur">
+                <div id="details-vente">
+                    <row>
+                        <p>Responsable Devis : <input type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
+                    </row>
+                    <row>
+                        <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
+                        <p>N° Client : <select id="idClient">';
+        
+        while($e = $lesClients->fetch(PDO::FETCH_OBJ))
+        {
+            $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
+        }
+        $return = $return.'</select></p>
+                        <p>Date : <input id="dateDevis" type="date"></p>
+                    </row>
+                    <row>
+                        <p>Entreprise : <input type="text" readonly></p>
+                        <p>Adresse : <input type="text" readonly></p>
+                        <p>Coordonnées : <input type="text" readonly></p>
+                    </row>
+                </div>
+	        
+                <div id="details-article">
+                    <table id="table-articles">
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
+                        <tr>
+                            <td><select id="idArticle1"></select></td>
+                            <td><input type="text" readonly></td>
+                            <td><input id="CMUPArticle1" type="number" readonly></td>
+                            <td><input id="qteArticle1" type="number" min=0></td>
+                            <td><input id="txArticle1" type="number" min=0 max=1></td>
+                            <td><input type="number" readonly></td>
+                            <td><input type="number" readonly></td>
+                            <td><input type="number" readonly></td>
+                            <td><input type="number" readonly></td>
+                            <td><input id="obsArticle1" type="text"></td>
+                      </tr>
+                    </table>
+                    <a id="bou-plusLigne" href="#bou-plusLigne" onclick="ajouteLigneArticleDevis()">+</a>
+                </div>
+            </div>
+	    <a id="bou-confirmerDevis" href="Confirmer">Enregistrer le devis</a>';
+	    return $return;
+	}
+	
 	   
 	public function genererMDP ($longueur = 8){
 		// initialiser la variable $mdp

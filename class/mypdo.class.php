@@ -96,7 +96,7 @@ class mypdo extends PDO{
     public  function listeComptes($identifiant,$mdp)
     {
         
-        $requete='SELECT * FROM employe WHERE prenom = "'.$identifiant.'" and mdp = "'.$mdp.'";';
+        $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
         
         $result=$this->connexion->query($requete);
         if ($result)
@@ -138,21 +138,50 @@ class mypdo extends PDO{
         $result=$this->connexion->query($r);
         if($result)
             return $result;
-            else
-                
+            else                
                 return null;
     }
-    public  function listeVente()
+
+    public function idDerniereVente()
     {
-        
-        $requete='SELECT idVente FROM VENTE';
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
+        $r="SELECT idVente FROM VENTE ORDER BY idVente DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
     }
+    
+    public function listeEmployes()
+    {
+        $r = "SELECT * FROM EMPLOYE";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeEmployesParType($type)
+    {
+        $r = 'SELECT * FROM EMPLOYE WHERE idType='.$type.'';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeClients()
+    {
+        $r = 'SELECT * FROM CONTACT_CLIENT';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;                
+    }
+    
     public  function employeParIdVente($idVente)
     {
         
@@ -167,7 +196,7 @@ class mypdo extends PDO{
     public  function entrepriseParIdVente($idVente)
     {
         
-        $requete='SELECT s.nom, v.idVente, v.idClient, v.dateDevis FROM detail_devis d, vente v, contact_client c, societe s WHERE d.idVente=v.idVente AND v.idClient= c.idClient  AND c.idSociete = s.idSociete AND v.idVente='.$idVente.'';
+        $requete='SELECT s.* FROM detail_devis d, vente v, contact_client c, societe s WHERE d.idVente=v.idVente AND v.idClient= c.idClient  AND c.idSociete = s.idSociete AND v.idVente='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
         {

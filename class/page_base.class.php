@@ -4,7 +4,7 @@ class page_base {
 	protected $right_sidebar;
 	protected $left_sidebar;
 	protected $titre;
-	protected $js=array('jquery-3.3.1.min','bootstrap.min');
+	protected $js=array();
 	protected $css=array('perso','base', 'modele');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
@@ -280,47 +280,6 @@ class page_base {
 	}
 	/************************************** Affiche la page ajout devis ************************************/
 	
-	public function afficheAjoutDevis()
-	{
-	    return '
-            <div id="conteneur">
-                <div id="details-vente">
-                    <row>
-                        <p>Responsable Devis : <select></select></p>
-                    </row>                    
-                    <row>
-                        <p>N° Vente : <input id="idVente" type="text" readonly></p>
-                        <p>N° Client : <select id="idClient"></select></p>
-                        <p>Date : <input id="dateDevis" type="date"></p>
-                    </row>
-                    <row>
-                        <p>Entreprise : <select id="idSociete"></select></p>
-                        <p>Adresse : <input type="text" readonly></p>
-                        <p>Coordonnées : <input type="text" readonly></p>
-                    </row>
-                </div>
-
-                <div id="details-article">
-                    <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
-                        <tr>
-                            <td><select id="idArticle1"></select></td>
-                            <td><input type="text" readonly></td>
-                            <td><input id="CMUPArticle1" type="number" readonly></td>
-                            <td><input id="qteArticle1" type="number" min=0></td>
-                            <td><input id="txArticle1" type="number" min=0 max=1></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
-                            <td><input id="obsArticle1" type="text"></td> 
-                      </tr>	  
-                    </table>
-                    <a id="bou-plusLigne" href="#bou-plusLigne" onclick="ajouteLigneArticleDevis()">+</a>
-                </div>
-                <a id="bou-confirmerDevis" href="'.$this->path.'Ventes/Devis/Confirmer">Enregistrer le devis</a>
-            </div>';
-	}
 	/****************************************** Affichage du pied de la page ***************************/
 	private function afficheFooter() {
 		echo '

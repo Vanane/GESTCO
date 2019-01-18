@@ -15,7 +15,7 @@
 	switch ($params[1]) {
 		case 'accueil' :
 			$site->titre='Accueil';
-			$site-> right_sidebar=$site->afficheBlocContact();
+			$site-> right_sidebar=$site->afficheBlocContact();			
 			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
 			$site->affiche();
 
@@ -38,7 +38,7 @@
 			break;
 			
 		case 'ventes' :
-		    $site->js = "ajoutLigneDevis";
+		    $site->js = "pageAjoutDevis";
 		    $site->left_sidebar = $site->afficheSousMenuVente();		    
 		    if(isset($params[2]))
 		    {
@@ -52,13 +52,20 @@
     		                    switch($params[3])
     		                    {
     		                        case 'ajouter':
-                                        $site->left_sidebar = $site->afficheAjoutDevis();
+                                        $site->left_sidebar = $controleur->afficheAjoutDevis();
     		                            break;
-    		                        case 'confirmer':
+    		                        case 'confirmer':    		                            
     		                            $site->left_sidebar = 'confirmation';
     		                            break;
-    		                        default:    		                           
-    		                            $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                        default:
+    		                            if(isset($params[4]))
+    		                            {
+    		                                $site->left_sidebar=$controleur->validationDevis();    		                                
+    		                            }
+    		                            else
+    		                            {
+    		                                $site->left_sidebar =$controleur->detailsDevis($params[3]);
+    		                            }
     		                            break;
     		                  }
     		                }
