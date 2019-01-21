@@ -134,7 +134,7 @@ public function listeDevis()
                 </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	
 	$l = $this->vpdo->listeVentes();
-	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boulce tant que..des données sont présentes dans la requête liste. 
+	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste. 
     {    
     $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
@@ -145,7 +145,7 @@ public function listeDevis()
     //on prévoit des varibles pour nos appels
     // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
     //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
-    $return = $return.'<div id="bloc-liste"><p>
+    $return = $return.'<div id="bloc-liste">
    
                 <row>
                     <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
@@ -162,12 +162,10 @@ public function listeDevis()
                 </row>
     </div>';
 	}
-	
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
     <a href="Devis/Ajouter" id="btn-ajouter">Ajouter un Devis</a>';
-    // on retourne la totalité du texte
-    return $return;
+    return $return;   // on retourne la totalité du texte
 	}
 	
 	public function validationDevis()
@@ -248,23 +246,23 @@ public function listeFournisseurs()
 	    while($ligneIdSociete = $lsf->fetch(PDO::FETCH_OBJ))
 	    {
 	        /*$ligneIdContact = $lcf->fetch(PDO::FETCH_OBJ);*/
-	        $return = $return.'<br /><div id="bloc-liste"> <p>
-    <br /> 	       
-    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->idSociete.'> &emsp;
-    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->nom.'> &emsp;
-    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> &emsp;  
-    <br /> 
-    <br /> 
-    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->telephone.'> &emsp;
-    Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->adresse.'> &emsp;
-    Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->raison.'> &emsp;
-    <br /> 
-    <br /> 
-    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdSociete->mail.'> &emsp;
+	        $return = $return.'
+    <div id="bloc-liste"> 
+   	<row>    
+        <p>Code de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+        <p>Nom de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
+        <p>Site web de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
+    <row>
+    <row>
+        <p>Téléphone de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+        <p>Adresse de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+        <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+    <row>
+    <row>
+        <p>Mail de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
     <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
-    <br />  
-    <br />  
-    </p></div>';
+    <row> 
+   </div>';
 	}
 	   $return = $return.'</div>
        <a href="Fournisseur/Ajouter" id="btn-ajouter">Ajouter un fournisseur </a>';
@@ -290,24 +288,18 @@ public function listeClients()
     $lsc = $this->vpdo->listeSocieteClients();
     while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
-        
-        $return = $return.'<br /><div id="bloc-liste"> <p>
-     <br /> 	       
-    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->idSociete.'> &emsp;
-    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->nom.'> &emsp;
-    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> &emsp;  
-    <br /> 
-    <br /> 
-    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->telephone.'> &emsp;
-    Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdSociete->adresse.'> &emsp;
-    Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdSociete->raison.'> &emsp;
-    <br /> 
-    <br /> 
-    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdSociete->mail.'> &emsp;
+    $return = $return.'<div id="bloc-liste">    
+    <p>Code de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+    <p>Nom de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->nom.'></p>
+    <p>Site web de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->siteWeb.'></p> 
+ 
+    <p>Téléphone de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+    <p>Adresse de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+    <p>Raison sociale : <input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+  
+    <p>Mail de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->mail.'></p>
     <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
-    <br />  
-    <br />  
-    </p></div>';
+   </div>';
     }
     $return = $return.'</div>
        <a href="Contact/Ajouter" id="btn-ajouter">Ajouter une société </a>';
