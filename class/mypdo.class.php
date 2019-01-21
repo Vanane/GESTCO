@@ -48,7 +48,7 @@ class mypdo extends PDO{
         return null;
     }
      
-    public  function listeArticle()
+    public  function listeArticles()
     {
         
         $requete='SELECT * FROM ARTICLE ;';

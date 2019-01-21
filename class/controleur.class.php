@@ -51,6 +51,7 @@ public function detailsDevis($idVente)
                 <div id="details-article">
                     <table>
                         <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+	    
 	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
 	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
 	    {	       
@@ -178,16 +179,17 @@ public function listeDevis()
 	{
 	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
 	    $emp = $this->vpdo->employeParSonId($_SESSION['idEmploye']);	  
-	    $lesClients = $this->vpdo->listeClients();	    
+	    $lesClients = $this->vpdo->listeClients();
+	    $lesArticles = $this->vpdo->listeArticles();
 	    $return = '
             <div id="conteneur">
                 <div id="details-vente">
                     <row>
-                        <p>Responsable Devis : <input type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
+                        <p>Responsable Devis : <input id="respDevis" type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
                     </row>
                     <row>
                         <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
-                        <p>N° Client : <select id="idClient">';
+                        <p>N° Client :<select id="idClient">';
         
         while($e = $lesClients->fetch(PDO::FETCH_OBJ))
         {
@@ -197,9 +199,9 @@ public function listeDevis()
                         <p>Date : <input id="dateDevis" type="date"></p>
                     </row>
                     <row>
-                        <p>Entreprise : <input type="text" readonly></p>
-                        <p>Adresse : <input type="text" readonly></p>
-                        <p>Coordonnées : <input type="text" readonly></p>
+                        <p>Société : <input id="idSociete" type="text" readonly></p>
+                        <p>Adresse : <input id="adrSociete" type="text" readonly></p>
+                        <p>Coordonnées : <input id="coordSociete" type="text" readonly></p>
                     </row>
                 </div>
 	        
@@ -207,11 +209,16 @@ public function listeDevis()
                     <table id="table-articles">
                         <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
-                            <td><select id="idArticle1"></select></td>
-                            <td><input type="text" readonly></td>
+                            <td><select id="idArticle1">';
+        while($e = $lesArticles->fetch(PDO::FETCH_OBJ))
+        {
+            $return = $return.'<option value="'.$e->idArticle.'">'.$e->idArticle.'</option>';
+        }        
+        $return = $return.'</select></td>
+                            <td><input id="nomArticle1" type="text" readonly></td>
                             <td><input id="CMUPArticle1" type="number" readonly></td>
                             <td><input id="qteArticle1" type="number" min=0></td>
-                            <td><input id="txArticle1" type="number" min=0 max=1></td>
+                            <td><input id="txArticle1" type="number" min=0 max=100 step=0.01></td>
                             <td><input type="number" readonly></td>
                             <td><input type="number" readonly></td>
                             <td><input type="number" readonly></td>
@@ -219,10 +226,10 @@ public function listeDevis()
                             <td><input id="obsArticle1" type="text"></td>
                       </tr>
                     </table>
-                    <a id="bou-plusLigne" href="#bou-plusLigne" onclick="ajouteLigneArticleDevis()">+</a>
+                    <a id="bou-plusLigne">+</a>
                 </div>
             </div>
-	    <a id="bou-confirmerDevis" href="Confirmer">Enregistrer le devis</a>';
+	    <a id="bou-confirmerDevis">Enregistrer le devis</a>';
 	    return $return;
 	}
 	
