@@ -142,7 +142,7 @@ public function listeDevis()
     $c=$v->idClient;
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     
-    //on prévoit des varibles pour nos appels
+    //on prévoit des variables pour nos appels
     // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
     //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
     $return = $return.'<div id="bloc-liste">

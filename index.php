@@ -52,6 +52,8 @@
 		case 'Achats':
 		    break;
 		case 'ventes' :
+		    if($controleur->estConnecte()!= false)
+		    {
 		    $site->js = "pageAjoutDevis";
 		    $site->left_sidebar = $site->afficheSousMenuVente();		    
 		    if(isset($params[2]))
@@ -59,7 +61,7 @@
     		    switch($params[2])
     		    {
     		        case 'devis' :
-    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4 || $controleur->estConnecte() != false)
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
     		            {
     		                if(isset($params[3]))
     		                {
@@ -88,10 +90,6 @@
     		                    $site-> left_sidebar=$controleur->listeDevis();
     		                }
     		            }
-    		            else
-    		            {
-    		                $site-> left_sidebar= "Vous n'êtes pas connecté !";    		                    		               
-    		            }
     		            break;
     		        case 'commande' :
     		            break;
@@ -105,7 +103,13 @@
     		            break;		            		        
 		        }
 		    }
-		    $site->affiche();
+		    }
+		    else
+		    {
+		        $site-> left_sidebar= "Vous n'êtes pas connecté !";
+		    }
+		    
+		    $site->affiche();		    
 		    break;		
 		case 'articles':
 		    $site->left_sidebar = 'Page articles';
