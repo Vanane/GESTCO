@@ -311,7 +311,7 @@ pre strong {
 }	
 
 
-#bloc-devis row
+#bloc-liste row
 {
 	position:relative;
 	display:block;
@@ -319,14 +319,14 @@ pre strong {
 	height:4em;
 }
 
-#bloc-devis row p
+#bloc-liste row p
 {
 	display:block;
 	float:left;
 	width:33%;	
 }
 
-#bloc-devis row p input
+#bloc-liste row p input
 {
 	display:block;
 	float:right;
