@@ -72,6 +72,18 @@ class mypdo extends PDO{
         }
         return null;
     }
+    public  function listeContactClientsParID($id)
+    {
+        
+        $requete='SELECT c.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.' ;';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     public  function listeSocieteFournisseurs()
     {
         
@@ -98,8 +110,48 @@ class mypdo extends PDO{
     }
     
     /*------------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------------FIN-LISTE-----------------------------------------------------*/
+    /*---------------------------------------------------FIN-LISTE-DEBUT-DELETE-----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
+
+    public function deleteContactClient($id)
+    {
+        $r='DELETE FROM contact_client WHERE idClient='.$id.'';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function deleteContactFournisseur($id)
+    {
+        $r='DELETE FROM contact_fournisseur WHERE idClient='.$id.'';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    /*------------------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------FIN-DELETE-DEBUT-INSERT----------------------------------------*/
+    /*------------------------------------------------------------------------------------------------------------------*/
+   
+    
+    public function insertContactClient($id, $nom, $prenom, $adresse, $telephone)
+    {
+        $sql='INSER INTO contact_client (idClient,nomn prenom, adresse, telephone)VALUES('.$id.', '.$nom.', '.$prenom.', '.$adresse.','.$telephone.')';
+        $result=$this->connexion->query($sql)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+   
+ 
+/*------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------FIN-INSERT-------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------*/
+    
     
     public function articleParSonId($id)
     {

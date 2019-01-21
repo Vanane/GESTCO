@@ -45,10 +45,36 @@
 		    $site-> left_sidebar=$controleur->listeFournisseurs();
 		    $site->affiche();
 		    break;
+		    
 		case 'clients':
-		    $site-> left_sidebar=$controleur->listeClients();
-		    $site->affiche();
+		    if($controleur->estConnecte()!= false)
+		    {
+		          if(isset($params[2]))
+		          {
+		            
+		              switch($params[2])
+		                 {
+                         case 'ajouterClient':
+		                 $site->left_sidebar = $controleur->ajouterClient();
+		                 break;
+		                 default:
+		                 $site-> left_sidebar=$controleur->listeContactClients($params[2]);
+		                 $site->js="boutton";
+		                 break;
+		                 }
+		          }
+		          else
+		          {
+		              $site-> left_sidebar=$controleur->listeClients();
+		          }
+		          $site->affiche();
+		    }
+             else
+		    {
+		          $site-> left_sidebar= "Vous n'êtes pas connecté !";
+		    }
 		    break;
+		    
 		case 'Achats':
 		    break;
 		case 'ventes' :

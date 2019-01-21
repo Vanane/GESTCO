@@ -265,7 +265,7 @@ public function listeFournisseurs()
    </div>';
 	}
 	   $return = $return.'</div>
-       <a href="Fournisseur/Ajouter" id="btn-ajouter">Ajouter un fournisseur </a>';
+       <a href="Fournisseurs/ajouterContact" id="btn-ajouter">Ajouter un fournisseur </a>';
 	   //renvoie vers la page "Ajouter un Fournisseur" 
 	   return $return;
 }
@@ -288,117 +288,91 @@ public function listeClients()
     $lsc = $this->vpdo->listeSocieteClients();
     while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
-    $return = $return.'<div id="bloc-liste">    
+    $return = $return.'<div id="bloc-liste">   
+  <row> 
     <p>Code de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
     <p>Nom de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->nom.'></p>
     <p>Site web de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->siteWeb.'></p> 
- 
+  <row>
+  <row>
     <p>Téléphone de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
     <p>Adresse de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
     <p>Raison sociale : <input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-  
+  <row>
+  <row>
     <p>Mail de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
+    <a href="clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
+  <row>
    </div>';
     }
-    $return = $return.'</div>
-       <a href="Contact/Ajouter" id="btn-ajouter">Ajouter une société </a>';
+    $return = $return.'<a href="Clients/ajouterContact" id="btn-ajouter">Ajouter une société </a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
 
-public function listeContactClients()
-{//récupérer l'id de la page ($id)
-    $s = $this->vpdo->societeParSonId($id);
+public function listeContactClients($idClient)
+{
+    $s = $this->vpdo->societeParSonId($idClient);
     $return='
                 <div id="conteneur">
                     <p style="margin-left: 1em">
-                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client sélectionné.<br>
-                        Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Ajouter un Contact"<br>
-                        Si vous souhaitez modifier les informations d\'un client, cliquez sur "Modifier Client"<br>
-                        Si vous souhaitez modifier les informations d\'un contact, cliquez sur "Modifier Contact"
-                    </p>
-                <div id="bloc-Societe">
-                    <p>
-                    <br> 	       
-                         &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->idSociete.'> &emsp;
-                         Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->nom.'> &emsp;
-                         Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$s->siteWeb.'> &emsp;  
-                    <br> 
-                    <br> 
-                         &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$s->telephone.'> &emsp;
-                         Adresse de l\'entreprise :&emsp;<input type="text" readonly value='.$s->adresse.'> &emsp;
-                         Raison sociale :&emsp;&emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$s->raison.'> &emsp;
-                    <br> 
-                    <br> 
-                         &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$s->mail.'> &emsp;
-                        <type=input id="btn-voirDetail" value=MODIFIER DONNEE ENTREPRISE>   
-                    <br>  
-
-                    <br>  
-                    </p>
-                </div>';
-    
-    $lcc = $this->vpdo->listeContactClients();
+                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idClient.'.<br>
+                        Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
+                        Si vous souhaitez modifier les informations d\'un contact, cliquez sur "VALIDER LES MODIFICATIONS CONTACT"<br>
+                        Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
+                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "AjOUTER UN CONTACT"     
+                    </p> ';
+   $return = $return.'<div id="details-operation">
+                       
+                     <row>    
+                        <p><b>INFORMATION SUR L\'ENTREPRISE</b></p>   
+                        <p> Code de l\'entreprise : <input type="text" readonly value='.$s->idSociete.'> </p>
+                        <p>  Nom de l\'entreprise : <input type="text" value='.$s->nom.'> </p>
+                     </row>
+                     <row>
+                        <p>  Site web de l\'entreprise : <input type="text" value='.$s->siteWeb.'> </p>  
+                        <p>  Téléphone de l\'entreprise : <input type="text"  value='.$s->telephone.'> </p>
+                        <p> Adresse de l\'entreprise : <input type="text" value='.$s->adresse.'> </p>
+                      </row>
+                      <row>
+                        <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
+                        <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
+                      </row>
+                      <row>
+                      </row>
+                </div></div>';
+   //<a href="ajouterModifEntreprise.php" target="_blank"> <input type="button" id = btn-ajouter value="VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"> </a>
+    $lcc = $this->vpdo->listeContactClientsParId($idClient);
+    if(isset($_POST['validerModifEntreprise']))
+  {
+      //$sql=$this->vpdo->deleteContactClient($idClient);
+  }
     while($ligneIdContact = $lcc->fetch(PDO::FETCH_OBJ))
-    {
-    $return = $return.'<br /><div id="bloc-liste"> <p>
-    <br />
-    &emsp;Code de l\'entreprise : &emsp;&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdContact->idClient.'> &emsp;
-    Nom de l\'entreprise :&emsp;&emsp;&nbsp;<input type="text" readonly value='.$ligneIdContact->nom.'> &emsp;
-    Site web de l\'entreprise :&nbsp;<input type="text" readonly value='.$ligneIdContact->prenom.'> &emsp;
-    <br />
-    <br />
-    &emsp;Téléphone de l\'entreprise :&emsp;<input type="text" readonly value='.$ligneIdContact->telephone.'> &emsp;
-    &emsp;Mail de l\'entreprise :&emsp;&emsp;&emsp;&emsp;<input type="text" readonly value='.$ligneIdContact->mail.'> &emsp;
-    <br />
-    <br />
-    <a href="fournisseurs/'.$ligneIdContact->idSociete.'" id="btn-voirDetail">Voir Contact</a>
-    <br />
-    <br />
-    </p></div>';
+    { 
+    $return = $return.'
+<div id="bloc-liste">       
+    <row> 
+        <p>Code du contact : <input type="text" readonly value='.$ligneIdContact->idClient.'></p>
+        <p>Nom du contact : <input type="text"  value='.$ligneIdContact->nom.'></p>
+        <p>Prenom du contact : <input type="text"  value='.$ligneIdContact->prenom.'></p> 
+    </row>
+    <row>
+        <p>Téléphone du contact : <input type="text"  value='.$ligneIdContact->telephone.'></p>
+        <p>Mail du cntact : <input type="text"  value='.$ligneIdContact->mail.'></p>
+     </row>   
+     <row> 
+        <input type="button" id="btn-ajouter" value="SUPPRIMER LE CONTACT">
+        <input type="button" id="btn-ajouter" value="VALIDER LES MODIFICATIONS DU CONTACT">
+
+    <//row>
+</div>';
     }
-    $return = $return.'</div>
-       <a href="Contact/Ajouter" id="btn-ajouter">Ajouter une société </a>';
-    //renvoie vers la page "Ajouter un Contact"
+    $return = $return.'<input type="button" id="btn-ajouter" value="AJOUTER UN CONTACT">';
+   
+    
     return $return;
 }
 
-public function genererMDP ($longueur = 8){
-		// initialiser la variable $mdp
-		$mdp = "";
-	
-		// Définir tout les caractères possibles dans le mot de passe,
-		// Il est possible de rajouter des voyelles ou bien des caractères spéciaux
-		$possible = "2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ&#@$*!";
-	
-		// obtenir le nombre de caractères dans la chaîne précédente
-		// cette valeur sera utilisé plus tard
-		$longueurMax = strlen($possible);
-	
-		if ($longueur > $longueurMax) {
-			$longueur = $longueurMax;
-		}
-	
-		// initialiser le compteur
-		$i = 0;
-	
-		// ajouter un caractère aléatoire à $mdp jusqu'à ce que $longueur soit atteint
-		while ($i < $longueur) {
-			// prendre un caractère aléatoire
-			$caractere = substr($possible, mt_rand(0, $longueurMax-1), 1);
-	
-			// vérifier si le caractère est déjà utilisé dans $mdp
-			if (!strstr($mdp, $caractere)) {
-				// Si non, ajouter le caractère à $mdp et augmenter le compteur
-				$mdp .= $caractere;
-				$i++;
-			}
-		}
-	
-		// retourner le résultat final
-		return $mdp;
-}
 	
 	
 }

@@ -317,6 +317,7 @@ pre strong {
 	display:block;
 	width:100%;
 	height:4em;
+	
 }
 
 #bloc-liste row p
@@ -324,6 +325,7 @@ pre strong {
 	display:block;
 	float:left;
 	width:33%;	
+	padding:0.1em;
 }
 
 #bloc-liste row p input
@@ -392,6 +394,46 @@ pre strong {
 	overflow-y:scroll;	
 	overflow-x:none;
 }
+
+#details-operation
+{
+	position:absolute;
+	width:100%;
+	height:65%;
+	top:35%;
+	box-sizing:border-box;
+	overflow-y:scroll;	
+	overflow-x:none;
+	border-style: solid;
+  	border-width: 0.5px;
+}
+
+#details-operation roow
+{
+
+	position:relative;
+	display:block;
+	width:100%;
+	height:4em;
+	
+}
+
+#details-operation row p
+{
+	display:block;
+	float:left;
+	width:33%;	
+	padding:0.1em;
+}
+
+#details-operation row p input
+{
+	display:block;
+	float:right;
+	width:40%;
+}
+	
+
 
 #details-article table td, #details-article table th
 {	
