@@ -70,6 +70,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 				let tva = document.getElementById("tva"+item.id.substring(9,10));
 				
 				$.ajax({ //AJAX pour récupérer les infos d'un article.
+<<<<<<< HEAD
 			        type: "POST",
 			        dataType: "json",
 			        data:
@@ -91,6 +92,28 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(ajaxOptions);
 			    	}
 				});
+=======
+		        type: "POST",
+		        dataType: "json",
+		        data:
+		    	{
+		        	'action':'infoArticle',
+		    		'idArticle':item.value
+		    	},
+		        url: "../../ajax/ajoutDevisAjax.php",
+		        success: function(r) {
+		        	nom.value = r['libelle'];
+		        	cmup.value = r['cmup'];
+		        	
+		        },
+		        error: function (xhr, ajaxOptions, thrownError)
+		        {
+		            console.log(xhr.status);
+		            console.log(thrownError);
+		            console.log(ajaxOptions);
+		    	}
+		    });
+>>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
 			}
 		}
 		

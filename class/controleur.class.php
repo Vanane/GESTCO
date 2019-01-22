@@ -314,7 +314,7 @@ public function listeClients()
   <row>
    </div>';
     }
-    $return = $return.'<a href="Clients/ajouterContact" id="btn-ajouter">Ajouter une société </a></div>';
+    $return = $return.'<a href="ajouterSocieteCliente"" id="btn-confirmerModifEntreprise">AJOUTER UNE SOCIETE CLIENTE</a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -346,6 +346,7 @@ public function listeContactClients($idClient)
                       <row>
                         <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
                         <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
+                        <button onclick="confirmerModifEntrepriseClient()" id="btn-confirmerModifEntreprise">MODIFIER LES INFORMATIONS SUR L\'ENTREPRISE</button>
                       </row>
                       <row>
                       </row>
@@ -370,20 +371,28 @@ public function listeContactClients($idClient)
         <p>Mail du cntact : <input type="text"  value='.$ligneIdContact->mail.'></p>
      </row>   
      <row> 
-        <input type="button" id="btn-ajouter" value="SUPPRIMER LE CONTACT">
-        <input type="button" id="btn-ajouter" value="VALIDER LES MODIFICATIONS DU CONTACT">
+        <button onclick="supprimerContactClient()" id="btn-confirmerModifEntreprise">SUPPRIMER LE CONTACT</button>
+        <button onclick="confirmerModifContactClient()" id="btn-confirmerModifEntreprise">VALIDER LES MODIFICATIONS DU CONTACT</button>
 
     <//row>
 </div>';
     }
-    $return = $return.'<input type="button" id="btn-ajouter" value="AJOUTER UN CONTACT">';
+    $return = $return.' <button onclick="ajouterContact()" id="btn-confirmerModifEntreprise">AJOUTER UN CONTACT</button>';
    
     
     return $return;
 }
-
+public function ajouterContact()
+{
+    $vretour='test';
 	
-	
+	return $vretour;
 }
-
+public function ajouterSocieteCliente()
+{
+    $vretour='<p>test</p>';
+    
+    return $vretour;
+}
+}
 ?>

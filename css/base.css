@@ -274,6 +274,19 @@ pre strong {
 	background: #478bf9;	
 }
 
+#btn-confirmerModifEntreprise
+{	
+	display:block;
+	float:right;
+	right:0;
+	bottom:0;
+	padding:0.5em;
+	margin: 15px;	
+	transition: background linear 0.1s;
+	background: #478bf9;	
+}
+
+
 #details-article input, #details-article select
 {
 	width:100%;

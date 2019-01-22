@@ -51,15 +51,23 @@
 		    {
 		          if(isset($params[2]))
 		          {
-		            
+		              $site->js = "pageClient";
 		              switch($params[2])
 		                 {
-                         case 'ajouterClient':
-		                 $site->left_sidebar = $controleur->ajouterClient();
+                         case 'ajouterSocieteCliente':
+                         $site->left_sidebar = $controleur->ajouterSocieteCliente;
 		                 break;
+                         case 'confirmerModificationEntrepriseClient':
+                         break;
+                         case 'confirmerModificationContactClient':
+                         break;
+                         case 'confirmerSupressionContactClient':
+                         break;
+                         case 'ajouterContact':
+                         $site->left_sidebar = $controleur->ajouterContact();
+                         break;
 		                 default:
 		                 $site-> left_sidebar=$controleur->listeContactClients($params[2]);
-		                 $site->js="boutton";
 		                 break;
 		                 }
 		          }
