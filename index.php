@@ -80,7 +80,6 @@
 		case 'ventes' :
 		    if($controleur->estConnecte()!= false)
 		    {
-		    $site->js = "pageAjoutDevis";
 		    $site->left_sidebar = $site->afficheSousMenuVente();		    
 		    if(isset($params[2]))
 		    {
@@ -94,6 +93,7 @@
     		                    switch($params[3])
     		                    {
     		                        case 'ajouter':
+    		                            $site->js = "pageAjoutDevis";    		                            
                                         $site->left_sidebar = $controleur->afficheAjoutDevis();
     		                            break;
     		                        case 'confirmer':    		                            

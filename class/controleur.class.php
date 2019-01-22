@@ -34,12 +34,12 @@ public function detailsDevis($idVente)
             <div id="conteneur">
                 <div id="details-vente">
                     <row>
-                        <p>Responsable Devis : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                        <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
                     </row>                    
                     <row>
                         <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
-                        <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly></p>
+                        <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
+                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
@@ -189,14 +189,15 @@ public function listeDevis()
                     </row>
                     <row>
                         <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
-                        <p>N° Client :<select id="idClient">';
+                        <p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"><select id="idClient">
+                                        <option selected hidden disabled></option>';//Ajoute une option vide pour forcer l'utilisateur à choisir.
         
         while($e = $lesClients->fetch(PDO::FETCH_OBJ))
         {
             $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
         }
-        $return = $return.'</select></p>
-                        <p>Date : <input id="dateDevis" type="date"></p>
+        $return = $return.'</select></span></p>
+                        <p>Date : <input id="dateDevis" type="date" required></p>
                     </row>
                     <row>
                         <p>Société : <input id="idSociete" type="text" readonly></p>
@@ -207,22 +208,23 @@ public function listeDevis()
 	        
                 <div id="details-article">
                     <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
-                            <td><select id="idArticle1">';
+                            <td><span class="tooltip" id="ttIdArticle" title="Sélectionnez au moins un article !"><select id="idArticle1">
+                                <option selected hidden></option>';
         while($e = $lesArticles->fetch(PDO::FETCH_OBJ))
         {
             $return = $return.'<option value="'.$e->idArticle.'">'.$e->idArticle.'</option>';
         }        
-        $return = $return.'</select></td>
+        $return = $return.'</select></span></td>
                             <td><input id="nomArticle1" type="text" readonly></td>
                             <td><input id="CMUPArticle1" type="number" readonly></td>
-                            <td><input id="qteArticle1" type="number" min=0></td>
-                            <td><input id="txArticle1" type="number" min=0 max=100 step=0.01></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
-                            <td><input type="number" readonly></td>
+                            <td><input id="qteArticle1" type="number" min=1 value=1></td>
+                            <td><input id="txArticle1" type="number" min=0 max=100 step=0.5 value=0></td>
+                            <td><input id="remise1" type="number" readonly></td>
+                            <td><input id="ht1" type="number" readonly></td>
+                            <td><input id="tva1" type="number" readonly></td>
+                            <td><input id="ttc1" type="number" readonly></td>
                             <td><input id="obsArticle1" type="text"></td>
                       </tr>
                     </table>

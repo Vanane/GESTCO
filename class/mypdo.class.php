@@ -139,7 +139,7 @@ class mypdo extends PDO{
     
     public function insertContactClient($id, $nom, $prenom, $adresse, $telephone)
     {
-        $sql='INSER INTO contact_client (idClient,nomn prenom, adresse, telephone)VALUES('.$id.', '.$nom.', '.$prenom.', '.$adresse.','.$telephone.')';
+        $sql='INSERT INTO contact_client (idClient,nomn prenom, adresse, telephone)VALUES('.$id.', '.$nom.', '.$prenom.', '.$adresse.','.$telephone.')';
         $result=$this->connexion->query($sql)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
@@ -147,9 +147,40 @@ class mypdo extends PDO{
                 return null;
     }
    
- 
+    public function insertVente($idVente, $idClient, $idEmploye, $date)
+    {
+        $q = 'INSERT INTO vente VALUES ('.$idVente.',"'.$idClient.'", "'.$date.'", null, null, null, null);';
+        $result = $this->connexion->query($q);
+        return $result;
+    }
+    
+    public function insertDetailDevis($idV, $idA, $idEm, $qte, $tx, $remise, $ttc, $obs)
+    {
+        $q = 'INSERT INTO detail_devis VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$ttc.'", "'.$obs.'");';
+        $result = $this->connexion->query($q);
+        return $result;
+    }
+    
 /*------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------FIN-INSERT-------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------*/
+    
+/*------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------------DEBUT UPDATE------------------------------------------------*/
+/*------------------------------------------------------------------------------------------------------------------*/
+    
+    public function updateDetailDevis($attr, $value)
+    {
+        $r='UPDATE detail_devis SET '.$attr.' = "'.$value.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+/*------------------------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------FIN UPDATE------------------------------------------------*/
 /*------------------------------------------------------------------------------------------------------------------*/
     
     
@@ -162,6 +193,21 @@ class mypdo extends PDO{
             else
                 return null;
     }
+    
+    
+    public function devisParSonId($idV, $idA)
+    {
+        $r='SELECT * from detail_devis WHERE idArticle = "'.$idA.'" AND idVente = "'.$idV.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+        {
+            $result=$result->fetch(PDO::FETCH_OBJ);
+            return $result;
+        }
+            else
+                return null;
+    }
+    
     
     public function venteParSonId($id)
     {

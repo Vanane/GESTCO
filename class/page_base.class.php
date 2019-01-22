@@ -4,8 +4,8 @@ class page_base {
 	protected $right_sidebar;
 	protected $left_sidebar;
 	protected $titre;
-	protected $js=array('jquery-3.3.1.min');
-	protected $css=array('perso','base', 'modele');
+	protected $js=array('jquery-3.3.1.min', 'tooltipster.main.min', 'tooltipster.bundle.min');
+	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );

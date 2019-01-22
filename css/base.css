@@ -395,6 +395,11 @@ pre strong {
 	overflow-x:none;
 }
 
+#details-article select option:first-child
+{
+	visibility:hidden;	
+}
+
 #details-operation
 {
 	position:absolute;
@@ -408,7 +413,7 @@ pre strong {
   	border-width: 0.5px;
 }
 
-#details-operation roow
+#details-operation row
 {
 
 	position:relative;
