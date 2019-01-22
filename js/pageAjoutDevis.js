@@ -65,7 +65,6 @@ $('document').ready(function(){
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
 		        {
-		        	console.log(item);
 		            console.log(xhr.status);
 		            console.log(thrownError);
 		            console.log(ajaxOptions);

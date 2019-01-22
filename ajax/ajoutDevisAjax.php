@@ -22,6 +22,10 @@ switch ($action)
         $r['libelle'] = $q->libelle;
         $r['cmup'] = $q->dernierCMUP;
         break;
+    case 'deleteClient':
+        $idC = $_POST['idClient'];
+        $q= $pdo->deleteContactClient($idC);
+        break;
 }
 die( json_encode($r) );
 ?>

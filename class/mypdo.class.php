@@ -185,7 +185,7 @@ class mypdo extends PDO{
     
     public function societeParSonId($id)
     {
-        $r='SELECT * from SOCIETE WHERE idSociete = '.$id;
+        $r='SELECT * from SOCIETE WHERE idSociete = '.$id.'';
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
