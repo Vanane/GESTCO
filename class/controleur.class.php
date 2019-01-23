@@ -346,7 +346,7 @@ public function listeContactClients($idSociete)
                       <row>
                         <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
                         <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
-                        <a href="modificationclient" onclick="modificationclient()" id="btn-confirmerModifEntreprise">Modifier les informations</a>
+                        <button onclick="modificationclient()" id="btn-confirmerModifEntreprise">Modifier les informations</button>
                       </row>
                       <row>
                       </row>
@@ -377,7 +377,7 @@ public function listeContactClients($idSociete)
     <//row>
 </div>';
     }
-    $return = $return.' <a href="ajoutercontact" onclick="ajoutercontact()" id="btn-confirmerModifEntreprise">Ajouter un contact</a>';
+    $return = $return.' <a onclick="ajoutercontact()" id="btn-confirmerModifEntreprise">Ajouter un contact</a>';
    
     
     return $return;

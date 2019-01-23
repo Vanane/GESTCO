@@ -1,9 +1,8 @@
   
-function confirmerModifEntrepriseClient() {
+$("#bou-modifclient").click(function() {
 	if (confirm("Pour valider les modifications des données de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "confirmerModificationEntrepriseClient";
-
+	location = "modificationclient";
 	}
 	}
 
@@ -37,7 +36,7 @@ function supprimerContactClient(){
 }
 
 
-function confirmerModifContactClient(){
+function modificationcontactclient(){
 	if (confirm("Pour valider les modifications des données du contact client, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
 	location = "modificationcontactclient";

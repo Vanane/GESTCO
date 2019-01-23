@@ -20,31 +20,31 @@
 			$site->affiche();
 			break;
 		case 'connexion' :
-		    if($controleur->estConnecte() == false)
-		    {
-			$site->titre='Connexion';
-			$site-> right_sidebar=$site->afficheBlocContact();
-			$site-> left_sidebar=$controleur->formulaireLogin();
-		    }
-	        else
-	        {
-	        $site-> left_sidebar= "Vous êtes déjà connecté !";
-	        }
+		      if($controleur->estConnecte() == false)
+		          {
+			         $site->titre='Connexion';
+			         $site-> right_sidebar=$site->afficheBlocContact();
+			         $site-> left_sidebar=$controleur->formulaireLogin();
+		          }
+	           else
+	              {
+	                 $site-> left_sidebar= "Vous êtes déjà connecté !";
+	              }
 	        $site->affiche();
-			break;			
+		    break;			
 		case 'confirmation':
-		    $site->titre='Confirmation';		   
-		    $site->left_sidebar=$controleur->confirmationLogin($_POST['login'],$_POST['pwd']);
-		    break;
+		      $site->titre='Confirmation';		   
+		      $site->left_sidebar=$controleur->confirmationLogin($_POST['login'],$_POST['pwd']);
+		      break;
 		case 'deconnexion' :
-			$_SESSION=array();
-			session_destroy();
-			echo '<script>document.location.href="Accueil"; </script>';
-			break;
+			  $_SESSION=array();
+			  session_destroy();
+			  echo '<script>document.location.href="Accueil"; </script>';
+			  break;
 		case 'fournisseurs':
-		    $site-> left_sidebar=$controleur->listeFournisseurs();
-		    $site->affiche();
-		    break;
+		      $site-> left_sidebar=$controleur->listeFournisseurs();
+		      $site->affiche();
+		      break;
 		    
 		case 'clients':
 		    if($controleur->estConnecte()!= false)
@@ -55,20 +55,23 @@
 		              switch($params[2])
 		                 {
 		                 case 'ajouterclient':
-		                 $site->left_sidebar = $controleur->ajouterSocieteCliente();
-		                 break;
+		                     $site->left_sidebar = $controleur->ajouterSocieteCliente();
+		                     break;
                          case 'modificationclient':
-                         break;
-                         case 'modificationcontactclient':
-                         break;
-                         case 'supprimercontactclient':
-                         break;
+                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
+                             break;
+                         case 'modificationcontact':
+                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
+                             break;
+                         case 'supprimercontact':
+                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
+                             break;
                          case 'ajoutercontact':
-                         $site->left_sidebar = $controleur->ajouterContact();
-                         break;
+                             $site->left_sidebar = $controleur->ajouterContact();
+                             break;
 		                 default:
-		                 $site-> left_sidebar=$controleur->listeContactClients($params[2]);
-		                 break;
+		                     $site-> left_sidebar=$controleur->listeContactClients($params[2]);
+                             break;
 		                 }
 		          }
 		          else
