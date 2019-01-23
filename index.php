@@ -54,16 +54,16 @@
 		              $site->js = "pageClient";
 		              switch($params[2])
 		                 {
-                         case 'ajouterSocieteCliente':
-                         $site->left_sidebar = $controleur->ajouterSocieteCliente;
+		                 case 'ajouterclient':
+		                 $site->left_sidebar = $controleur->ajouterSocieteCliente();
 		                 break;
-                         case 'confirmerModificationEntrepriseClient':
+                         case 'modificationclient':
                          break;
-                         case 'confirmerModificationContactClient':
+                         case 'modificationcontactclient':
                          break;
-                         case 'confirmerSupressionContactClient':
+                         case 'supprimercontactclient':
                          break;
-                         case 'ajouterContact':
+                         case 'ajoutercontact':
                          $site->left_sidebar = $controleur->ajouterContact();
                          break;
 		                 default:
@@ -82,7 +82,6 @@
 		          $site-> left_sidebar= "Vous n'êtes pas connecté !";
 		    }
 		    break;
-		    
 		case 'Achats':
 		    break;
 		case 'ventes' :
