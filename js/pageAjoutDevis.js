@@ -176,9 +176,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			        success: function(r) {
 			        	console.log(r['resultVente']);
 			        	console.log(r['resultDevis1']);
-			        	console.log(r['test1'])
-			        	console.log(r['test2'])
-			        	console.log(r['test3'])
 			        },
 			        error: function (xhr, ajaxOptions, thrownError)
 			        {
