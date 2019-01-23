@@ -243,35 +243,30 @@ pre strong {
 
 /* --- STYLE IHM AJOUT DEVIS --- */
 
-
-#bou-plusLigne
+.bou-classique
 {
-	display:block;
-	padding:1em 0;
-	width:100%;
-	text-align:center;
-	box-sizing:border-box;
-	float:right;
-	transition: background linear 0.1s;
-	background: #478bf9;
+	display: block;
+	padding:0.5em;
+	margin: 1em;
+	background:#478bf9;
+   	float:right;
+   	box-sizing:border-box;
+   	text-align:center;
+   	transition: background linear 0.1s;   	  
 }
 
-#bou-plusLigne:hover, #bou-confirmerDevis:hover, #btn-voirDetail:hover, #btn-ajouterUnDevis:hover
+
+.bou-plusLigne
+{
+	padding:0.8em 0;
+	margin:0;
+	width:100%;
+}
+
+#bou-classique:hover
 {
 	transition: background-color ease-in 0.1s;
 	background-color: #367ae8;
-}
-
-#bou-confirmerDevis
-{	
-	display:block;
-	float:right;
-	right:0;
-	bottom:0;
-	padding:0.5em;
-	margin: 15px;	
-	transition: background linear 0.1s;
-	background: #478bf9;	
 }
 
 #btn-confirmerModifEntreprise
@@ -309,7 +304,7 @@ pre strong {
 {
 	display: block;
 	padding:0.5em;
-	margin: 15px;
+	margin: 1em;
 	background:#478bf9;
    	float:right;
    	transition: background linear 0.1s;   	  
