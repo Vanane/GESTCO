@@ -100,10 +100,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 				let tva = document.getElementById("tva"+item.id.substring(9,10));
 				
 				$.ajax({ //AJAX pour récupérer les infos d'un article.
-<<<<<<< HEAD
-=======
-
->>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
 			        type: "POST",
 			        dataType: "json",
 			        data:
@@ -124,11 +120,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(thrownError);
 			            console.log(ajaxOptions);
 			    	}
-<<<<<<< HEAD
 				});
-=======
-				});
->>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
 			}
 		}		
 	}

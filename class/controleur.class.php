@@ -314,7 +314,7 @@ public function listeClients()
   <row>
    </div>';
     }
-    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">AJOUTER UNE SOCIETE CLIENTE</a></div>';
+    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">Ajouter une societe cliente</a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -329,7 +329,7 @@ public function listeContactClients($idSociete)
                         Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
                         Si vous souhaitez modifier les informations d\'un contact, cliquez sur "VALIDER LES MODIFICATIONS CONTACT"<br>
                         Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
-                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "AjOUTER UN CONTACT"     
+                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "Ajouter un contact"     
                     </p> ';
    $return = $return.'<div id="details-operation">
                        
@@ -346,7 +346,7 @@ public function listeContactClients($idSociete)
                       <row>
                         <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
                         <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
-                        <button onclick="modificationclient()" id="btn-confirmerModifEntreprise">Modifier les informations</button>
+                        <a onclick="modificationclient()" class="bou-classique">Modifier les informations</a>
                       </row>
                       <row>
                       </row>
@@ -368,16 +368,16 @@ public function listeContactClients($idSociete)
     </row>
     <row>
         <p>Téléphone du contact : <input type="text"  value='.$ligneIdContact->telephone.'></p>
-        <p>Mail du cntact : <input type="text"  value='.$ligneIdContact->mail.'></p>
+        <p>Mail du contact : <input type="text"  value='.$ligneIdContact->mail.'></p>
      </row>   
      <row> 
-        <a onclick="supprimercontactclient()" id="btn-confirmerModifEntreprise">Supprimer le contact</a>
-        <a onclick="modificationcontactclient()" id="btn-confirmerModifEntreprise">Modifier le contact</a>
+        <a onclick="supprimercontactclient()" class="bou-classique">Supprimer le contact</a>
+        <a onclick="modificationcontact()" class="bou-classique">Modifier le contact</a>
 
     <//row>
 </div>';
     }
-    $return = $return.' <a onclick="ajoutercontact()" id="btn-confirmerModifEntreprise">Ajouter un contact</a>';
+    $return = $return.'<a href="ajoutercontact" class="bou-classique">Ajouter un contact</a>';
    
     
     return $return;
