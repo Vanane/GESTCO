@@ -221,10 +221,10 @@ public function listeDevis()
                             <td><input id="CMUPArticle1" type="number" readonly></td>
                             <td><input id="qteArticle1" type="number" min=1 value=1></td>
                             <td><input id="txArticle1" type="number" min=0 max=100 step=0.5 value=0></td>
-                            <td><input id="remise1" type="number" readonly></td>
-                            <td><input id="ht1" type="number" readonly></td>
-                            <td><input id="tva1" type="number" readonly></td>
-                            <td><input id="ttc1" type="number" readonly></td>
+                            <td><input id="remise1" type="number" value=0 readonly></td>
+                            <td><input id="ht1" type="number" value=0 readonly></td>
+                            <td><input id="tva1" type="number" value=0 readonly></td>
+                            <td><input id="ttc1" type="number" value=0 readonly></td>
                             <td><input id="obsArticle1" type="text"></td>
                       </tr>
                     </table>

@@ -1,7 +1,11 @@
 var lesSelectsArticles = new Array();//Contient tous les selects de chaque ligne article.
-var lesCountersRemise = new Array();//Contient tous les numeric Updown %remise de chaque ligne article.
+
+
 $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le script.
 	
+	ajouteListenerCalculTTC("qteArticle1");//Ajoute un listener qui permet de calculer le prix au numeric qteArticle1
+	ajouteListenerCalculTTC("txArticle1");//Pareil pour txArticle1, ces deux éléments devant être initialisés de base.
+
 	$('.tooltip').tooltipster
 	({
 		trigger:'custom',
@@ -10,10 +14,8 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			click:true
 		},
 			
-	});
+	});	
 	
-	
-	lesCountersRemise.push(document.getElementById("txArticle1"));
 	lesSelectsArticles.push(document.getElementById("idArticle1"));//Ajoute le premier select dans la table	
 	ajouteListener();//Puis lui attribue un event au clic.
 	today = new Date();
@@ -33,8 +35,8 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		tr.insertCell().innerHTML = '<select id="idArticle'+rowCount+'"></select>';
 		tr.insertCell().innerHTML = '<input id="nomArticle'+rowCount+'" type="text" readonly>';
 		tr.insertCell().innerHTML = '<input id="CMUPArticle'+rowCount+'" type="number" readonly>';
-		tr.insertCell().innerHTML = '<input id="qteArticle'+rowCount+'" type="number" min=1 value=1>';
-		tr.insertCell().innerHTML = '<input id="txArticle'+rowCount+'" type="number" min=0 max=100 value=0 step:0.5>';
+		tr.insertCell().innerHTML = '<input id="qteArticle'+rowCount+'" type="number" min=0 value=0>';
+		tr.insertCell().innerHTML = '<input id="txArticle'+rowCount+'" type="number" min="0" max="100" value=0 step:0.5>';
 		tr.insertCell().innerHTML = '<td><input id="remise'+rowCount+'" type="number" readonly></td>';
 		tr.insertCell().innerHTML = '<td><input id="ht'+rowCount+'" type="number" readonly></td>';
 		tr.insertCell().innerHTML = '<td><input id="tva'+rowCount+'" type="number" readonly></td>';
@@ -45,12 +47,40 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		afficheLesArticles(rowCount);//Affecte au select de la nouvelle ligne, la liste des articles de la première ligne.
 		
 		lesSelectsArticles.push(document.getElementById("idArticle"+rowCount));//Ajoute le select de la nouvelle ligne à la table des selects.
-		lesCountersRemise.push(document.getElementById("txArticle"+rowCount));
+		ajouteListenerCalculTTC("txArticle"+rowCount);
+		ajouteListenerCalculTTC("qteArticle"+rowCount);
 
 		
 		ajouteListener();//Relance l'affectation des events clic.
 	});
 
+	
+	function ajouteListenerCalculTTC(idElement)	
+	{
+		let el = document.getElementById(idElement);
+		var numElement = el.id.substring(idElement.length-1,idElement.length);
+		el.onchange = function()
+		{
+			let qte = document.getElementById("qteArticle"+numElement);
+			let cmup = document.getElementById("CMUPArticle"+numElement);
+			let tva = document.getElementById("tva"+numElement);
+			let rem = document.getElementById("remise"+numElement);
+			let txrem = document.getElementById("txArticle"+numElement);
+			let ht = document.getElementById("ht"+numElement);
+			let ttc = document.getElementById("ttc"+numElement);
+			
+			if(qte.value<0 || qte.value=="")
+				qte.value=0;
+			if(txrem.value<0 || txrem.value>100 || txrem.value=="")
+				txrem.value=0;
+			
+			ht.value = qte.value*cmup.value;
+			ttc.value = ht.value*(1+(tva.value/100));
+			rem.value = ttc.value*(txrem.value/100);//Math.round et /100 pour arrondir à 2 décimales
+			ttc.value = ttc.value-rem.value;
+		}
+	}
+	
 	
 	function ajouteListener()
 	//Récupère tous les éléments de la table lesSelectsArticles
@@ -70,7 +100,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 				let tva = document.getElementById("tva"+item.id.substring(9,10));
 				
 				$.ajax({ //AJAX pour récupérer les infos d'un article.
-<<<<<<< HEAD
 			        type: "POST",
 			        dataType: "json",
 			        data:
@@ -92,47 +121,8 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(ajaxOptions);
 			    	}
 				});
-=======
-		        type: "POST",
-		        dataType: "json",
-		        data:
-		    	{
-		        	'action':'infoArticle',
-		    		'idArticle':item.value
-		    	},
-		        url: "../../ajax/ajoutDevisAjax.php",
-		        success: function(r) {
-		        	nom.value = r['libelle'];
-		        	cmup.value = r['cmup'];
-		        	
-		        },
-		        error: function (xhr, ajaxOptions, thrownError)
-		        {
-		            console.log(xhr.status);
-		            console.log(thrownError);
-		            console.log(ajaxOptions);
-		    	}
-		    });
->>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
 			}
-		}
-		
-		for (var i = 0; i < lesCountersRemise.length; i++)
-		{
-			let item = lesCountersRemise[i];		
-			document.getElementById(item.id).onchange = function()
-			{
-				let qte = document.getElementById("qteArticle"+item.id.substring(9,10));
-				let cmup = document.getElementById("CMUPArticle"+item.id.substring(9,10));
-				let tva = document.getElementById("tva"+item.id.substring(9,10));
-				let rem = document.getElementById("remise"+item.id.substring(9,10));
-				let ht = document.getElementById("ht"+item.id.substring(9,10));
-				let ttc = document.getElementById("ttc"+item.id.substring(9,10));
-				ht.value = qte.value*cmup.value;
-				ttc.value = ht.value*(1+(tva.value/100));
-				rem.value = ttc.value*(item.value/100);//Math.round et /100 pour arrondir à 2 décimales
-			}
-		}	
+		}		
 	}
 	
 	$("#bou-confirmerDevis").click(function()
