@@ -124,7 +124,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			}		
 		}
 	}	
-	$("#enregistrer").click(function()
 	//Affiche une popup de confirmation au clic sur enregistrer
 	{
 		var erreur = false;
