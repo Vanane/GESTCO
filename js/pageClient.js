@@ -10,24 +10,29 @@ function confirmerModifEntrepriseClient() {
 function supprimerContactClient(){
 	if (confirm("Pour supprimer les données du contact de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "confirmerSupressionContactClient";
-		/*$.ajax({
-	        type: "POST",
-	        dataType: "json",
-            data:
-        	{
-            	'action':'deleteClient',            	
-        		'idClient':$('#idClient option:checked').val()
-        	},
-            url: "../../ajax/ajoutDevisAjax.php",
-	        success: function(r) {
-	        },
-	        error: function (xhr, ajaxOptions, thrownError)
-	        {
-	            console.log(xhr.status);
-	            console.log(thrownError);
-	            console.log(ajaxOptions);
-	    	}*/
+	//location = "confirmerSupressionContactClient";	
+	$.ajax({ //AJAX pour récupérer les infos d'un article.
+
+        type: "POST",
+        dataType: "json",
+        data:
+    	{
+        	'action':'deleteClient',
+    		'idClient':item.value
+    	},
+        url: "../../ajax/ajoutDevisAjax.php",
+        success: function(r) {
+        },
+        error: function (xhr, ajaxOptions, thrownError)
+        {
+        	console.log(item);
+            console.log(xhr.status);
+            console.log(thrownError);
+            console.log(ajaxOptions);
+    	}
+	});
+	
+	
 	}
 }
 
@@ -35,7 +40,7 @@ function supprimerContactClient(){
 function confirmerModifContactClient(){
 	if (confirm("Pour valider les modifications des données du contact client, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "confirmerModificationContactClient";
+	location = "modificationcontactclient";
 	}
 	}
 

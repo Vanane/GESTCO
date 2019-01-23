@@ -314,18 +314,18 @@ public function listeClients()
   <row>
    </div>';
     }
-    $return = $return.'<a href="ajouterSocieteCliente"" id="btn-confirmerModifEntreprise">AJOUTER UNE SOCIETE CLIENTE</a></div>';
+    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">AJOUTER UNE SOCIETE CLIENTE</a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
 
-public function listeContactClients($idClient)
+public function listeContactClients($idSociete)
 {
-    $s = $this->vpdo->societeParSonId($idClient);
+    $s = $this->vpdo->societeParSonId($idSociete);
     $return='
                 <div id="conteneur">
                     <p style="margin-left: 1em">
-                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idClient.'.<br>
+                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idSociete.'.<br>
                         Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
                         Si vous souhaitez modifier les informations d\'un contact, cliquez sur "VALIDER LES MODIFICATIONS CONTACT"<br>
                         Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
@@ -346,13 +346,13 @@ public function listeContactClients($idClient)
                       <row>
                         <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
                         <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
-                        <button onclick="confirmerModifEntrepriseClient()" id="btn-confirmerModifEntreprise">MODIFIER LES INFORMATIONS SUR L\'ENTREPRISE</button>
+                        <a href="modificationclient" onclick="modificationclient()" id="btn-confirmerModifEntreprise">Modifier les informations</a>
                       </row>
                       <row>
                       </row>
                 </div></div>';
    //<a href="ajouterModifEntreprise.php" target="_blank"> <input type="button" id = btn-ajouter value="VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"> </a>
-    $lcc = $this->vpdo->listeContactClientsParId($idClient);
+    $lcc = $this->vpdo->listeContactClientsParId($idSociete);
     if(isset($_POST['validerModifEntreprise']))
   {
       //$sql=$this->vpdo->deleteContactClient($idClient);
@@ -371,13 +371,13 @@ public function listeContactClients($idClient)
         <p>Mail du cntact : <input type="text"  value='.$ligneIdContact->mail.'></p>
      </row>   
      <row> 
-        <button onclick="supprimerContactClient()" id="btn-confirmerModifEntreprise">SUPPRIMER LE CONTACT</button>
-        <button onclick="confirmerModifContactClient()" id="btn-confirmerModifEntreprise">VALIDER LES MODIFICATIONS DU CONTACT</button>
+        <a onclick="supprimercontactclient()" id="btn-confirmerModifEntreprise">Supprimer le contact</a>
+        <a onclick="modificationcontactclient()" id="btn-confirmerModifEntreprise">Modifier le contact</a>
 
     <//row>
 </div>';
     }
-    $return = $return.' <button onclick="ajouterContact()" id="btn-confirmerModifEntreprise">AJOUTER UN CONTACT</button>';
+    $return = $return.' <a href="ajoutercontact" onclick="ajoutercontact()" id="btn-confirmerModifEntreprise">Ajouter un contact</a>';
    
     
     return $return;
