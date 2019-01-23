@@ -37,7 +37,7 @@ public function detailsDevis($idVente)
                         <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
                     </row>                    
                     <row>
-                        <p>N° Vente : <input type="text" value="'.$v->idVente.'" readonly></p>
+                        <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
                         <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
                     </row>
@@ -76,7 +76,7 @@ public function detailsDevis($idVente)
                     </table>
                 </div>
             </div>
-            <a id="btn-ajouterUnDevis" onclick=confirmerDevis()>Confirmer Devis</a>';
+            <a id="confirmer" class="bou-classique">Confirmer Devis</a>';
 	    return $retour;
 }	
 		
@@ -228,10 +228,10 @@ public function listeDevis()
                             <td><input id="obsArticle1" type="text"></td>
                       </tr>
                     </table>
-                    <a id="bou-plusLigne">+</a>
+                    <a id="ajouteLigne" class="bou-classique bou-plusLigne">+</a>
                 </div>
             </div>
-	    <a id="bou-confirmerDevis">Enregistrer le devis</a>';
+	    <a id="enregistrer" class="bou-classique">Enregistrer le devis</a>';
 	    return $return;
 	}
 	

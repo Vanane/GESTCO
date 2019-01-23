@@ -20,7 +20,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 	ajouteListener();//Puis lui attribue un event au clic.
 	today = new Date();
 	document.getElementById("dateDevis").value = (today.getFullYear()+'-'+today.getMonth()+1+'-'+today.getDate());
-	$("#bou-plusLigne").click(function()
+	$("#ajouteLigne").click(function()
 	//Ajoute une ligne dans la table des articles au clic sur le bouton.
 	{		
 		var element = document.getElementById("table-articles");
@@ -100,10 +100,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 				let tva = document.getElementById("tva"+item.id.substring(9,10));
 				
 				$.ajax({ //AJAX pour récupérer les infos d'un article.
-<<<<<<< HEAD
-=======
-
->>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
 			        type: "POST",
 			        dataType: "json",
 			        data:
@@ -124,16 +120,11 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(thrownError);
 			            console.log(ajaxOptions);
 			    	}
-<<<<<<< HEAD
 				});
-=======
-				});
->>>>>>> branch 'master' of https://github.com/Vanane/GESTCO.git
-			}
-		}		
-	}
-	
-	$("#bou-confirmerDevis").click(function()
+			}		
+		}
+	}	
+	$("#enregistrer").click(function()
 	//Affiche une popup de confirmation au clic sur enregistrer
 	{
 		var erreur = false;
