@@ -9,7 +9,7 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );
-	protected $path="http://localhost/GESTCO/";
+	protected $path="http://192.168.168.194/GESTCO/";
 	
 	public function __construct() {
 		$numargs = func_num_args();
@@ -88,7 +88,8 @@ class page_base {
 	/* Insertion des feuilles de style */
 	private function afficheStyle() {
 		foreach ($this->css as $s) {
-			echo "<link rel='stylesheet'  href='".$this->path."css/".$s.".css' />\n";
+		   //echo "<link rel='stylesheet'  href='".$this->path."css/".$s.".css' />\n";
+		    echo "<link rel='stylesheet'  href='".$this->path."css/".$s.".css'/>\n";
 		}
 
 	}

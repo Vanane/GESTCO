@@ -11,6 +11,7 @@
 	if (!isset($params[1]))
 	{
 		$params[1]='accueil';
+		$site->right_sidebar = '<script>console.log()</script>';
 	}
 	switch ($params[1]) {
 		case 'accueil' :
@@ -142,13 +143,12 @@
 		    
 		    $site->affiche();		    
 		    break;		
+		    
 		case 'articles':
-		    $site->left_sidebar = 'Page articles';
-		    $site->left_sidebar = ' <select id="blbl"><option value="KEY">VALUE</option></select>';
-		    $site->right_sidebar = '<script>console.log(document.getElementById("blbl").options[document.getElementById("blbl").selectedIndex].text)</script>';
+		    $site->left_sidebar = $controleur->afficheListeArticles();
 		    $site->affiche();
 		    break;
-		    
+
 	    default: 
 			$site->titre='Accueil';			
 			$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
