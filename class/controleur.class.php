@@ -322,8 +322,7 @@ public function listeClients()
 public function listeContactClients($idSociete)
 {
     $s = $this->vpdo->societeParSonId($idSociete);
-    $return='
-                <div id="conteneur">
+    $return='   <div id="conteneur">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idSociete.'.<br>
                         Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
@@ -331,21 +330,21 @@ public function listeContactClients($idSociete)
                         Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
                         Si vous souhaitez ajouter un nouveau contact, cliquez sur "Ajouter un contact"     
                     </p> ';
+   $return=$return.' <p><b>INFORMATION SUR L\'ENTREPRISE</b></p> ';  
    $return = $return.'<div id="details-operation">
-                       
-                     <row>    
-                        <p><b>INFORMATION SUR L\'ENTREPRISE</b></p>   
-                        <p> Code de l\'entreprise : <input type="text" readonly value='.$s->idSociete.'> </p>
-                        <p>  Nom de l\'entreprise : <input type="text" value='.$s->nom.'> </p>
+                        <row>    
+                        <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value='.$s->idSociete.'></p>
+                        <p>  Nom de l\'entreprise : <input type="text" id="nomSociete"value='.$s->nom.'> </p>
+                        <p>  Raison sociale : <input type="text" id="raisonSociete" value='.$s->raison.'> </p>
                      </row>
                      <row>
-                        <p>  Site web de l\'entreprise : <input type="text" value='.$s->siteWeb.'> </p>  
-                        <p>  Téléphone de l\'entreprise : <input type="text"  value='.$s->telephone.'> </p>
-                        <p> Adresse de l\'entreprise : <input type="text" value='.$s->adresse.'> </p>
+                        <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" value='.$s->siteWeb.'> </p>  
+                        <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" value='.$s->telephone.'> </p>
+                        <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" value='.$s->adresse.'> </p>
                       </row>
                       <row>
-                        <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
-                        <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
+                        <p>  faxe de l\'entreprise : <input type="text" id="faxSociete"value='.$s->fax.'> </p>          
+                        <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" value='.$s->mail.'></p>
                         <a onclick="modificationclient()" class="bou-classique">Modifier les informations</a>
                       </row>
                       <row>
@@ -362,24 +361,22 @@ public function listeContactClients($idSociete)
     $return = $return.'
 <div id="bloc-liste">       
     <row> 
-        <p>Code du contact : <input type="text" readonly value='.$ligneIdContact->idClient.'></p>
-        <p>Nom du contact : <input type="text"  value='.$ligneIdContact->nom.'></p>
-        <p>Prenom du contact : <input type="text"  value='.$ligneIdContact->prenom.'></p> 
+        <p>Code du contact : <input type="text" id="idClient" readonly value='.$ligneIdContact->idClient.'></p>
+        <p>Nom du contact : <input type="text" id="nomClient" value='.$ligneIdContact->nom.'></p>
+        <p>Prenom du contact : <input type="text" id="prenomClient"  value='.$ligneIdContact->prenom.'></p> 
     </row>
     <row>
-        <p>Téléphone du contact : <input type="text"  value='.$ligneIdContact->telephone.'></p>
-        <p>Mail du contact : <input type="text"  value='.$ligneIdContact->mail.'></p>
+        <p>Téléphone du contact : <input type="text" id="telClient"  value='.$ligneIdContact->telephone.'></p>
+        <p>Mail du contact : <input type="text" id="mailClient"  value='.$ligneIdContact->mail.'></p>
+        <p>Id société du contact : <input type="text" id="societeClient"  value='.$ligneIdContact->idSociete.'></p>
      </row>   
-     <row> 
-        <a onclick="supprimercontactclient()" class="bou-classique">Supprimer le contact</a>
-        <a onclick="modificationcontact()" class="bou-classique">Modifier le contact</a>
+     <row>
+        <a onclick="modificationcontactclient()" class="bou-classique">Modifier le contact</a>
 
     <//row>
 </div>';
     }
     $return = $return.'<a href="ajoutercontact" class="bou-classique">Ajouter un contact</a>';
-   
-    
     return $return;
 }
 public function ajouterContact()

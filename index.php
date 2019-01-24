@@ -57,15 +57,9 @@
 		                 case 'ajouterclient':
 		                     $site->left_sidebar = $controleur->ajouterSocieteCliente();
 		                     break;
-                         case 'modificationclient':
+                         /*case 'supprimercontact':
                              $site->left_sidebar = $controleur->ajouterSocieteCliente();
-                             break;
-                         case 'modificationcontact':
-                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
-                             break;
-                         case 'supprimercontact':
-                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
-                             break;
+                             break;*///solution externe
                          case 'ajoutercontact':
                              $site->left_sidebar = $controleur->ajouterContact();
                              break;

@@ -55,10 +55,7 @@ switch ($action)
             }
         }
         break;
-    case 'deleteClient':
-        $idC = $_POST['idClient'];
-        $q= $pdo->deleteContactClient($idC);
-        break;
+   
 }
 die( json_encode($r) );
 ?>

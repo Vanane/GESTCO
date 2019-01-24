@@ -112,11 +112,11 @@ class mypdo extends PDO{
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------FIN-LISTE-DEBUT-DELETE-----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
-
+/*
     public function deleteContactClient($id)
     {
-        $r='DELETE FROM contact_client WHERE idClient='.$id.'';
-        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        $r='DELETE FROM contact_client WHERE idClient="'.$id.'";';
+        $result=$this->connexion->query($r);
         if($result)
             return $result;
             else
@@ -125,13 +125,15 @@ class mypdo extends PDO{
     
     public function deleteContactFournisseur($id)
     {
-        $r='DELETE FROM contact_fournisseur WHERE idClient='.$id.'';
-        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        $r='DELETE FROM contact_fournisseur WHERE idClient="'.$id.'"';
+        $result=$this->connexion->query($r);
         if($result)
             return $result;
             else
                 return null;
-    }
+    }*/ 
+            
+    // delete impossible car les clients sont clé étrangère aux ventes.
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------FIN-DELETE-DEBUT-INSERT----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
@@ -160,18 +162,50 @@ class mypdo extends PDO{
         $result = $this->connexion->query($q);
         return $result;
     }
-    
-/*------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------FIN-INSERT-------------------------------------------------*/
-/*------------------------------------------------------------------------------------------------------------------*/
-    
-/*------------------------------------------------------------------------------------------------------------------*/
-/*------------------------------------------------------DEBUT UPDATE------------------------------------------------*/
-/*------------------------------------------------------------------------------------------------------------------*/
+
+  /* **************************************************************************************************************** */    
+ /*--------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------FIN-INSERT-----------------------------------------------------*/
+ /*--------------------------------------------------------------------------------------------------------------------*/
+  /* **************************************************************************************************************** */    
+ /*--------------------------------------------------------------------------------------------------------------------*/
+/*------------------------------------------------------DEBUT UPDATE----------------------------------------------------*/
+ /*--------------------------------------------------------------------------------------------------------------------*/
+  /* **************************************************************************************************************** */    
     
     public function updateDetailDevis($attr, $value)
     {
         $r='UPDATE detail_devis SET '.$attr.' = "'.$value.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    /*public function updateClient($nom, $adresse,$telephone,$fax, $siteweb,$raison,$mail,$idSociete)
+    {
+ 
+        $r='UPDATE societe SET nom = "'.$nom.'",adresse="'.$adresse.'",telephone="'.$telephone.'", fax="'.$fax.'", siteweb="'.$siteweb.'" , raison="'.$raison.'", mail="'.$mail.'" WHERE idSociete="'.$idSociete.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    } // méthode différentre pour un update*/
+    
+    public function TupdateClient($attr, $value,$lacondition,$estremplie)
+    {
+        $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    public function updateContactClient($attr, $value,$lacondition,$estremplie)
+    {
+        $r='UPDATE contact_client SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
         $result=$this->connexion->query($r);
         if($result)
             return $result;
