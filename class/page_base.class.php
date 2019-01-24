@@ -119,7 +119,7 @@ class page_base {
 					GestCo
 				</h1>
 				<h3>
-					<strong>Bienvenue</strong> sur l\'application web de gestion de commandes du GRETA.
+					<strong>Bienvenue</strong> sur l\'application web de gestion de commandes GESTCO.
 				</h3>
              </header>
 		';

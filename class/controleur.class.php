@@ -48,7 +48,7 @@ public function detailsDevis($idVente)
                 </row>
             </div>
 
-            <div id="details-article">
+            <div id="details-articles-devis">
                 <table>
                     <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
     
@@ -204,7 +204,7 @@ public function listeDevis()
                     </row>
                 </div>
 	        
-                <div id="details-article">
+                <div id="details-articles-devis">
                     <table id="table-articles">
                         <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
@@ -396,11 +396,6 @@ public function listeContactClients($idSociete)
         
         $retour = $retour.'
                     <p>Voici la liste des articles enregistrés dans la base de données.</p>
-                    <p></p>
-
-
-
-
         ';
         $lesArticles = $this->vpdo->listeArticles();
         $i = 1;
@@ -409,20 +404,48 @@ public function listeContactClients($idSociete)
             $f = $this->vpdo->familleParSonId($a->idFam);
             $retour = $retour.'
                     <row>
-                        <p>ID Article : <input id="idArticle'.$i.'" value="'.$a->idArticle.'"></p>
-                        <p>Code-barre : <input id="barreArticle'.$i.'" value="'.$a->codeBarre.'"></p>
-                        <p>Dénomination : <input id="libArticle'.$i.'" value="'.$a->libelle.'"></p>
-                        <p>Famille : <input id="famArticle'.$i.'" value="'.$f->libelle.'"></p>
+                        <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'"></p>
+                        <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'"></p>
+                        <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'"></p>
+                        <p>Famille : <input id="famArticle" value="'.$f->libelle.'"></p>
                         <a class="bou-classique" href="Articles/'.$a->idArticle.'">Détails article</a>
                     </row>
                 ';
-            
           $i++;  
+        }
+        $retour = $retour.'
+                </div>';
+        return $retour;
+    }
+    
+    
+    public function afficheDetailsArticle($idArticle)
+    {
+        $a = $this->vpdo->articleParSonId($idArticle);
+        if($a == null)
+        {
+            $retour = "Cet article n'existe pas !";
+        }
+        else
+        {
+            $retour = '
+                <div class="conteneur div-articles">
+                    <div id="details-articles-devis"></div>
+                    <div id="details-mouvements"></div>
+                    <div id="details-cmup"></div>
+
+
+
+            ';
+                    
+            
+            
+            
+            $retour = $retour.'
+                </div>';
         }
         
         
-        $retour = $retour.'
-                </div>';
         return $retour;
     }
 }

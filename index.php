@@ -43,8 +43,11 @@
 			  echo '<script>document.location.href="Accueil"; </script>';
 			  break;
 		case 'fournisseurs':
-		      $site-> left_sidebar=$controleur->listeFournisseurs();
-		      $site->affiche();
+		    if($controleur->estConnecte()!= false)
+		    {		       
+                $site-> left_sidebar=$controleur->listeFournisseurs();
+                $site->affiche();
+		    }
 		      break;
 		    
 		case 'clients':
@@ -81,6 +84,10 @@
 		    }
 		    break;
 		case 'Achats':
+		    if($controleur->estConnecte()!= false)
+		    {
+		    
+		    }
 		    break;
 		case 'ventes' :
 		    if($controleur->estConnecte()!= false)
@@ -145,8 +152,26 @@
 		    break;		
 		    
 		case 'articles':
-		    $site->left_sidebar = $controleur->afficheListeArticles();
-		    $site->affiche();
+		    if($controleur->estConnecte()!= false)
+		    {    		       
+    		    if(isset($params[2]))
+    		    {
+    		        switch($params[2])
+    		        {
+                        case 'Ajouter':
+                            $site->left_sidebar = "Page Ajout Article";
+                            break;
+                        default:
+                            $site->left_sidebar = $controleur->afficheDetailsArticle($params[2]);
+                            break;
+    		        }
+    		    }
+    		    else
+    		    {
+    		        $site->left_sidebar = $controleur->afficheListeArticles();		        
+    		    }
+    		    $site->affiche();
+		    }
 		    break;
 
 	    default: 
