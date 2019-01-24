@@ -25,59 +25,62 @@ class controleur {
 	
 public function detailsDevis($idVente)
 {
-	    $v = $this->vpdo->venteParSonId($idVente);
-	    $c = $this->vpdo->clientParSonId($v->idClient);
-	    $s = $this->vpdo->societeParSonId($c->idSociete);
-	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
-	    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
-	    $retour = '
-            <div id="conteneur">
-                <div id="details-vente">
-                    <row>
-                        <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
-                    </row>                    
-                    <row>
-                        <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
-                        <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
-                        <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
-                    </row>
-                    <row>
-                        <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
-                        <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
-                        <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
-                    </row>
-                </div>
-
-                <div id="details-article">
-                    <table>
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
-	    
-	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
-	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
-	    {	       
-	        $a = $this->vpdo->articleParSonId($d->idArticle);
-	        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
-	        $retour = $retour.'
-                        <tr>
-                                <td>'.$d->idArticle.'</td>
-                                <td>'.$a->libelle.'</td>
-                                <td>'.$a->dernierCMUP.'</td>
-                                <td>'.$d->qteDemandee.'</td>
-                                <td>'.$d->txRemise.'</td>
-                                <td>'.$d->remise.'</td>
-                                <td>'.$ht.'</td>
-                                <td>'.$a->txTVA.'</td>
-                                <td>'.$ht*(1+$a->txTVA).'</td>
-                                <td>'.$d->observation.'</td>
-                        </tr>';	       
-	    }    
-	    
-	  $retour = $retour.'
-                    </table>
-                </div>
+    $v = $this->vpdo->venteParSonId($idVente);
+    $c = $this->vpdo->clientParSonId($v->idClient);
+    $s = $this->vpdo->societeParSonId($c->idSociete);
+    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
+    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
+    $retour = '
+        <div id="conteneur">
+            <div id="details-vente">
+                <row>
+                    <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                </row>                    
+                <row>
+                    <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
+                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
+                    <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
+                </row>
+                <row>
+                    <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
+                    <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
+                    <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                </row>
             </div>
-            <a id="confirmer" class="bou-classique">Confirmer Devis</a>';
-	    return $retour;
+
+            <div id="details-article">
+                <table>
+                    <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+    
+    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
+    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
+    {	       
+        $a = $this->vpdo->articleParSonId($d->idArticle);
+        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
+        $retour = $retour.'
+                    <tr>
+                            <td>'.$d->idArticle.'</td>
+                            <td>'.$a->libelle.'</td>
+                            <td>'.$a->dernierCMUP.'</td>
+                            <td>'.$d->qteDemandee.'</td>
+                            <td>'.$d->txRemise.'</td>
+                            <td>'.$d->remise.'</td>
+                            <td>'.$ht.'</td>
+                            <td>'.$a->txTVA.'</td>
+                            <td>'.$d->TTC.'</td>
+                            <td>'.$d->observation.'</td>
+                    </tr>';	       
+    }    
+    
+  $retour = $retour.'
+                </table>
+            </div>
+        </div>';
+  if($v->dateCommande != null)//Si le devis a déjà été confirmé en commande, on ne fait pas de bouton JS.
+      $retour = $retour.'<a class="bou-classique">Devis confirmé</a>';
+    else
+        $retour=$retour.'<a id="confirmer" class="bou-classique">Confirmer Devis</a>';
+    return $retour;
 }	
 		
 public function formulaireLogin()
@@ -159,7 +162,7 @@ public function listeDevis()
                     <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
                 </row>
                 <row>
-                   <a href="Devis/'.$ligneIdVente->idVente.'/" id="btn-voirDetail">Voir Details</a>
+                   <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail">Voir Details</a>
                 </row>
     </div>';
 	}
@@ -168,13 +171,7 @@ public function listeDevis()
     <a href="Devis/Ajouter" id="btn-ajouter">Ajouter un Devis</a>';
     return $return;   // on retourne la totalité du texte
 	}
-	
-	public function validationDevis()
-	{
-	    return "FAIRE insertDevis()";
-	    /*$this->vpdo->insertDevis();*/    
-	}
-	
+		
 	public function afficheAjoutDevis()
 	{
 	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
@@ -314,7 +311,7 @@ public function listeClients()
   <row>
    </div>';
     }
-    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">AJOUTER UNE SOCIETE CLIENTE</a></div>';
+    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">Ajouter une societe cliente</a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -329,7 +326,7 @@ public function listeContactClients($idSociete)
                         Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
                         Si vous souhaitez modifier les informations d\'un contact, cliquez sur "VALIDER LES MODIFICATIONS CONTACT"<br>
                         Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
-                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "AjOUTER UN CONTACT"     
+                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "Ajouter un contact"     
                     </p> ';
    $return = $return.'<div id="details-operation">
                        
@@ -346,7 +343,7 @@ public function listeContactClients($idSociete)
                       <row>
                         <p>  Raison sociale : <input type="text"  value='.$s->raison.'> </p>
                         <p>  Mail de l\'entreprise : <input type="text"  value='.$s->mail.'></p>
-                        <a href="modificationclient" onclick="modificationclient()" id="btn-confirmerModifEntreprise">Modifier les informations</a>
+                        <a onclick="modificationclient()" class="bou-classique">Modifier les informations</a>
                       </row>
                       <row>
                       </row>
@@ -368,16 +365,16 @@ public function listeContactClients($idSociete)
     </row>
     <row>
         <p>Téléphone du contact : <input type="text"  value='.$ligneIdContact->telephone.'></p>
-        <p>Mail du cntact : <input type="text"  value='.$ligneIdContact->mail.'></p>
+        <p>Mail du contact : <input type="text"  value='.$ligneIdContact->mail.'></p>
      </row>   
      <row> 
-        <a onclick="supprimercontactclient()" id="btn-confirmerModifEntreprise">Supprimer le contact</a>
-        <a onclick="modificationcontactclient()" id="btn-confirmerModifEntreprise">Modifier le contact</a>
+        <a onclick="supprimercontactclient()" class="bou-classique">Supprimer le contact</a>
+        <a onclick="modificationcontact()" class="bou-classique">Modifier le contact</a>
 
     <//row>
 </div>';
     }
-    $return = $return.' <a href="ajoutercontact" onclick="ajoutercontact()" id="btn-confirmerModifEntreprise">Ajouter un contact</a>';
+    $return = $return.'<a href="ajoutercontact" class="bou-classique">Ajouter un contact</a>';
    
     
     return $return;

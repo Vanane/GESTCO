@@ -1,19 +1,18 @@
-  
-function confirmerModifEntrepriseClient() {
+  var lesSelectsClients = new Array();
+function modificationclient() {
 	if (confirm("Pour valider les modifications des données de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "confirmerModificationEntrepriseClient";
-
+	location = "modificationclient";
 	}
 	}
 
-function supprimerContactClient(){
+function supprimercontactclient(){
 	if (confirm("Pour supprimer les données du contact de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	//location = "confirmerSupressionContactClient";	
-	$.ajax({ //AJAX pour récupérer les infos d'un article.
-
-        type: "POST",
+	//location = "confirmerSupressionContactClient"
+		let item = lesSelectsClients;	
+		$.ajax({
+		type: "POST",
         dataType: "json",
         data:
     	{
@@ -37,17 +36,17 @@ function supprimerContactClient(){
 }
 
 
-function confirmerModifContactClient(){
+function modificationcontact(){
 	if (confirm("Pour valider les modifications des données du contact client, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "modificationcontactclient";
+	location = "modificationcontact";
 	}
 	}
 
 function ajouterContact(){
 	if (confirm("Si vous souhaietez ajouter un contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
-	location = "ajouterContact";
+	location = "ajoutercontact";
 	}
 	}
 function ajouterSocieteCliente(){
