@@ -84,55 +84,56 @@
 		case 'ventes' :
 		    if($controleur->estConnecte()!= false)
 		    {
-		    $site->left_sidebar = $site->afficheSousMenuVente();		    
-		    if(isset($params[2]))
-		    {
-    		    switch($params[2])
+    		    $site->left_sidebar = $site->afficheSousMenuVente();		    
+    		    if(isset($params[2]))
     		    {
-    		        case 'devis' :
-    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
-    		            {
-    		                if(isset($params[3]))
-    		                {
-    		                    switch($params[3])
-    		                    {
-    		                        case 'ajouter':
-    		                            $site->js = "pageAjoutDevis";    		                            
-                                        $site->left_sidebar = $controleur->afficheAjoutDevis();
-    		                            break;
-    		                        case 'confirmer':    		                            
-    		                            $site->left_sidebar = 'confirmation';
-    		                            break;
-    		                        default:
-    		                            if(isset($params[4]))
-    		                            {
-    		                                $site->left_sidebar=$controleur->validationDevis();    		                                
-    		                            }
-    		                            else
-    		                            {
-    		                                $site->left_sidebar =$controleur->detailsDevis($params[3]);
-    		                            }
-    		                            break;
-    		                  }
-    		                }
-    		                else
-    		                {
-    		                    $site-> left_sidebar=$controleur->listeDevis();
-    		                }
-    		            }
-    		            break;
-    		        case 'commande' :
-    		            break;
-    		        case 'preparation' :
-    		            break;
-    		        case 'livraison' :
-    		            break;
-    		        case 'facturation' :
-    		            break;
-    		        case 'conflit' :
-    		            break;		            		        
-		        }
-		    }
+        		    switch($params[2])
+        		    {
+        		        case 'devis' :
+        		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+        		            {
+        		                if(isset($params[3]))
+        		                {
+        		                    switch($params[3])
+        		                    {
+        		                        case 'ajouter':
+        		                            $site->js = "pageAjoutDevis";    		                            
+                                            $site->left_sidebar = $controleur->afficheAjoutDevis();
+        		                            break;
+        		                        case 'confirmer':    		                            
+        		                            $site->left_sidebar = 'confirmation';
+        		                            break;
+        		                        default:
+        		                            if(isset($params[4]))
+        		                            {
+        		                                $site->left_sidebar=$controleur->validationDevis();    		                                
+        		                            }
+        		                            else
+        		                            {
+        		                                $site->js="pageDetailDevis";        		                               
+        		                                $site->left_sidebar =$controleur->detailsDevis($params[3]);
+        		                            }
+        		                            break;
+        		                  }
+        		                }
+        		                else
+        		                {
+        		                    $site-> left_sidebar=$controleur->listeDevis();
+        		                }
+        		            }
+        		            break;
+        		        case 'commande' :
+        		            break;
+        		        case 'preparation' :
+        		            break;
+        		        case 'livraison' :
+        		            break;
+        		        case 'facturation' :
+        		            break;
+        		        case 'conflit' :
+        		            break;		            		        
+    		        }
+    		    }
 		    }
 		    else
 		    {

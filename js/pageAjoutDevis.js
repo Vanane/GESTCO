@@ -1,8 +1,15 @@
 var lesSelectsArticles = new Array();//Contient tous les selects de chaque ligne article.
 
-
 $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le script.
 	
+	console.log(new Date().getFullYear()+'-'+
+				new Date().getMonth()+1+'-'+
+				new Date().getDate()+' '+
+				new Date().getHours()+':'+
+				new Date().getMinutes()+':'+
+				new Date().getSeconds()
+	);
+
 	ajouteListenerCalculTTC("qteArticle1");//Ajoute un listener qui permet de calculer le prix au numeric qteArticle1
 	ajouteListenerCalculTTC("txArticle1");//Pareil pour txArticle1, ces deux éléments devant être initialisés de base.
 
@@ -13,14 +20,20 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		{
 			click:true
 		},
-			
 	});	
 	
 	lesSelectsArticles.push(document.getElementById("idArticle1"));//Ajoute le premier select dans la table	
 	ajouteListener();//Puis lui attribue un event au clic.
 	today = new Date();
-	document.getElementById("dateDevis").value = (today.getFullYear()+'-'+today.getMonth()+1+'-'+today.getDate());
-	$("#bou-plusLigne").click(function()
+	document.getElementById("dateDevis").value = 
+		new Date().getFullYear()+'-'+
+		new Date().getMonth()+1+'-'+
+		new Date().getDate()+' '+
+		new Date().getHours()+':'+
+		new Date().getMinutes()+':'+
+		new Date().getSeconds();
+	
+	$("#ajouteLigne").click(function()
 	//Ajoute une ligne dans la table des articles au clic sur le bouton.
 	{		
 		var element = document.getElementById("table-articles");
@@ -121,12 +134,12 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(ajaxOptions);
 			    	}
 				});
-			}
-		}		
-	}
-	
-	$("#bou-confirmerDevis").click(function()
+			}		
+		}
+	}	
 	//Affiche une popup de confirmation au clic sur enregistrer
+	
+	$("#enregistrer").click(function()
 	{
 		var erreur = false;
 		if(confirm("Voulez-vous vraiment insérer ce devis dans la base de données ?"))
@@ -159,7 +172,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
         		dArticles['qteArticle'+i] = $("#qteArticle"+i).val();
         		dArticles['txRemise'+i] = $("#txArticle"+i).val();
         		dArticles['obsArticle'+i] = $("#obsArticle"+i).val();
-    		}
+    		}        	
         	
         	if(!erreur)
     		{
@@ -174,8 +187,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		        	},
 		            url: "../../ajax/ajoutDevisAjax.php",
 			        success: function(r) {
-			        	console.log(r['resultVente']);
-			        	console.log(r['resultDevis1']);
+			        	alert("Devis créé avec succès !");
 			        },
 			        error: function (xhr, ajaxOptions, thrownError)
 			        {
@@ -183,7 +195,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			            console.log(thrownError);
 			            console.log(ajaxOptions);
 			    	}
-		    });
+		    	});
 	    	}
 		}
 	});
