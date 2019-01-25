@@ -124,6 +124,12 @@ pre strong {
 	text-decoration: underline;
 }
 
+.hidden
+{
+	display:none;
+}
+
+
 /* --- STYLES DE MISE EN PAGE --- */
 
 #img-greta
@@ -301,6 +307,15 @@ pre strong {
 	background:#B2C3C0;
 }
 
+.div-liste-devis bloc
+{
+	display:block;
+	background:#B2C3C0;
+	width:100%;
+	overflow:hidden;
+	border-top:solid 1px black;	
+}
+
 .div-liste-devis row p
 {
 	display:block;
@@ -343,9 +358,9 @@ pre strong {
 }
 
 
-#details-vente row:first-child p input, #details-vente row:first-child p select
+#details-vente row
 {
-	width:16%;
+	width:100%;
 }
 
 #details-vente row:first-child p
@@ -353,7 +368,7 @@ pre strong {
 	width:97%;
 }
 
-#details-articles-deviss-devis
+#details-articles-devis
 {
 	position:relative;
 	width:100%;
@@ -455,15 +470,15 @@ pre strong {
 	position:relative;
 	width:98%;
 	padding:1%;	
+	background:#B2C3C0;
 	border-top:solid 1px black;
-	background:#B2C3C0;	
 }
 
 .div-articles row p
 {
 	display:block;
 	float:left;
-	width:50%;
+	width:50%;	
 	margin: 1em 0;
 }
 
@@ -471,7 +486,153 @@ pre strong {
 .div-articles row p input
 {
 	float:right;
+	overflow:hidden;
 }
+
+
+.div-articles row p input[type=number]
+{
+	  width:25%;
+}
+
+/* --- STYLE IHM DETAILS ARTICLE --- */
+
+
+#details-infos-article row
+{
+	position:relative;
+	padding:1%;	
+}
+
+#details-infos-article row p
+{
+	display:block;
+	float:left;
+	width:25%;	
+	margin: 0.5em 0;
+}
+
+#details-infos-article row:first-child p, #details-infos-article row:nth-child(2) p 
+{
+	width:50%;	
+}
+
+#details-infos-article row:nth-child(2) p:last-child, #details-infos-article row:nth-child(2) p:last-child input
+{
+	width:75%;
+}
+
+#details-infos-article row p input
+{
+	float:right;
+	overflow:hidden;
+	width:50%;
+}
+
+#details-infos-article row p input[type="number"]
+{
+	width:25%;
+}
+
+
+#onglets-details-article
+{
+	width:100%;
+	margin:0;
+	padding:0.5em 0;
+	overflow:hidden;
+}
+
+#onglets-details-article div
+{
+	width:50%;
+	padding:0.5em;
+	margin:0;
+	float:left;
+	text-align:center;
+	background:#B2C3C0;	
+	box-sizing:border-box;
+	border:solid 1px black;
+	cursor:pointer;
+}
+
+#onglets-details-article div[active=true]
+{
+	font-weight:bold;
+	background:white;
+}
+
+#div-onglets-details-article
+{
+	position:relative;
+	width:100%;	
+	overflow:hidden;
+}
+
+#div-on-cmup
+{
+	position:relative;
+	width:100%;
+}
+
+#div-on-cmup row
+{
+	width:48%;
+	float:left;
+	padding:1%;	
+}
+
+#div-on-cmup row p
+{
+	width:100%;
+}
+#div-on-cmup row p input
+{
+	float:right;
+}
+
+#div-on-cmup row:last-child p
+{
+	width:100%;
+	text-align:center;
+}
+#div-on-cmup row:last-child p input
+{
+	margin:0 25%;
+	width:50%;	
+	font-size:2em;
+	float:none;
+}
+
+
+#div-on-mouv
+{
+	
+}
+
+#div-on-mouv table
+{
+	width:100%;
+}
+
+#div-on-mouv row table th, #div-on-mouv row table td
+{
+	width:calc(100%/7)
+	text-align:center;
+	margin:0;
+	border:solid 1px black;
+}
+
+#div-on-mouv row tr
+{
+	background:#B2C3C0;	
+}
+
+#div-on-mouv row tr:nth-child(2n)
+{
+	background:#dae9e7;	
+}
+
 
 /* --- STYLE SMARTPHONE --- */	
 
