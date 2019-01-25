@@ -119,6 +119,27 @@ class mypdo extends PDO{
             return null;
     }
     
+    
+    public function listeMouvementsParArticle($id)
+    {
+        $q='SELECT * FROM mouvement_article WHERE idArticle = "'.$id.'";';
+        $result=$this->connexion->query($q);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
+    
+    public function listeFamilles()
+    {
+        $q='SELECT * FROM famille_article;';
+        $result=$this->connexion->query($q);
+        if ($result)
+            return ($result);
+            else
+                return null;
+    }
+    
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------FIN-LISTE-DEBUT-DELETE-----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
@@ -244,6 +265,16 @@ class mypdo extends PDO{
 /*------------------------------------------------------------------------------------------------------------------*/
 /*--------------------------------------------------------FIN UPDATE------------------------------------------------*/
 /*------------------------------------------------------------------------------------------------------------------*/
+    
+    public function emplacementParSonId($id)
+    {
+        $r='SELECT * from emplacement WHERE idEmp = "'.$id.'";';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
     
     
     public function articleParSonId($id)

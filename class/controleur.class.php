@@ -61,7 +61,7 @@ public function detailsDevis($idVente)
                     <tr>
                             <td>'.$d->idArticle.'</td>
                             <td>'.$a->libelle.'</td>
-                            <td>'.$a->dernierCMUP.'</td>
+                            <td>'.$d->prixVente.'</td>
                             <td>'.$d->qteDemandee.'</td>
                             <td>'.$d->txRemise.'</td>
                             <td>'.$d->remise.'</td>
@@ -150,21 +150,22 @@ public function listeDevis()
     // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
     //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
     $return = $return.'
-   
-                <row>
-                    <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
-                    <p>Responsbale devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                    <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
-                </row>
-                <row>
-                    <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
-                    <p>Code client :<input type="text" readonly value='.$c.'></p>
-                    <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
-                </row>
-                <row>
-                   <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
-                </row>
-        ';
+                <bloc>
+                    <row>
+                        <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
+                        <p>Responsbale devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
+                        <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
+                    </row>
+                    <row>
+                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
+                        <p>Code client :<input type="text" readonly value='.$c.'></p>
+                        <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
+                    </row>
+                    <row>
+                       <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
+                    </row>
+                </bloc>
+    ';
 	}
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
@@ -418,10 +419,6 @@ public function ajouterContactClient($idSociete)//175
         return $vretour;
     }
     
-	    
-
-    
-    
     public function afficheListeArticles()
     {
         $retour = '
@@ -446,6 +443,87 @@ public function ajouterContactClient($idSociete)//175
                 ';
           $i++;  
         }
+        $retour = $retour.'
+                </div>';
+        return $retour;
+    }
+    
+    public function afficheDetailsArticle($idArticle)
+    {
+        $a = $this->vpdo->articleParSonId($idArticle);
+        $em = $this->vpdo->emplacementParSonId($a->idEmp);
+        $f = $this->vpdo->familleParSonId($a->idFam);
+        $lesMouvements = $this->vpdo->listeMouvementsParArticle($idArticle);
+        $retour = '
+    <div class="conteneur">
+        <div id="details-infos-article">
+            <row>
+                <p>Nom Article : <input type="text" value="'.$a->libelle.'"></p>
+                <p>ID Article : <input type="text" value="'.$a->idArticle.'" readonly></p>
+            </row>
+            <row>
+                <p>Famille Article : <select>';
+            $lesFamilles = $this->vpdo->listeFamilles();
+            while($lesF = $lesFamilles->fetch(PDO::FETCH_OBJ))
+            {
+                $retour = $retour.'
+                    <option value="'.$lesF->idFam.'"';
+                
+                //Si l'id de la famille l'article en détail = l'id de la famille actuellement ajoutée au select
+                if($lesF->idFam = $a->idFam)
+                    $retour = $retour." selected"; //On la choisit par défaut.
+                
+                $retour = $retour.'>'.$lesF->idFam.' - '.$lesF->libelle.'</option>';
+            }                                          
+            $retour = $retour.'</select></p>
+                <p>Code à barres : <input type="" value="'.$a->codeBarre.'"></p>
+                <p>Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
+            </row>
+        </div>
+        <div id="onglets-details-article">
+            <div id="on-cmup" active=true>Calcul CMUP</div>
+            <div id="on-mouv">Entrées/Sorties de stock</div>
+        </div>
+        <div id="div-onglets-details-article">
+            <div id="div-on-cmup">
+                <row>
+                    <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'"></p>
+                    <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'"></p>
+                    <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input type="number" value="'.$a->dernierCMUP.'" readonly></p>
+                </row>
+                <row>
+                    <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number"></p>
+                </row>
+            </div>
+
+            <div id="div-on-mouv">
+                <row>
+                    <table>
+                        <tr><th>Id Mouvement</th>   <th>Type</th>   <th>Fournisseur</th>   <th>Date</th>   <th>Prix unité</th>   <th>Quantité</th>  <th>Observations</th></tr>';
+                        
+                        
+            while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))
+            {
+                $retour = $retour.'
+                            <tr>
+                                <td>'.$m->idMouv.'</td>
+                                <td>'.$m->idType.'</td>
+                                <td>'.$m->idFour.'</td>
+                                <td>'.$m->date.'</td>
+                                <td>'.$m->prix.'</td>
+                                <td>'.$m->qte.'</td>
+                                <td>'.$m->commentaire.'</td>
+                            </tr>
+            ';   
+            }
+            
+            $retour = $retour.'
+                        </table>
+                    </row>
+                </div>
+            </div>
+';
+                
         $retour = $retour.'
                 </div>';
         return $retour;

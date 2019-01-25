@@ -188,6 +188,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		            url: "../../ajax/ajoutDevisAjax.php",
 			        success: function(r) {
 			        	alert("Devis créé avec succès !");
+			        	window.location = "/";
 			        },
 			        error: function (xhr, ajaxOptions, thrownError)
 			        {

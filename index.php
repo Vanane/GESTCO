@@ -168,6 +168,7 @@
                             $site->left_sidebar = "Page Ajout Article";
                             break;
                         default:
+                            $site->js = "pageDetailsArticle";
                             $site->left_sidebar = $controleur->afficheDetailsArticle($params[2]);
                             break;
     		        }
