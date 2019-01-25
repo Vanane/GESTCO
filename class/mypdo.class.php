@@ -109,6 +109,16 @@ class mypdo extends PDO{
         return null;
     }
     
+    public function familleParSonId($id)
+    {
+        $q='SELECT * FROM famille_article WHERE idFam = "'.$id.'";';   
+        $result=$this->connexion->query($q)->fetch(PDO::FETCH_OBJ);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
+    
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------FIN-LISTE-DEBUT-DELETE-----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/

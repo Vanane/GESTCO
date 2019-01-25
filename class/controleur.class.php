@@ -31,7 +31,7 @@ public function detailsDevis($idVente)
     $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
     $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
     $retour = '
-        <div id="conteneur">
+        <div class="conteneur">
             <div id="details-vente">
                 <row>
                     <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
@@ -48,7 +48,7 @@ public function detailsDevis($idVente)
                 </row>
             </div>
 
-            <div id="details-article">
+            <div id="details-articles-devis">
                 <table>
                     <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
     
@@ -67,7 +67,7 @@ public function detailsDevis($idVente)
                             <td>'.$d->remise.'</td>
                             <td>'.$ht.'</td>
                             <td>'.$a->txTVA.'</td>
-                            <td>'.$d->TTC.'</td>
+                            <td>'.$d->prixVente * $d->qteDemandee.'</td>
                             <td>'.$d->observation.'</td>
                     </tr>';	       
     }    
@@ -130,7 +130,7 @@ public function listeDevis()
 {
 	    
 	$return='
-            <div id="conteneur">
+            <div class="conteneur div-liste-devis">
                 <p style="margin-left: 1em">
                     Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
                     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
@@ -149,7 +149,7 @@ public function listeDevis()
     //on prévoit des variables pour nos appels
     // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
     //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
-    $return = $return.'<div class="bloc-liste">
+    $return = $return.'
    
                 <row>
                     <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
@@ -162,15 +162,16 @@ public function listeDevis()
                     <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
                 </row>
                 <row>
-                   <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail">Voir Details</a>
+                   <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
                 </row>
-    </div>';
+        ';
 	}
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
-    <a href="Devis/Ajouter" id="btn-ajouter">Ajouter un Devis</a>';
+    <a href="Devis/Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
     return $return;   // on retourne la totalité du texte
 	}
+	
 		
 	public function afficheAjoutDevis()
 	{
@@ -179,7 +180,7 @@ public function listeDevis()
 	    $lesClients = $this->vpdo->listeClients();
 	    $lesArticles = $this->vpdo->listeArticles();
 	    $return = '
-            <div id="conteneur">
+            <div class="conteneur">
                 <div id="details-vente">
                     <row>
                         <p>Responsable Devis : <input id="respDevis" type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
@@ -203,7 +204,7 @@ public function listeDevis()
                     </row>
                 </div>
 	        
-                <div id="details-article">
+                <div id="details-articles-devis">
                     <table id="table-articles">
                         <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
@@ -237,14 +238,13 @@ public function listeFournisseurs()
 {
 	    
 	    $return='
-            <div id="conteneur">
+            <div class="conteneur div-liste-entreprises">
                 <p style="margin-left: 1em">
                     Voici l\'outil de gestion des fournisseurs. Ci-dessous la liste des fournisseurs existants.<br>
                     Vous pouvez accéder au contact que vous possèdez pour chaque fournisseur en cliquant sur "Voir Contact".<br>
                     Si vous souhaitez ajouter un nouveau fournisseur, cliquez sur le bouton "Ajouter un fournisseur" en bas de la page.<br>
                     Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Voir Contact"<br>
                     Si vous souhaitez modifier les informations d\'un fournisseur ou d\'un contact, cliquez sur "Voir Contact"
-
                 </p>';
 	    
 	    $lsf = $this->vpdo->listeSocieteFournisseurs();
@@ -253,25 +253,24 @@ public function listeFournisseurs()
 	    {
 	        /*$ligneIdContact = $lcf->fetch(PDO::FETCH_OBJ);*/
 	        $return = $return.'
-    <div class="bloc-liste"> 
-   	<row>    
-        <p>Code de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-        <p>Nom de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
-        <p>Site web de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
-    <row>
-    <row>
-        <p>Téléphone de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-        <p>Adresse de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-        <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-    <row>
-    <row>
-        <p>Mail de l\'entreprise :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
-    <row> 
-   </div>';
-	}
+               	<row>    
+                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
+                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
+                </row>
+                <row>
+                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+                </row>
+                <row>
+                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                </row> 
+                ';
+        }
 	   $return = $return.'</div>
-       <a href="Fournisseurs/ajouterContact" id="btn-ajouter">Ajouter un fournisseur </a>';
+       <a href="Fournisseurs/ajouterContact" id="btn-ajouter" class="bou-classique">Ajouter un fournisseur </a>';
 	   //renvoie vers la page "Ajouter un Fournisseur" 
 	   return $return;
 }
@@ -281,7 +280,7 @@ public function listeClients()
 {
     
     $return='
-            <div id="conteneur">
+            <div class="conteneur div-liste-entreprises">
                 <p style="margin-left: 1em">
                     Voici l\'outil de gestion des clients. Ci-dessous la liste des clients existants.<br>
                     Vous pouvez accéder au contact que vous possèdez pour chaque client en cliquant sur "Voir Contact".<br>
@@ -294,24 +293,24 @@ public function listeClients()
     $lsc = $this->vpdo->listeSocieteClients();
     while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
-    $return = $return.'<div class="bloc-liste">   
-  <row> 
-    <p>Code de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-    <p>Nom de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->nom.'></p>
-    <p>Site web de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->siteWeb.'></p> 
-  <row>
-  <row>
-    <p>Téléphone de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-    <p>Adresse de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-    <p>Raison sociale : <input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-  <row>
-  <row>
-    <p>Mail de l\'entreprise : <input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-    <a href="clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail">Voir Contact</a>   
-  <row>
-   </div>';
+    $return = $return.'
+               	<row>    
+                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
+                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
+                </row>
+                <row>
+                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+                </row>
+                <row>
+                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                    <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                </row> 
+  ';
     }
-    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise">Ajouter une societe cliente</a></div>';
+    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a></div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -319,24 +318,25 @@ public function listeClients()
 public function listeContactClients($idSociete)
 {
     $s = $this->vpdo->societeParSonId($idSociete);
-    $return='   <div id="conteneur">
+    $return='   <div class="conteneur">
                     <p style="margin-left: 1em">
-                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour '.$s->nom.'.<br>
-                        Si vous souhaitez modifier les informations d\'un client, cliquez sur "Modifier les informations"<br>                        
-                        Si vous souhaitez modifier les informations d\'un contact, cliquez sur "Modifier le contact"<br>
-                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "Ajouter un contact"<br>
+                        Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idSociete.'.<br>
+                        Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
+                        Si vous souhaitez modifier les informations d\'un contact, cliquez sur "VALIDER LES MODIFICATIONS CONTACT"<br>
+                        Si vous souhaitez supprimer les informations d\'un contact, cliquez sur "SUPPRIMER CONTACT" <br>
+                        Si vous souhaitez ajouter un nouveau contact, cliquez sur "Ajouter un contact"     
                     </p> ';
    $return=$return.' <p><b>INFORMATION SUR L\'ENTREPRISE</b></p> ';  
-   $return = $return.'<div id="details-operation">
+   $return = $return.'<div id="details-entreprise">
                         <row>    
                         <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value='.$s->idSociete.'></p>
-                        <p>  Nom de l\'entreprise : <input type="text" id="nomSociete" required value='.$s->nom.'> </p>
-                        <p>  Raison sociale : <input type="text" id="raisonSociete" required value='.$s->raison.'> </p>
+                        <p>  Nom de l\'entreprise : <input type="text" id="nomSociete"value='.$s->nom.'> </p>
+                        <p>  Raison sociale : <input type="text" id="raisonSociete" value='.$s->raison.'> </p>
                      </row>
                      <row>
-                        <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" required value='.$s->siteWeb.'> </p>  
-                        <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" required value='.$s->telephone.'> </p>
-                        <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" required value='.$s->adresse.'> </p>
+                        <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" value='.$s->siteWeb.'> </p>  
+                        <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" value='.$s->telephone.'> </p>
+                        <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" value='.$s->adresse.'> </p>
                       </row>
                       <row>
                         <p>  faxe de l\'entreprise : <input type="text" id="faxSociete" required value='.$s->fax.'> </p>          
@@ -345,12 +345,16 @@ public function listeContactClients($idSociete)
                       </row>
                       <row>
                       </row>
-                </div></div><div id="lesBlocs">';
+                </div>';
+   //<a href="ajouterModifEntreprise.php" target="_blank"> <input type="button" id = btn-ajouter value="VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"> </a>
     $lcc = $this->vpdo->listeContactClientsParId($idSociete);
+    if(isset($_POST['validerModifEntreprise']))
+  {
+      //$sql=$this->vpdo->deleteContactClient($idClient);
+  }
     while($ligneIdContact = $lcc->fetch(PDO::FETCH_OBJ))
     { 
-     $return = $return.'
-<div id="bloc-liste" class="bloc-liste">       
+     $return = $return.'<div id="conteneur">
     <row> 
         <p>Code du contact : <input type="text" id="idClient'.$ligneIdContact->idClient.'" required readonly value='.$ligneIdContact->idClient.'></p>
         <p>Nom du contact : <input type="text" id="nomClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->nom.'></p>
@@ -402,11 +406,47 @@ public function ajouterContactClient($idSociete)//175
 	
 	return $return;// ajouter nom entreprise en plus de code.
 }
-public function ajouterSocieteCliente()
-{
-    $vretour='<p>test</p>';
+
+    public function ajouterSocieteCliente()
+    {
+        $vretour='<p>test</p>';
+        
+        return $vretour;
+    }
     
-    return $vretour;
-}
+	    
+
+    
+    
+    public function afficheListeArticles()
+    {
+        $retour = '
+                <div class="conteneur div-articles">';
+        
+        $retour = $retour.'
+                    <p>Voici la liste des articles enregistrés dans la base de données.</p>
+        ';
+        $lesArticles = $this->vpdo->listeArticles();
+        $i = 1;
+        while($a = $lesArticles->fetch(PDO::FETCH_OBJ))
+        {
+            $f = $this->vpdo->familleParSonId($a->idFam);
+            $retour = $retour.'
+                    <row>
+                        <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'"></p>
+                        <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'"></p>
+                        <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'"></p>
+                        <p>Famille : <input id="famArticle" value="'.$f->libelle.'"></p>
+                        <a class="bou-classique" href="Articles/'.$a->idArticle.'">Détails article</a>
+                    </row>
+                ';
+          $i++;  
+        }
+        $retour = $retour.'
+                </div>';
+        return $retour;
+    }
+    
+    
 }
 ?>

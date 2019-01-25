@@ -141,6 +141,24 @@ pre strong {
 	width:100%;
 }
 
+.conteneur
+{
+	position:relative;	
+	width:100%;
+	box-sizing:border-box;
+	border:solid 1px black;
+	overflow:visible;
+}	
+
+.conteneur row 
+{
+	position:relative;
+	display: block;
+	overflow: hidden;
+	height:auto;
+}
+
+
 .right_sidebar
 {
 	position:relative;
@@ -255,7 +273,6 @@ pre strong {
    	transition: background linear 0.1s;   	  
 }
 
-
 .bou-plusLigne
 {
 	padding:0.8em 0;
@@ -269,101 +286,45 @@ pre strong {
 	background-color: #367ae8;
 }
 
-#btn-confirmerModifEntreprise
-{	
-	display:block;
-	float:right;
-	right:0;
-	bottom:0;
-	padding:0.5em;
-	margin: 15px;	
-	transition: background linear 0.1s;
-	background: #478bf9;	
-}
-
-
-#details-article input, #details-article select
+#details-articles-devis input, #details-articles-devis select
 {
 	width:100%;
 	height:2em;
 }
 
 /* --- STYLE IHM LISTE DEVIS --- */
-
-#btn-voirDetail
-{
-	display: block;
-	padding:0.5em;
-	margin:1%;
-	background:#478bf9;
-   	float:right;
-   	transition: background linear 0.1s;   	  
-}
-
-#btn-ajouter
-{
-	display: block;
-	padding:0.5em;
-	margin: 1em;
-	background:#478bf9;
-   	float:right;
-   	transition: background linear 0.1s;   	  
-}
-
-.bloc-liste
-{
-	position:relative;
-	background:#B2C3C0;
-	border-top:solid 1px black;
-	height:12em;
-}	
-
-
-.bloc-liste row
-{
-	position:relative;
-	display:block;
-	width:100%;
-	height:4em;
 	
+ .div-liste-devis row
+ {
+	position:relative;
+	width:100%;	
+	background:#B2C3C0;
 }
 
-.bloc-liste row p
+.div-liste-devis row p
 {
 	display:block;
 	float:left;
-	width:33%;	
-	padding:0.1em;
+	width:33%;
+	margin: 1em 0;
 }
 
-.bloc-liste row p input
+.div-liste-devis row p input
 {
 	display:block;
 	float:right;
-	width:40%;
 }
 	
-/* --- STYLE IHM DETAILS --- */
-
-#conteneur
-{
-	position:relative;
-	height:500px;
-	width:100%;
-	box-sizing:border-box;
-	border:solid 1px black;
-	overflow:auto;
-}	
+/* --- STYLE IHM DETAILS DEVIS --- */
 
 
 #details-vente
 {
-	position:absolute;
+	position:relative;
 	width:100%;		
-	height:33%;
+	height:250px;
 	box-sizing:border-box;
 	border-bottom:solid 1px black;	
-	margin-bottom:1%;		
 }
 
 #details-vente p
@@ -392,36 +353,35 @@ pre strong {
 	width:97%;
 }
 
-#details-article
+#details-articles-deviss-devis
 {
-	position:absolute;
+	position:relative;
 	width:100%;
-	height:65%;
-	top:35%;
+	height:250px;
 	box-sizing:border-box;
 	overflow-y:scroll;	
 	overflow-x:none;
 }
 
-#details-article select option:first-child
+#details-articles-devis select option:first-child
 {
 	visibility:hidden;	
 }
 
-#details-operation
+
+/* --- STYLE IHM DETAIL ENTREPRISE --- */
+
+#details-entreprise
 {
-	position:absolute;
+	positio:relative;
 	width:100%;
-	height:65%;
-	top:35%;
 	box-sizing:border-box;
-	overflow-y:scroll;	
-	overflow-x:none;
-	border-style: solid;
-  	border-width: 0.5px;
+	overflow-x:hidden;
+	border-top:solid 1px black;
+	border-bottom:solid 1px black;
 }
 
-#details-operation row
+#details-entreprise row
 {
 
 	position:relative;
@@ -431,7 +391,7 @@ pre strong {
 	
 }
 
-#details-operation row p
+#details-entreprise row p
 {
 	display:block;
 	float:left;
@@ -439,7 +399,7 @@ pre strong {
 	padding:0.1em;
 }
 
-#details-operation row p input
+#details-entreprise row p input
 {
 	display:block;
 	float:right;
@@ -448,11 +408,60 @@ pre strong {
 	
 
 
-#details-article table td, #details-article table th
+#details-articles-devis table td, #details-articles-devis table th
 {	
 	max-width:10%;
 	box-sizing:border-box;
 	border-left:solid 1px black;
+}
+
+/* --- STYLE IHM LISTE FOURNISSEURS ET CLIENTS --- */
+
+ .div-liste-entreprises row
+ {
+	position:relative;
+	width:100%;	
+	background:#B2C3C0;
+}
+
+.div-liste-entreprises row p
+{
+	display:block;
+	float:left;
+	width:33%;
+	margin: 1em 0;
+}
+
+.div-liste-entreprises row p input
+{
+	display:block;
+	float:right;
+}
+
+
+/* --- STYLE IHM LISTE ARTICLES --- */
+
+.div-articles row
+{
+	position:relative;
+	width:98%;
+	padding:1%;	
+	border-top:solid 1px black;
+	background:#B2C3C0;	
+}
+
+.div-articles row p
+{
+	display:block;
+	float:left;
+	width:50%;
+	margin: 1em 0;
+}
+
+
+.div-articles row p input
+{
+	float:right;
 }
 
 /* --- STYLE SMARTPHONE --- */	
@@ -509,6 +518,28 @@ pre strong {
 	.sous-menu
 	{
 		height:10.8em;
+	}	
+		
+	/* --- STYLE IHM ARTICLES SMARTPHONE --- */
+	
+	.conteneur row 
+	{
+		display: block;
+		overflow: auto;
+	}
+	.conteneur row p
+	{
+		width:100%;
+		margin:0;
+		padding:0;
+		font-size:1.5em;
+	}
+	
+	.conteneur row p input
+	{
+		width:100%;
+		font-size:1em;
+		text-align:center;
 	}	
 }
 
