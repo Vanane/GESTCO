@@ -34,7 +34,6 @@ switch ($action)
         for($i=1;$i<=$laVente['nbArticles'];$i++)
         {
             $devis = $pdo->devisParSonId($laVente['idVente'], $lesArticles['idArticle'.$i]);
-            $r['test'.$i] = $devis;
             if($devis != null)
             //Si la ligne devis pour ce produit existe déjà.
             //Permet d'éviter les erreurs de doublons, et cumule alors les deux

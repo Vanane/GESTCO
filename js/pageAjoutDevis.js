@@ -28,10 +28,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 	document.getElementById("dateDevis").value = 
 		new Date().getFullYear()+'-'+
 		new Date().getMonth()+1+'-'+
-		new Date().getDate()+' '+
-		new Date().getHours()+':'+
-		new Date().getMinutes()+':'+
-		new Date().getSeconds();
+		new Date().getDate();
 	
 	$("#ajouteLigne").click(function()
 	//Ajoute une ligne dans la table des articles au clic sur le bouton.
@@ -148,32 +145,54 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		{						
 			var dVente = {};
 			var dArticles = {};
+			
+			var rowCount = document.getElementById("table-articles").rows.length-1;
+			var i = 1;
+			var compteur = 0;
+			while(i<=rowCount)
+        	//Boucle qui remplit le tableau de tous les articles.
+			//Si l'id Article n'est pas choisi pour la ligne actuelle,
+			//Alors on ne la prend pas en compte, en comptant
+			//Le nombre de lignes invalides.
+        	{				
+        		if(dArticles['idArticle'+(i-compteur)] = $("#idArticle"+i).find(":selected").val() == null)
+        		{
+        			compteur++;
+        		}
+        		else
+        		{	
+            		dArticles['idArticle'+(i-compteur)] = $("#idArticle"+i).find(":selected").val();        			
+	        		dArticles['CMUPArticle'+(i-compteur)] = $("#CMUPArticle"+i).val();        		
+	        		dArticles['qteArticle'+(i-compteur)] = $("#qteArticle"+i).val();
+	        		dArticles['txRemise'+(i-compteur)] = $("#txArticle"+i).val();
+	        		dArticles['obsArticle'+(i-compteur)] = $("#obsArticle"+i).val();
+        		}
+        		i++;
+    		} 
+			
 			try
 			{
 				dVente['idVente'] = $("#idVente").val();
-				dVente['idEmploye'] = $("#respDevis").val().split('-')[0].trim();
+				dVente['idEmploye'] = $("#respDevis").val().split('-')[0].trim();//On split la chaine jusqu'au '-' pour garder le nombre.
 				dVente['idClient'] =$("#idClient").val().split('-')[0].trim();
-				dVente['dateDevis'] = $("#dateDevis").val();
-				dVente['nbArticles'] =$('#table-articles tr').length-1;//Nombre de tr - 1 pour ignorer l'en-tête du tableau
+				dVente['dateDevis'] = 
+							new Date().getFullYear()+'-'+
+							new Date().getMonth()+1+'-'+
+							new Date().getDate()+' '+
+							new Date().getHours()+':'+
+							new Date().getMinutes()+':'+
+							new Date().getSeconds();
+				//Format de mysql : aaaa-mm-jj hh:mm:ss.
+				
+				dVente['nbArticles'] = rowCount-compteur//Nombre de lignes comptées - les lignes invalides
 			}	
 			catch
 			{
-				$('#ttIdClient').tooltipster('open');
-				erreur = true;
+				$('#ttIdClient').tooltipster('open');//Si le try plante, on affiche des tooltips
+				erreur = true;//Et on empêche ajax de se faire.
 			}
-			var rowCount = document.getElementById("table-articles").rows.length;
-        	for(i=1;i<rowCount;i++)
-        	//Boucle qui remplit le tableau de tous les articles.
-        	{
-        		if(dArticles['idArticle'+i] = $("#idArticle"+i+" option:checked").val() == "")
-        			console.log('vide');
-        		dArticles['idArticle'+i] = $("#idArticle"+i+" option:checked").val();
-        		dArticles['CMUPArticle'+i] = $("#CMUPArticle"+i).val();
-        		dArticles['qteArticle'+i] = $("#qteArticle"+i).val();
-        		dArticles['txRemise'+i] = $("#txArticle"+i).val();
-        		dArticles['obsArticle'+i] = $("#obsArticle"+i).val();
-    		}        	
         	
+			console.log(dArticles);
         	if(!erreur)
     		{
 		    	$.ajax({
@@ -188,7 +207,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		            url: "../../ajax/ajoutDevisAjax.php",
 			        success: function(r) {
 			        	alert("Devis créé avec succès !");
-			        	window.location = "/";
+			        	console.log(r);
 			        },
 			        error: function (xhr, ajaxOptions, thrownError)
 			        {

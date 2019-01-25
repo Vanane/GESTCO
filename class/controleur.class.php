@@ -210,7 +210,7 @@ public function listeDevis()
                         <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
                             <td><span class="tooltip" id="ttIdArticle" title="Sélectionnez au moins un article !"><select id="idArticle1">
-                                <option selected hidden></option>';
+                                <option value></option>';
         while($e = $lesArticles->fetch(PDO::FETCH_OBJ))
         {
             $return = $return.'<option value="'.$e->idArticle.'">'.$e->idArticle.'</option>';
