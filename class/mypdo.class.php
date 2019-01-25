@@ -108,6 +108,18 @@ class mypdo extends PDO{
         }
         return null;
     }
+    public  function listeSociete()
+    {
+        
+        $requete='SELECT * FROM Societe';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     
     public function familleParSonId($id)
     {
@@ -151,10 +163,16 @@ class mypdo extends PDO{
     
     public function insertContactClient($id,$societe, $nom, $prenom, $mail, $telephone)
     {
-        $sql='INSERT INTO contact_client (idClient, societe, nom, prenom, mail, telephone)VALUES('.$id.','.$societe.','.$nom.', '.$prenom.', '.$mail.','.$telephone.')';
+        $sql='INSERT INTO contact_client VALUES("'.$id.'","'.$societe.'","'.$nom.'", "'.$prenom.'","'.$telephone.'","'.$mail.'")';
         $result=$this->connexion->query($sql);
         return $result;
-
+    }
+    
+    public function insertSociete($id, $nom, $adresse, $telephone,$fax,$siteWeb, $raison, $mail)
+    {
+        $sql='INSERT INTO Societe VALUES("'.$id.'","'.$nom.'","'.$adresse.'", "'.$telephone.'","'.$fax.'","'.$siteWeb.'","'.$raison.'","'.$mail.'")';
+        $result=$this->connexion->query($sql);
+        return $result;
     }
    
     public function insertVente($idVente, $idClient, $idEmploye, $date)
@@ -361,6 +379,16 @@ class mypdo extends PDO{
     public function idDernierContactClient()
     {
         $r="SELECT  idClient FROM contact_client ORDER BY idClient DESC";//MAX(idClient) si besoin 
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function idDernierSociete()
+    {
+        $r="SELECT  idSociete FROM societe WHERE idSociete ORDER BY idSociete DESC";//MAX(idClient) si besoin
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;

@@ -253,20 +253,22 @@ public function listeFournisseurs()
 	    {
 	        /*$ligneIdContact = $lcf->fetch(PDO::FETCH_OBJ);*/
 	        $return = $return.'
-               	<row>    
-                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
-                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
-                </row>
-                <row>
-                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-                </row>
-                <row>
-                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
-                </row> 
+               	<bloc>
+                    <row>    
+                        <p>Dénomination : <input type="text" readonly maxlength="24" value='.$ligneIdSociete->nom.'> </p>
+                        <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+                        <p>Site web :<input type="text" readonly maxlength="48" value='.$ligneIdSociete->siteWeb.'> </p>  
+                    </row>
+                    <row>
+                        <p>Téléphone :<input type="text" readonly maxlength="12" value='.$ligneIdSociete->telephone.'></p>
+                        <p>Adresse :<input type="text" readonly maxlength="64" value='.$ligneIdSociete->adresse.'> </p>
+                        <p>Raison sociale :<input type="text" maxlength="12" readonly value='.$ligneIdSociete->raison.'></p>
+                    </row>
+                    <row>
+                        <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                        <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                    </row> 
+                </bloc>
                 ';
         }
 	   $return = $return.'</div>
@@ -286,31 +288,42 @@ public function listeClients()
                     Vous pouvez accéder au contact que vous possèdez pour chaque client en cliquant sur "Voir Contact".<br>
                     Si vous souhaitez ajouter un nouveau client, cliquez sur le bouton "Ajouter un client" en bas de la page.<br>
                     Si vous souhaitez ajouter un nouveau contact, cliquez sur le "Voir Contact"<br>
-                    Si vous souhaitez modifier les informations d\'un client ou d\'un contact, cliquez sur "Voir Contact"
-        
+                    Si vous souhaitez modifier les informations d\'un client ou d\'un contact, cliquez sur "Voir Contact"<br><br>
+                    Si vous souhaitez voir toutes les entreprises (cliente et fournisseuse) cochez cette case <input type="checkbox" name="test" value="1"> 
                 </p>';
-    
-    $lsc = $this->vpdo->listeSocieteClients();
-    while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
+    if ($_POST[test]==1)
+    {
+      
+      $lsc = $this->vpdo->listeSociete();
+      
+    }
+    else
+    {
+      $lsc = $this->vpdo->listeSocieteClients();
+    }
+ while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
     $return = $return.'
-               	<row>    
-                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
-                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
-                </row>
-                <row>
-                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-                </row>
-                <row>
-                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                    <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
-                </row> 
+                <bloc>
+                   	<row>    
+                        <p>Dénomination : <input type="text" readonly maxlength="24" value='.$ligneIdSociete->nom.'> </p>
+                        <p>Code : <input type="text" readonly  value='.$ligneIdSociete->idSociete.'></p>
+                        <p>Site web :<input type="text" readonly maxlength="48" value='.$ligneIdSociete->siteWeb.'> </p>  
+                    </row>
+                    <row>
+                        <p>Téléphone :<input type="text" readonly maxlength="12" value='.$ligneIdSociete->telephone.'></p>
+                        <p>Adresse :<input type="text" readonly maxlength="64" value="'.$ligneIdSociete->adresse.'"> </p>
+                        <p>Raison sociale :<input type="text" readonly maxlength="12" value='.$ligneIdSociete->raison.'></p>
+                    </row>
+                    <row>
+                        <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                        <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                    </row>
+                </bloc> 
   ';
     }
-    $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a></div>';
+    $return = $return.'<a href="Clients/ajoutersociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a>
+   <a href="javascript:history.go(-1)" class="bou-classique">Retour</a>  </div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -318,7 +331,7 @@ public function listeClients()
 public function listeContactClients($idSociete)
 {
     $s = $this->vpdo->societeParSonId($idSociete);
-    $return='   <div class="conteneur">
+    $return='   <div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existants pour le client numéro '.$idSociete.'.<br>
                         Si vous souhaitez modifier les informations d\'un client, cliquez sur "VALIDER LES MODIFICATIONS DE L\'ENTREPRISE CLIENTE"<br>                        
@@ -330,16 +343,16 @@ public function listeContactClients($idSociete)
    $return = $return.'<div id="details-entreprise">
                         <row>    
                         <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value='.$s->idSociete.'></p>
-                        <p>  Nom de l\'entreprise : <input type="text" id="nomSociete"value='.$s->nom.'> </p>
-                        <p>  Raison sociale : <input type="text" id="raisonSociete" value='.$s->raison.'> </p>
+                        <p>  Nom de l\'entreprise : <input type="text" maxlength="24" id="nomSociete"value='.$s->nom.'> </p>
+                        <p>  Raison sociale : <input type="text" id="raisonSociete" maxlength="12" value='.$s->raison.'> </p>
                      </row>
                      <row>
-                        <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" value='.$s->siteWeb.'> </p>  
-                        <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" value='.$s->telephone.'> </p>
-                        <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" value='.$s->adresse.'> </p>
+                        <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" maxlength="48" value='.$s->siteWeb.'> </p>  
+                        <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" maxlength="12" value='.$s->telephone.'> </p>
+                        <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" maxlength="64" value="'.$s->adresse.'"> </p>
                       </row>
                       <row>
-                        <p>  faxe de l\'entreprise : <input type="text" id="faxSociete" required value='.$s->fax.'> </p>          
+                        <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required value='.$s->fax.'> </p>          
                         <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required value='.$s->mail.'></p>
                         <a onclick="modificationclient()" class="bou-classique">Modifier les informations</a>
                       </row>
@@ -354,64 +367,91 @@ public function listeContactClients($idSociete)
   }
     while($ligneIdContact = $lcc->fetch(PDO::FETCH_OBJ))
     { 
-     $return = $return.'<div id="conteneur">
+     $return = $return.'<div id="conteneur  div-liste-entreprises">
     <row> 
         <p>Code du contact : <input type="text" id="idClient'.$ligneIdContact->idClient.'" required readonly value='.$ligneIdContact->idClient.'></p>
-        <p>Nom du contact : <input type="text" id="nomClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->nom.'></p>
-        <p>Prenom du contact : <input type="text" id="prenomClient'.$ligneIdContact->idClient.'"  value='.$ligneIdContact->prenom.'></p> 
+        <p>Nom du contact : <input type="text" id="nomClient'.$ligneIdContact->idClient.'" maxlength="16" required value='.$ligneIdContact->nom.'></p>
+        <p>Prenom du contact : <input type="text" id="prenomClient'.$ligneIdContact->idClient.'" maxlength="16"  value='.$ligneIdContact->prenom.'></p> 
     </row>
     <row>
-        <p>Téléphone du contact : <input type="text" id="telClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->telephone.'></p>
-        <p>Mail du contact : <input type="text" id="mailClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->mail.'></p>
+        <p>Téléphone du contact : <input type="text" id="telClient'.$ligneIdContact->idClient.'" maxlength="10" required value='.$ligneIdContact->telephone.'></p>
+        <p>Mail du contact : <input type="text" id="mailClient'.$ligneIdContact->idClient.'" required maxlength="40" value='.$ligneIdContact->mail.'></p>
         <p>Id société du contact : <input type="text" id="societeClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->idSociete.'></p>
      </row>   
      <row>
-        <a onclick=\'modificationcontactclient("'.$ligneIdContact->idClient.'")\' class="bou-classique">Modifier le contact</a>
+        <a onclick=\'modificationContactClient("'.$ligneIdContact->idClient.'")\' class="bou-classique">Modifier le contact</a>
+        
 
     </row>
 </div>';
     }//'.$ligneIdContact->idClient.'
-    $return = $return.'</div><a href="ajoutercontactclient/'.$idSociete.'" class="bou-classique">Ajouter un contact</a>';
+    $return = $return.'</div><a href="ajoutercontactclient/'.$idSociete.'" class="bou-classique">Ajouter un contact</a><a href="javascript:history.go(-1)" class="bou-classique">Retour</a>   ';
     return $return;
 }
 
 public function ajouterContactClient($idSociete)//175
 {   
     $idContactClient = $this->vpdo->idDernierContactClient()->idClient+1;
-    $infoSociete=$this-> vpdo ->societeParSonId($idSociete);
-    $return='<div id="conteneur">
+    $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;
+    $return='<div class="conteneur div-liste-entreprises">
                     <p style="margin-left: 1em">
-                        Voici l\'outil d\'ajout des contacts pour votre client <b>'.$infoSociete->nom.'</b><br>
+                        Voici l\'outil d\'ajout des contacts pour votre client <b>'.$infoSociete.'</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur "Valider le contact".<br>
-                        Les cases "Code du contact" et  "id société '.$infoSociete->nom.'" ne peuvent être changé.
+                        Les cases "Code du contact" et  "id société '.$infoSociete.'" ne peuvent pas être changé.
                         Si vous souhaietez rajouter un contact pour une autre entreprise, veuillez vous rediriger vers la liste des entreprises.  
                     </p> ';
     $return = $return.'
-<div id="bloc-liste" class="bloc-liste">
+<div id="bloc-liste" class="conteneur div-liste-entreprises">
     <row>
         <p>Code du contact : <input type="text" id="idClient" readonly value="'.$idContactClient.'"></p>
-        <p>Nom du contact(*) : <input type="text" id="nomClient" required value=""></p>
-        <p>Prenom du contact(*) : <input type="text" id="prenomClient" required  value=""></p>
+        <p>Nom du contact(*) : <input type="text" id="nomClient" maxlength="16" required value=""></p>
+        <p>Prenom du contact(*) : <input type="text" id="prenomClient" maxlength="16" required  value=""></p>
     </row>
     <row>
-        <p>Téléphone du contact(*) : <input type="text" id="telClient" required  value=""></p>
-        <p>Mail du contact(*) : <input type="text" id="mailClient" required value=""></p>
-        <p>id société '.$infoSociete->nom.' : <input type="text" readonly id="societeClient" value="'.$idSociete.'"></p>
+        <p>Téléphone du contact(*) : <input type="text" id="telClient" maxlength="10" required  value=""></p>
+        <p>Mail du contact(*) : <input type="text" id="mailClient" maxlength="40" required value=""></p>
+        <p>id société '.$infoSociete.' : <input type="text" readonly id="societeClient" value="'.$idSociete.'"></p>
      </row>
      <row>
         <a onclick=\'ajoutercontactclient()\' class="bou-classique">Valider le contact</a>
-            
+        <a href="javascript:history.go(-1)" class="bou-classique">Retour</a>   
     </row>
 </div>';
 	
-	return $return;// ajouter nom entreprise en plus de code.
+	return $return;
 }
 
-    public function ajouterSocieteCliente()
+    public function ajouterSociete()
     {
-        $vretour='<p>test</p>';
+        $idSociete = $this->vpdo->idDernierSociete()->idSociete+1;
+        $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil d\'ajout de nouvelle entreprise.</b><br>
+                        Il vous suffit de remplir les cases ci-dessous et cliquez sur "Valider la société".<br>
+                        La case "id de l\'entreprise" ne peut pas être changé.
+                    </p> ';
+        $return = $return.'
+<div id="bloc-liste" class="conteneur  div-liste-entreprises">
+    <row>
+        <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value="'.$idSociete.'"></p>
+        <p>  Nom de l\'entreprise : <input type="text" maxlength="24" id="nomSociete"value=""></p>
+        <p>  Raison sociale : <input type="text" id="raisonSociete" maxlength="12" value=""> </p>
+   </row>
+    <row>
+         <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" maxlength="48" value=""> </p>  
+         <p>  Téléphone de l\'entreprise : <input type="text"  id="telSociete" maxlength="12" value=""> </p>
+         <p> Adresse de l\'entreprise : <input type="text" id="adresseSociete" maxlength="64" value=""> </p>
+    </row>
+     <row>
+         <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required maxlength="48"  value=""> </p>          
+         <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required maxlength="40"  value=""></p>
+    </row>
+         <a onclick=\'ajoutersociete()\' class="bou-classique">Confirmer l\'entreprise</a>
+         <a href="javascript:history.go(-1)" class="bou-classique">Retour</a>
+    </row>
+</div>';
         
-        return $vretour;
+        return $return;
     }
     
 	    

@@ -424,6 +424,15 @@ pre strong {
 	background:#B2C3C0;
 }
 
+.div-liste-entreprises bloc
+{
+	display:block;
+	background:#B2C3C0;
+	width:100%;
+	overflow:hidden;
+	border-top:solid 1px black;
+}
+
 .div-liste-entreprises row p
 {
 	display:block;

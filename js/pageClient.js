@@ -25,6 +25,7 @@ function modificationclient() {
         url: "../ajax/clientAjax.php",
         success: function(r) {
         	console.log(r['idSociete']);
+        	location.reload()
         },
         error: function (xhr, ajaxOptions, thrownError)
         {
@@ -36,9 +37,10 @@ function modificationclient() {
 	});
 	}
 	}
-function modificationcontactclient(idClient) {//$idClient
+
+function modificationContactClient(id) {
 	if (confirm("Pour valider les modifications des données de votre contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{	let idClient = idClient;
+	{	let idClient = id;
 		let nom = document.getElementById("nomClient"+idClient);
 		let prenom = document.getElementById("prenomClient"+idClient);
 		let telephone = document.getElementById("telClient"+idClient);
@@ -60,8 +62,7 @@ function modificationcontactclient(idClient) {//$idClient
     	},
         url: "../ajax/clientAjax.php",
         success: function(r) {
-        	
-        	
+        	location.reload()
         	/*document.getElementById("lesBlocs").innerHTML = r['result'];*/ 
         },
         error: function (xhr, ajaxOptions, thrownError)
@@ -97,9 +98,9 @@ function ajoutercontactclient() {
     		'mail':mail.value,
     		'societe':societe.value
     	},
-        url: "../ajax/clientAjax.php",
+        url: "../../ajax/clientAjax.php",
         success: function(r) {
-        	
+        	location.reload()
         },
         error: function (xhr, ajaxOptions, thrownError)
         {
@@ -110,7 +111,54 @@ function ajoutercontactclient() {
     	}
 	});
 	}
-}
+	}
+
+
+function ajoutersociete(){
+	if (confirm("Si vous souhaietez ajouter une société cliente, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
+	{
+		let id = document.getElementById("idSociete");
+		let nom = document.getElementById("nomSociete");
+		let adresse  = document.getElementById("adresseSociete");
+		let telephone = document.getElementById("telSociete");
+		let fax = document.getElementById("faxSociete");
+		let siteWeb = document.getElementById("siteWebSociete");
+		let raison = document.getElementById("raisonSociete");
+		let mail = document.getElementById("mailSociete");
+		$.ajax({
+		type: "POST",
+        dataType: "json",
+        data:
+    	{
+        	'action':'ajouterSociete',
+        	'id':id.value,
+    		'nom':nom.value,
+    		'adresse':adresse.value,
+    		'telephone':telephone.value,
+    		'fax':fax.value,
+    		'siteWeb':siteWeb.value,
+    		'raison':raison.value,
+    		'mail':mail.value
+    		
+    		
+    		
+    	},
+        url: "../ajax/clientAjax.php",
+        success: function(r) {
+        	location.reload()
+        	
+        },
+        error: function (xhr, ajaxOptions, thrownError)
+        {
+        	console.log(idSociete);
+            console.log(xhr.status);
+            console.log(thrownError);
+            console.log(ajaxOptions);
+    	}
+	});
+	}
+	}
+
 
 /*function supprimercontactclient(){
 	if (confirm("Pour supprimer les données du contact de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
@@ -141,15 +189,3 @@ function ajoutercontactclient() {
 }*/
 // pas possible de supprimer car clé étrangère aux ventes 
 
-function ajouterContact(){
-	if (confirm("Si vous souhaietez ajouter un contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{
-	location = "ajoutercontact";
-	}
-	}
-function ajouterSocieteCliente(){
-	if (confirm("Si vous souhaietez ajouter une société cliente, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{
-	location = "ajouterSocieteCliente";
-	}
-	}

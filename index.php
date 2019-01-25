@@ -58,8 +58,8 @@
 		              $site->js = "pageClient";
 		              switch($params[2])
 		                 {
-		                 case 'ajouterclient':
-		                     $site->left_sidebar = $controleur->ajouterSocieteCliente();
+		                 case 'ajoutersociete':
+		                     $site->left_sidebar = $controleur->ajouterSociete();
 		                     break;
                          default:
 		                     if(isset($params[3]))

@@ -30,7 +30,18 @@ switch ($action)
         $r['result']=$pdo->TupdateClient('mail',$m,'idSociete',$i);
        // $r['result'] = $pdo->updateClient($n,$a,$t,$f,$sw,$ra,$m,$i);//méthode différente.
         break;
-        
+   
+    case 'ajouterSociete':
+        $i=$_POST['id'];
+        $n=$_POST['nom'];
+        $a=$_POST['adresse'];
+        $t=$_POST['telephone'];
+        $f=$_POST['fax'];
+        $s=$_POST['siteWeb'];
+        $r=$_POST['raison'];
+        $m=$_POST['mail'];
+        $pdo->insertSociete($i,$n,$a,$t,$f,$s,$r,$m);
+        break; 
         
     case 'modifierContactClient':
         $i=$_POST['idClient'];
@@ -39,7 +50,6 @@ switch ($action)
         $t=$_POST['telephone'];
         $m=$_POST['mail'];
         $s=$_POST['societe'];
-        //$i=$_POST['idClient'];
         $r['result']=$pdo->updateContactClient('nom',$n,'idClient',$i);
         $r['result']=$pdo->updateContactClient('prenom',$p,'idClient',$i);
         $r['result']=$pdo->updateContactClient('telephone',$t,'idClient',$i);
