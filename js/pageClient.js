@@ -36,9 +36,9 @@ function modificationclient() {
 	});
 	}
 	}
-function modificationcontactclient($idClient) {//$idClient
+function modificationContactClient(id) {//$idClient
 	if (confirm("Pour valider les modifications des données de votre contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{	let idClient = $idClient;
+	{	let idClient = id;
 		let nom = document.getElementById("nomClient"+idClient);
 		let prenom = document.getElementById("prenomClient"+idClient);
 		let telephone = document.getElementById("telClient"+idClient);
@@ -51,7 +51,7 @@ function modificationcontactclient($idClient) {//$idClient
         data:
     	{
         	'action':'modifierContactClient',
-        	'idClient':$idClient,
+        	'idClient':idClient,
     		'nom':nom.value,
     		'prenom':prenom.value,
     		'telephone':telephone.value,

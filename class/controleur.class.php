@@ -253,20 +253,22 @@ public function listeFournisseurs()
 	    {
 	        /*$ligneIdContact = $lcf->fetch(PDO::FETCH_OBJ);*/
 	        $return = $return.'
-               	<row>    
-                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
-                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
-                </row>
-                <row>
-                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-                </row>
-                <row>
-                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                    <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
-                </row> 
+               	<bloc>
+                    <row>    
+                        <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
+                        <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+                        <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
+                    </row>
+                    <row>
+                        <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+                        <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+                        <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+                    </row>
+                    <row>
+                        <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                        <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                    </row> 
+                </bloc>
                 ';
         }
 	   $return = $return.'</div>
@@ -294,20 +296,22 @@ public function listeClients()
     while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
     $return = $return.'
-               	<row>    
-                    <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
-                    <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
-                    <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
-                </row>
-                <row>
-                    <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
-                    <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
-                    <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
-                </row>
-                <row>
-                    <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                    <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
-                </row> 
+                <bloc>
+                   	<row>    
+                        <p>Dénomination : <input type="text" readonly value='.$ligneIdSociete->nom.'> </p>
+                        <p>Code : <input type="text" readonly value='.$ligneIdSociete->idSociete.'></p>
+                        <p>Site web :<input type="text" readonly value='.$ligneIdSociete->siteWeb.'> </p>  
+                    </row>
+                    <row>
+                        <p>Téléphone :<input type="text" readonly value='.$ligneIdSociete->telephone.'></p>
+                        <p>Adresse :<input type="text" readonly value='.$ligneIdSociete->adresse.'> </p>
+                        <p>Raison sociale :<input type="text" readonly value='.$ligneIdSociete->raison.'></p>
+                    </row>
+                    <row>
+                        <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
+                        <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                    </row>
+                </bloc> 
   ';
     }
     $return = $return.'<a href="Clients/ajouterclient" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a></div>';
@@ -366,7 +370,7 @@ public function listeContactClients($idSociete)
         <p>Id société du contact : <input type="text" id="societeClient'.$ligneIdContact->idClient.'" required value='.$ligneIdContact->idSociete.'></p>
      </row>   
      <row>
-        <a onclick=\'modificationcontactclient("'.$ligneIdContact->idClient.'")\' class="bou-classique">Modifier le contact</a>
+        <a onclick=\'modificationContactClient("'.$ligneIdContact->idClient.'")\' class="bou-classique">Modifier le contact</a>
 
     </row>
 </div>';
