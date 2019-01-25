@@ -57,14 +57,20 @@
 		                 case 'ajouterclient':
 		                     $site->left_sidebar = $controleur->ajouterSocieteCliente();
 		                     break;
-                         /*case 'supprimercontact':
-                             $site->left_sidebar = $controleur->ajouterSocieteCliente();
-                             break;*///solution externe
-                         case 'ajoutercontact':
-                             $site->left_sidebar = $controleur->ajouterContact();
-                             break;
-		                 default:
-		                     $site-> left_sidebar=$controleur->listeContactClients($params[2]);
+                         default:
+		                     if(isset($params[3]))
+		                     {
+		                         switch($params[3])
+		                              {        
+		                              default:
+		                              $site->left_sidebar = $controleur->ajouterContactClient($params[3]);
+		                              break;
+		                              }
+		                     }
+		                     else
+		                          {
+		                          $site-> left_sidebar=$controleur->listeContactClients($params[2]);
+		                          }
                              break;
 		                 }
 		          }

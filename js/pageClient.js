@@ -36,34 +36,37 @@ function modificationclient() {
 	});
 	}
 	}
-function modificationcontactclient() {
+function modificationcontactclient($idClient) {//$idClient
 	if (confirm("Pour valider les modifications des données de votre contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{	let idClient = document.getElementById("idClient");
-		let nom = document.getElementById("nomClient");
-		let prenom = document.getElementById("prenomClient");
-		let telephone = document.getElementById("telClient");
-		let mail = document.getElementById("mailClient");
-		let idSociete = document.getElementById("societeClient");
+	{	let idClient = $idClient;
+		let nom = document.getElementById("nomClient"+idClient);
+		let prenom = document.getElementById("prenomClient"+idClient);
+		let telephone = document.getElementById("telClient"+idClient);
+		let mail = document.getElementById("mailClient"+idClient);
+		let societe = document.getElementById("societeClient"+idClient);
+		console.log(idClient);
 		$.ajax({
 		type: "POST",
         dataType: "json",
         data:
     	{
         	'action':'modifierContactClient',
-    		'idClient':idClient.value,
+        	'idClient':$idClient,
     		'nom':nom.value,
     		'prenom':prenom.value,
     		'telephone':telephone.value,
-    		'mail':mail.value
-    		'idSociete':idSociete.value,
+    		'mail':mail.value,
+    		'societe':societe.value
     	},
         url: "../ajax/clientAjax.php",
         success: function(r) {
-        	console.log(r['idClient']);
+        	
+        	
+        	/*document.getElementById("lesBlocs").innerHTML = r['result'];*/ 
         },
         error: function (xhr, ajaxOptions, thrownError)
         {
-        	console.log(idSociete);
+        	console.log(idClient);
             console.log(xhr.status);
             console.log(thrownError);
             console.log(ajaxOptions);
@@ -71,6 +74,43 @@ function modificationcontactclient() {
 	});
 	}
 	}
+
+function ajoutercontactclient() {
+	if (confirm("Pour confirmer la création de ce contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
+	{
+		let idClient = document.getElementById("idClient");
+		let nom = document.getElementById("nomClient");
+		let prenom = document.getElementById("prenomClient");
+		let telephone = document.getElementById("telClient");
+		let mail = document.getElementById("mailClient");
+		let societe = document.getElementById("societeClient");
+		$.ajax({
+		type: "POST",
+        dataType: "json",
+        data:
+    	{
+        	'action':'ajouterContactClient',
+        	'idClient':idClient.value,
+    		'nom':nom.value,
+    		'prenom':prenom.value,
+    		'telephone':telephone.value,
+    		'mail':mail.value,
+    		'societe':societe.value
+    	},
+        url: "../ajax/clientAjax.php",
+        success: function(r) {
+        	
+        },
+        error: function (xhr, ajaxOptions, thrownError)
+        {
+        	console.log(idClient);
+            console.log(xhr.status);
+            console.log(thrownError);
+            console.log(ajaxOptions);
+    	}
+	});
+	}
+}
 
 /*function supprimercontactclient(){
 	if (confirm("Pour supprimer les données du contact de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))

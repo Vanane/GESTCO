@@ -310,7 +310,7 @@ pre strong {
    	transition: background linear 0.1s;   	  
 }
 
-#bloc-liste
+.bloc-liste
 {
 	position:relative;
 	background:#B2C3C0;
@@ -319,7 +319,7 @@ pre strong {
 }	
 
 
-#bloc-liste row
+.bloc-liste row
 {
 	position:relative;
 	display:block;
@@ -328,7 +328,7 @@ pre strong {
 	
 }
 
-#bloc-liste row p
+.bloc-liste row p
 {
 	display:block;
 	float:left;
@@ -336,7 +336,7 @@ pre strong {
 	padding:0.1em;
 }
 
-#bloc-liste row p input
+.bloc-liste row p input
 {
 	display:block;
 	float:right;
