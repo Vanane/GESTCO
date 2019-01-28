@@ -50,7 +50,7 @@ public function detailsDevis($idVente)
 
             <div id="details-articles-devis">
                 <table>
-                    <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+                    <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
     
     $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
     while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
@@ -62,6 +62,7 @@ public function detailsDevis($idVente)
                             <td>'.$d->idArticle.'</td>
                             <td>'.$a->libelle.'</td>
                             <td>'.$d->prixVente.'</td>
+                            <td>'.(100 * $a->txMarge).'</td>
                             <td>'.$d->qteDemandee.'</td>
                             <td>'.$d->txRemise.'</td>
                             <td>'.$d->remise.'</td>
@@ -169,7 +170,7 @@ public function listeDevis()
 	}
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
-    <a href="Devis/Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
+    <a href="Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
     return $return;   // on retourne la totalité du texte
 	}
 	
@@ -207,7 +208,7 @@ public function listeDevis()
 	        
                 <div id="details-articles-devis">
                     <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
                             <td><span class="tooltip" id="ttIdArticle" title="Sélectionnez au moins un article !"><select id="idArticle1">
                                 <option value></option>';
@@ -218,6 +219,7 @@ public function listeDevis()
         $return = $return.'</select></span></td>
                             <td><input id="nomArticle1" type="text" readonly></td>
                             <td><input id="CMUPArticle1" type="number" readonly></td>
+                            <td><input id="margeArticle1" type="number" readonly></td>
                             <td><input id="qteArticle1" type="number" min=1 value=1></td>
                             <td><input id="txArticle1" type="number" min=0 max=100 step=0.5 value=0></td>
                             <td><input id="remise1" type="number" value=0 readonly></td>
@@ -273,7 +275,7 @@ public function listeFournisseurs()
                 ';
         }
 	   $return = $return.'</div>
-       <a href="Fournisseurs/ajouterContact" id="btn-ajouter" class="bou-classique">Ajouter un fournisseur </a>';
+       <a href="ajouterContact" id="btn-ajouter" class="bou-classique">Ajouter un fournisseur </a>';
 	   //renvoie vers la page "Ajouter un Fournisseur" 
 	   return $return;
 }
@@ -314,8 +316,7 @@ public function listeClients()
                 </bloc> 
   ';
     }
-    $return = $return.'<a href="Clients/Ajouter" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a>
-   <a href="javascript:history.go(-1)" class="bou-classique">Retour</a>  </div>';
+    $return = $return.'<a href="Ajouter" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
 }
@@ -377,7 +378,7 @@ public function listeContactClients($idSociete)
     </row>
 </div>';
     }//'.$ligneIdContact->idClient.'
-    $return = $return.'</div><a href="'.$idSociete.'/Ajouter" class="bou-classique">Ajouter un contact</a><a href="javascript:history.go(-1)" class="bou-classique">Retour</a>   ';
+    $return = $return.'</div><a href="'.$idSociete.'/Ajouter" class="bou-classique">Ajouter un contact</a>';
     return $return;
 }
 

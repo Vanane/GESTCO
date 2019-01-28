@@ -45,6 +45,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		tr.insertCell().innerHTML = '<select id="idArticle'+rowCount+'"></select>';
 		tr.insertCell().innerHTML = '<input id="nomArticle'+rowCount+'" type="text" readonly>';
 		tr.insertCell().innerHTML = '<input id="CMUPArticle'+rowCount+'" type="number" readonly>';
+		tr.insertCell().innerHTML = '<input id="margeArticle'+rowCount+'" type="number" readonly>';
 		tr.insertCell().innerHTML = '<input id="qteArticle'+rowCount+'" type="number" min=0 value=0>';
 		tr.insertCell().innerHTML = '<input id="txArticle'+rowCount+'" type="number" min="0" max="100" value=0 step:0.5>';
 		tr.insertCell().innerHTML = '<td><input id="remise'+rowCount+'" type="number" readonly></td>';
@@ -105,9 +106,15 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			let item = lesSelectsArticles[i];		
 			document.getElementById(item.id).onchange = function()
 			{
-				let nom = document.getElementById("nomArticle"+item.id.substring(9,10));
-				let cmup = document.getElementById("CMUPArticle"+item.id.substring(9,10));
-				let tva = document.getElementById("tva"+item.id.substring(9,10));
+				//Récupérer les élements par leur nom + le numéro du select qui est activé.
+				//Pour cela, on récupère l'id du select, auquel on substring à partir du 
+				//9ème caractère, jusqu'à la fin (item.id.length). 9ème caractère car il y a
+				//9 caractères dans "idArticle".
+				
+				let nom = document.getElementById("nomArticle"+item.id.substring(9,item.id.length));
+				let cmup = document.getElementById("CMUPArticle"+item.id.substring(9,item.id.length));
+				let marge = document.getElementById("margeArticle"+item.id.substring(9,item.id.length));
+				let tva = document.getElementById("tva"+item.id.substring(9,item.id.length));
 				
 				$.ajax({ //AJAX pour récupérer les infos d'un article.
 			        type: "POST",
@@ -121,7 +128,8 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			        success: function(r) {
 			        	nom.value = r['libelle'];
 			        	cmup.value = r['cmup'];
-			        	tva.value = r['tva'];
+			        	marge.value = 100*r['marge'];
+			        	tva.value = 100*r['tva'];
 			        },
 			        error: function (xhr, ajaxOptions, thrownError)
 			        {
@@ -165,7 +173,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 	        		dArticles['CMUPArticle'+(i-compteur)] = $("#CMUPArticle"+i).val();        		
 	        		dArticles['qteArticle'+(i-compteur)] = $("#qteArticle"+i).val();
 	        		dArticles['txRemise'+(i-compteur)] = $("#txArticle"+i).val();
-	        		dArticles['obsArticle'+(i-compteur)] = $("#obsArticle"+i).val();
+	        		dArticles['obsArticle'+(i-compteur)] = $("#obsArticle"+i).val();	        		
         		}
         		i++;
     		} 
