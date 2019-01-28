@@ -130,67 +130,67 @@ class page_base {
 	    $lesMenus=array(	        
 	        'ventes'=>'
 				<ul>
-					<li><a href="'.$this->path.'Ventes">Ventes</a></li>
+					<li><a href="'.$this->path.'Ventes/">Ventes</a></li>
                 </ul>',
 	        
 	        'achats'=>'
 				<ul>
-					<li><a href="'.$this->path.'Achats">Achats</a></li>
+					<li><a href="'.$this->path.'Achats/">Achats</a></li>
                 </ul>',
 	        
 	        'devis'=>'
 				<ul>
-					<li><a href="'.$this->path.'Devis">Devis</a></li>
+					<li><a href="'.$this->path.'Devis/">Devis</a></li>
                 </ul>',
 	        
 	        'commandes'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Commandes">Commandes</a></li>
+					<li><a  href="'.$this->path.'Commandes/">Commandes</a></li>
 				</ul>',
 	        
 	        'preparations'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Preparations">Préparations</a></li>
+					<li><a  href="'.$this->path.'Preparations/">Préparations</a></li>
 				</ul>',
 	        
 	        'livraisons'=>'
                 <ul>
-                    <li><a href="'.$this->path.'Livraisons">Livraisons</a></li>
+                    <li><a href="'.$this->path.'Livraisons/">Livraisons</a></li>
                 </ul>',
 	        
 	        'facturations'=>'
                 <ul>
-                    <li><a href="'.$this->path.'Facturations">Facturations</a></li>
+                    <li><a href="'.$this->path.'Facturations/">Facturations</a></li>
                 </ul>',
 	        
 		    'conflits'=>'
 				<ul>
-    				<li><a  href="'.$this->path.'Conflits">Conflits</a></li>
+    				<li><a  href="'.$this->path.'Conflits/">Conflits</a></li>
 				</ul>',		    
 		    
 	        'articles'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Articles">Articles</a></li>
+					<li><a  href="'.$this->path.'Articles/">Articles</a></li>
                 </ul>',
 	        
 	        'employes'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Employes">Employés</a></li>
+					<li><a  href="'.$this->path.'Employes/">Employés</a></li>
                 </ul>',
 	        
 	        'clients'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Clients">Clients</a></li>
+					<li><a  href="'.$this->path.'Clients/">Clients</a></li>
                 </ul>',
 	        
 	        'fournisseurs'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Fournisseurs">Fournisseurs</a></li>
+					<li><a  href="'.$this->path.'Fournisseurs/">Fournisseurs</a></li>
                 </ul>',
 	        
 	        'societes'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Societes">Sociétés</a></li>
+					<li><a  href="'.$this->path.'Societes/">Sociétés</a></li>
                 </ul>'
 	    );      	       
 	        
@@ -266,16 +266,16 @@ class page_base {
                 <div class="sous-menu menu_horizontal">
                     <p>Choisissez une option</p>
                     <ul>
-                        <li><a href="'.$this->path.'Ventes/Devis">Devis</a></li>
+                        <li><a href="'.$this->path.'Ventes/Devis/">Devis</a></li>
                     </ul>
                     <ul>
-                        <li><a href="'.$this->path.'Ventes/Commandes">Commandes</a></li>
+                        <li><a href="'.$this->path.'Ventes/Commandes/">Commandes</a></li>
                     </ul>
                     <ul>
-                        <li><a href="'.$this->path.'Ventes/Facturations">Facturations</a></li>
+                        <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
                     </ul>
                     <ul>
-                        <li><a href="'.$this->path.'Ventes/Conflits">Reliquats</a></li>
+                        <li><a href="'.$this->path.'Ventes/Conflits/">Reliquats</a></li>
                     </ul>
                 </div>';
 	}

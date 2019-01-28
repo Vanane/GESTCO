@@ -235,8 +235,18 @@ class mypdo extends PDO{
         $result=$this->connexion->query($r);
         if($result)
             return $result;
-            else
-                return null;
+        else
+            return null;
+    }
+    
+    public function updateArticle($attr, $value)
+    {
+        $r='UPDATE article SET '.$attr.' = "'.$value.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+        else
+            return null;                
     }
 
     /*public function updateClient($nom, $adresse,$telephone,$fax, $siteweb,$raison,$mail,$idSociete)
@@ -256,8 +266,8 @@ class mypdo extends PDO{
         $result=$this->connexion->query($r);
         if($result)
             return $result;
-            else
-                return null;
+        else
+            return null;
     }
     public function updateContactClient($attr, $value,$lacondition,$estremplie)
     {
@@ -459,7 +469,6 @@ class mypdo extends PDO{
     
     public  function employeParIdVente($idVente)
     {
-        
         $requete='SELECT d.idVente, e.idEmploye ,e.nom, e.prenom FROM detail_devis d, Employe e WHERE d.idEmploye=e.idEmploye AND idVente='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
@@ -470,7 +479,6 @@ class mypdo extends PDO{
     }
     public  function entrepriseParIdVente($idVente)
     {
-        
         $requete='SELECT s.* FROM detail_devis d, vente v, contact_client c, societe s WHERE d.idVente=v.idVente AND v.idClient= c.idClient  AND c.idSociete = s.idSociete AND v.idVente='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
@@ -480,8 +488,7 @@ class mypdo extends PDO{
         return null;
     }
     public  function prixTotalParIdVente($idVente)
-    {
-        
+    {       
         $requete='SELECT prixTotal FROM calculPrixTotal WHERE idVente ='.$idVente.'';
         $result=$this->connexion->query($requete);
         if ($result)
@@ -489,6 +496,15 @@ class mypdo extends PDO{
             return ($result);
         }
         return null;
+    }
+    
+    public function qteTotaleArticleParSonId($id)
+    {
+        $requete='SELECT * FROM lesstocksdechaqueproduit WHERE idArticle = "'.$id.'";';
+        $result=$this->connexion->query($requete)->fetch(PDO::FETCH_OBJ);
+        if ($result)
+            return ($result);
+        return null;       
     }
  
 }

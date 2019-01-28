@@ -162,7 +162,7 @@ public function listeDevis()
                         <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
                     </row>
                     <row>
-                       <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
+                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
                     </row>
                 </bloc>
     ';
@@ -267,7 +267,7 @@ public function listeFournisseurs()
                     </row>
                     <row>
                         <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                        <a href="fournisseurs/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                        <a href="'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
                     </row> 
                 </bloc>
                 ';
@@ -292,17 +292,8 @@ public function listeClients()
                     Si vous souhaitez modifier les informations d\'un client ou d\'un contact, cliquez sur "Voir Contact"<br><br>
                     Si vous souhaitez voir toutes les entreprises (cliente et fournisseuse) cochez cette case <input type="checkbox" name="test" value="1"> 
                 </p>';
-    if ($_POST[test]==1)
-    {
-      
-      $lsc = $this->vpdo->listeSociete();
-      
-    }
-    else
-    {
-      $lsc = $this->vpdo->listeSocieteClients();
-    }
- while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
+        $lsc = $this->vpdo->listeSocieteClients();
+    while($ligneIdSociete = $lsc->fetch(PDO::FETCH_OBJ))
     {
     $return = $return.'
                 <bloc>
@@ -318,12 +309,12 @@ public function listeClients()
                     </row>
                     <row>
                         <p>Mail :<input type="text" readonly value='.$ligneIdSociete->mail.'></p>
-                        <a href="Clients/'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
+                        <a href="'.$ligneIdSociete->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir Contact</a>   
                     </row>
                 </bloc> 
   ';
     }
-    $return = $return.'<a href="Clients/ajoutersociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a>
+    $return = $return.'<a href="Clients/Ajouter" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une societe cliente</a>
    <a href="javascript:history.go(-1)" class="bou-classique">Retour</a>  </div>';
     //renvoie vers la page "Ajouter un Contact"
     return $return;
@@ -386,7 +377,7 @@ public function listeContactClients($idSociete)
     </row>
 </div>';
     }//'.$ligneIdContact->idClient.'
-    $return = $return.'</div><a href="ajoutercontactclient/'.$idSociete.'" class="bou-classique">Ajouter un contact</a><a href="javascript:history.go(-1)" class="bou-classique">Retour</a>   ';
+    $return = $return.'</div><a href="'.$idSociete.'/Ajouter" class="bou-classique">Ajouter un contact</a><a href="javascript:history.go(-1)" class="bou-classique">Retour</a>   ';
     return $return;
 }
 
@@ -457,25 +448,33 @@ public function ajouterContactClient($idSociete)//175
     
     public function afficheListeArticles()
     {
+        $lesArticles = $this->vpdo->listeArticles();                
         $retour = '
-                <div class="conteneur div-articles">';
+                <div class="conteneur div-liste-articles">';
         
         $retour = $retour.'
                     <p>Voici la liste des articles enregistrés dans la base de données.</p>
         ';
-        $lesArticles = $this->vpdo->listeArticles();
         $i = 1;
         while($a = $lesArticles->fetch(PDO::FETCH_OBJ))
         {
             $f = $this->vpdo->familleParSonId($a->idFam);
+            $qte = $this->vpdo->qteTotaleArticleParSonId($a->idArticle);
             $retour = $retour.'
-                    <row>
-                        <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'"></p>
-                        <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'"></p>
-                        <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'"></p>
-                        <p>Famille : <input id="famArticle" value="'.$f->libelle.'"></p>
-                        <a class="bou-classique" href="Articles/'.$a->idArticle.'">Détails article</a>
-                    </row>
+    <bloc>
+        <row>
+            <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'" readonly></p>
+            <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'" readonly></p>
+            <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'" readonly></p>
+            <p>Famille : <input id="famArticle" value="'.$f->libelle.'" readonly></p>
+        </row>
+        <row>
+            <p>Quantité réelle disponible : <input id="qteArticle" type="number" value='.$qte->qteArticle.' readonly></p>
+        </row>
+        <row>
+            <a class="bou-classique" href="'.$a->idArticle.'">Détails article</a>
+        </row>
+    </bloc>
                 ';
           $i++;  
         }
@@ -488,18 +487,17 @@ public function ajouterContactClient($idSociete)//175
     {
         $a = $this->vpdo->articleParSonId($idArticle);
         $em = $this->vpdo->emplacementParSonId($a->idEmp);
-        $f = $this->vpdo->familleParSonId($a->idFam);
+        $lesFamilles = $this->vpdo->listeFamilles();        
         $lesMouvements = $this->vpdo->listeMouvementsParArticle($idArticle);
         $retour = '
     <div class="conteneur">
         <div id="details-infos-article">
             <row>
                 <p>Nom Article : <input type="text" value="'.$a->libelle.'"></p>
-                <p>ID Article : <input type="text" value="'.$a->idArticle.'" readonly></p>
+                <p>ID Article : <input id="idArticle" type="text" value="'.$a->idArticle.'" readonly></p>
             </row>
             <row>
                 <p>Famille Article : <select>';
-            $lesFamilles = $this->vpdo->listeFamilles();
             while($lesF = $lesFamilles->fetch(PDO::FETCH_OBJ))
             {
                 $retour = $retour.'
@@ -513,7 +511,7 @@ public function ajouterContactClient($idSociete)//175
             }                                          
             $retour = $retour.'</select></p>
                 <p>Code à barres : <input type="" value="'.$a->codeBarre.'"></p>
-                <p>Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
+                <p id="details-info-article-localisation">Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
             </row>
         </div>
         <div id="onglets-details-article">
@@ -523,23 +521,41 @@ public function ajouterContactClient($idSociete)//175
         <div id="div-onglets-details-article">
             <div id="div-on-cmup">
                 <row>
-                    <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'"></p>
-                    <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'"></p>
-                    <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input type="number" value="'.$a->dernierCMUP.'" readonly></p>
+                    <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'" readonly></p>
+                    <p>Marge supplémentaire : <input id="margeSup" type="number" value=0 style="background:#ffaaaa"></p>
+                    <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'" readonly></p>
+                    <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input id="cmupActuel" type="number" value="'.$a->dernierCMUP.'" readonly></p>
+                    <p>Prix de Vente TTC : <input type="number" value="'.$a->dernierCMUP * (1+$a->txMarge) * (1+$a->txTVA).'" readonly></p>
                 </row>
                 <row>
-                    <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number"></p>
+                    <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number" readonly></p>
+                    <a id="modifierArticle" class="bou-classique">Etablir un nouveau CMUP</a>
                 </row>
             </div>
 
             <div id="div-on-mouv">
-                <row>
+                <row>';
+            if($lesMouvements->rowCount() == 0)
+            {
+                $retour = $retour.'<tr><td>Il n\'y a aucun mouvement à afficher.</td></tr>';
+            }
+            else
+            {
+                $retour = $retour.'           
                     <table>
-                        <tr><th>Id Mouvement</th>   <th>Type</th>   <th>Fournisseur</th>   <th>Date</th>   <th>Prix unité</th>   <th>Quantité</th>  <th>Observations</th></tr>';
-                        
-                        
+                        <tr><th>Id Mouvement</th>
+                        <th>Type</th>
+                        <th>Fournisseur</th>
+                        <th>Date</th>
+                        <th>Prix unité</th>
+                        <th>Quantité</th>
+                        <th>Observations</th>
+                    </tr>';
+            }
+            
             while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))
             {
+                
                 $retour = $retour.'
                             <tr>
                                 <td>'.$m->idMouv.'</td>
@@ -552,7 +568,7 @@ public function ajouterContactClient($idSociete)//175
                             </tr>
             ';   
             }
-            
+
             $retour = $retour.'
                         </table>
                     </row>
