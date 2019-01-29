@@ -50,7 +50,7 @@ public function detailsDevis($idVente)
 
             <div id="details-articles-devis">
                 <table>
-                    <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+                    <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise %</th>   <th>Remise €</th>   <th>Total HT</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
     
     $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);	    
     while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
@@ -62,6 +62,7 @@ public function detailsDevis($idVente)
                             <td>'.$d->idArticle.'</td>
                             <td>'.$a->libelle.'</td>
                             <td>'.$d->prixVente.'</td>
+                            <td>'.(100 * $a->txMarge).'</td>
                             <td>'.$d->qteDemandee.'</td>
                             <td>'.$d->txRemise.'</td>
                             <td>'.$d->remise.'</td>
@@ -162,14 +163,14 @@ public function listeDevis()
                         <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
                     </row>
                     <row>
-                       <a href="Devis/'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
+                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
                     </row>
                 </bloc>
     ';
 	}
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
-    <a href="Devis/Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
+    <a href="Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
     return $return;   // on retourne la totalité du texte
 	}
 	
@@ -207,7 +208,7 @@ public function listeDevis()
 	        
                 <div id="details-articles-devis">
                     <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
                         <tr>
                             <td><span class="tooltip" id="ttIdArticle" title="Sélectionnez au moins un article !"><select id="idArticle1">
                                 <option value></option>';
@@ -218,6 +219,7 @@ public function listeDevis()
         $return = $return.'</select></span></td>
                             <td><input id="nomArticle1" type="text" readonly></td>
                             <td><input id="CMUPArticle1" type="number" readonly></td>
+                            <td><input id="margeArticle1" type="number" readonly></td>
                             <td><input id="qteArticle1" type="number" min=1 value=1></td>
                             <td><input id="txArticle1" type="number" min=0 max=100 step=0.5 value=0></td>
                             <td><input id="remise1" type="number" value=0 readonly></td>
@@ -432,27 +434,35 @@ public function ajouterSociete()
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
     
-public function afficheListeArticles()
+    public function afficheListeArticles()
     {
+        $lesArticles = $this->vpdo->listeArticles();                
         $retour = '
-                <div class="conteneur div-articles">';
+                <div class="conteneur div-liste-articles">';
         
         $retour = $retour.'
                     <p>Voici la liste des articles enregistrés dans la base de données.</p>
         ';
-        $lesArticles = $this->vpdo->listeArticles();
         $i = 1;
         while($a = $lesArticles->fetch(PDO::FETCH_OBJ))
         {
             $f = $this->vpdo->familleParSonId($a->idFam);
+            $qte = $this->vpdo->qteTotaleArticleParSonId($a->idArticle);
             $retour = $retour.'
-                    <row>
-                        <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'"></p>
-                        <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'"></p>
-                        <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'"></p>
-                        <p>Famille : <input id="famArticle" value="'.$f->libelle.'"></p>
-                        <a class="bou-classique" href="Articles/'.$a->idArticle.'">Détails article</a>
-                    </row>
+    <bloc>
+        <row>
+            <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'" readonly></p>
+            <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'" readonly></p>
+            <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'" readonly></p>
+            <p>Famille : <input id="famArticle" value="'.$f->libelle.'" readonly></p>
+        </row>
+        <row>
+            <p>Quantité réelle disponible : <input id="qteArticle" type="number" value='.$qte->qteArticle.' readonly></p>
+        </row>
+        <row>
+            <a class="bou-classique" href="'.$a->idArticle.'">Détails article</a>
+        </row>
+    </bloc>
                 ';
           $i++;  
         }
@@ -465,18 +475,17 @@ public function afficheListeArticles()
     {
         $a = $this->vpdo->articleParSonId($idArticle);
         $em = $this->vpdo->emplacementParSonId($a->idEmp);
-        $f = $this->vpdo->familleParSonId($a->idFam);
+        $lesFamilles = $this->vpdo->listeFamilles();        
         $lesMouvements = $this->vpdo->listeMouvementsParArticle($idArticle);
         $retour = '
     <div class="conteneur">
         <div id="details-infos-article">
             <row>
                 <p>Nom Article : <input type="text" value="'.$a->libelle.'"></p>
-                <p>ID Article : <input type="text" value="'.$a->idArticle.'" readonly></p>
+                <p>ID Article : <input id="idArticle" type="text" value="'.$a->idArticle.'" readonly></p>
             </row>
             <row>
                 <p>Famille Article : <select>';
-            $lesFamilles = $this->vpdo->listeFamilles();
             while($lesF = $lesFamilles->fetch(PDO::FETCH_OBJ))
             {
                 $retour = $retour.'
@@ -490,7 +499,7 @@ public function afficheListeArticles()
             }                                          
             $retour = $retour.'</select></p>
                 <p>Code à barres : <input type="" value="'.$a->codeBarre.'"></p>
-                <p>Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
+                <p id="details-info-article-localisation">Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
             </row>
         </div>
         <div id="onglets-details-article">
@@ -500,21 +509,38 @@ public function afficheListeArticles()
         <div id="div-onglets-details-article">
             <div id="div-on-cmup">
                 <row>
-                    <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'"></p>
-                    <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'"></p>
-                    <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input type="number" value="'.$a->dernierCMUP.'" readonly></p>
+                    <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'" readonly></p>
+                    <p>Marge supplémentaire : <input id="margeSup" type="number" value=0 style="background:#ffaaaa"></p>
+                    <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'" readonly></p>
+                    <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input id="cmupActuel" type="number" value="'.$a->dernierCMUP.'" readonly></p>
+                    <p>Prix de Vente TTC : <input type="number" value="'.$a->dernierCMUP * (1+$a->txMarge) * (1+$a->txTVA).'" readonly></p>
                 </row>
                 <row>
-                    <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number"></p>
+                    <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number" readonly></p>
+                    <a id="modifierArticle" class="bou-classique">Etablir un nouveau CMUP</a>
                 </row>
             </div>
 
             <div id="div-on-mouv">
-                <row>
+                <row>';
+            if($lesMouvements->rowCount() == 0)
+            {
+                $retour = $retour.'<tr><td>Il n\'y a aucun mouvement à afficher.</td></tr>';
+            }
+            else
+            {
+                $retour = $retour.'           
                     <table>
-                        <tr><th>Id Mouvement</th>   <th>Type</th>   <th>Fournisseur</th>   <th>Date</th>   <th>Prix unité</th>   <th>Quantité</th>  <th>Observations</th></tr>';
-                        
-                        
+                        <tr><th>Id Mouvement</th>
+                        <th>Type</th>
+                        <th>Fournisseur</th>
+                        <th>Date</th>
+                        <th>Prix unité</th>
+                        <th>Quantité</th>
+                        <th>Observations</th>
+                    </tr>';
+            }
+            
             while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))
             {
                 $retour = $retour.'
@@ -529,7 +555,7 @@ public function afficheListeArticles()
                             </tr>
             ';   
             }
-            
+
             $retour = $retour.'
                         </table>
                     </row>

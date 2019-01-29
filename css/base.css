@@ -169,7 +169,7 @@ pre strong {
 {
 	position:relative;
 	float:left;
-	width:25%;
+	width:100%;
 }
 
 /* --- STYLE MENU --- */
@@ -271,12 +271,12 @@ pre strong {
 {
 	display: block;
 	padding:0.5em;
-	margin: 1em;
+	margin: 0.5em;
 	background:#478bf9;
    	float:right;
    	box-sizing:border-box;
    	text-align:center;
-   	transition: background linear 0.1s;   	  
+   	transition: all linear 0.1s;   	  
 }
 
 .bou-plusLigne
@@ -286,10 +286,9 @@ pre strong {
 	width:100%;
 }
 
-#bou-classique:hover
+.bou-classique:hover
 {
-	transition: background-color ease-in 0.1s;
-	background-color: #367ae8;
+   	transition: all linear 0.1s;   	  	
 }
 
 #details-articles-devis input, #details-articles-devis select
@@ -465,32 +464,39 @@ pre strong {
 
 /* --- STYLE IHM LISTE ARTICLES --- */
 
-.div-articles row
+.div-liste-articles row
 {
 	position:relative;
 	width:98%;
 	padding:1%;	
+}
+.div-liste-articles bloc
+{
+	display:block;
 	background:#B2C3C0;
+	width:100%;
+	overflow:hidden;
 	border-top:solid 1px black;
 }
 
-.div-articles row p
+
+.div-liste-articles bloc row p
 {
 	display:block;
 	float:left;
 	width:50%;	
-	margin: 1em 0;
+	margin: 0.5em 0;
 }
 
 
-.div-articles row p input
+.div-liste-articles bloc row p input
 {
 	float:right;
 	overflow:hidden;
 }
 
 
-.div-articles row p input[type=number]
+.div-liste-articles bloc row p input[type=number]
 {
 	  width:25%;
 }
@@ -509,32 +515,21 @@ pre strong {
 {
 	display:block;
 	float:left;
-	width:25%;	
 	margin: 0.5em 0;
-}
-
-#details-infos-article row:first-child p, #details-infos-article row:nth-child(2) p 
-{
 	width:50%;	
 }
 
-#details-infos-article row:nth-child(2) p:last-child, #details-infos-article row:nth-child(2) p:last-child input
-{
-	width:75%;
-}
-
-#details-infos-article row p input
+#details-infos-article row p input, #details-infos-article row p select
 {
 	float:right;
 	overflow:hidden;
 	width:50%;
 }
 
-#details-infos-article row p input[type="number"]
+#details-info-article-localisation, #details-info-article-localisation input
 {
-	width:25%;
+	width:75% !important;
 }
-
 
 #onglets-details-article
 {
@@ -603,12 +598,6 @@ pre strong {
 	width:50%;	
 	font-size:2em;
 	float:none;
-}
-
-
-#div-on-mouv
-{
-	
 }
 
 #div-on-mouv table

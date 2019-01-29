@@ -21,7 +21,8 @@ switch ($action)
         $q= $pdo->articleParSonId($idA);        
         $r['libelle'] = $q->libelle;
         $r['cmup'] = $q->dernierCMUP;
-        $r['tva'] = 100*($q->txTVA);
+        $r['tva'] = $q->txTVA;
+        $r['marge'] = $q->txMarge;
         break;
     case 'ajoutDevis'://Sur clic bouton Ajouter
         $laVente = $_POST['dVente'];//On récupère les informations de la vente

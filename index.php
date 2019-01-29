@@ -11,12 +11,14 @@
 	if (!isset($params[1]))
 	{
 		$params[1]='accueil';
-		$site->right_sidebar = '<script>console.log()</script>';
 	}
+	else 
+	{
+	    $site->right_sidebar='<a class="bou-classique" style="float:left" onclick="history.go(-1)">Retour</a>';	    
+	}	
 	switch ($params[1]) {
 		case 'accueil' :
 			$site->titre='Accueil';
-			$site-> right_sidebar=$site->afficheBlocContact();			
 			$site-> left_sidebar="<p>Ce programme vous est proposé par le GRETA.</p>";
 			$site->affiche();
 			break;
@@ -24,7 +26,6 @@
 		      if($controleur->estConnecte() == false)
 		          {
 			         $site->titre='Connexion';
-			         $site-> right_sidebar=$site->afficheBlocContact();
 			         $site-> left_sidebar=$controleur->formulaireLogin();
 		          }
 	           else
@@ -96,20 +97,23 @@
 		          { 
 		             
 		              switch($params[2])
-		                 {
-		                 case 'ajoutersociete':
+	                 {
+		                 case 'ajouter'://Ajouter Client
+		                     $site->titre = "Ajouter un Client";		                     
 		                     $site->left_sidebar = $controleur->ajouterSociete();
 		                     break;
                          default:
 		                     if(isset($params[3]))
 		                     {
 		                         switch($params[3])
-		                              {        
-		                              default:
-		                              $site->left_sidebar = $controleur->ajouterContactClient($params[3]);
-		                              break;
-		                              }
+                                {        
+                                    case 'ajouter'://Ajouter contact
+                                        $site->titre = "Ajouter un Contact";                                        
+                                        $site->left_sidebar = $controleur->ajouterContactClient($params[2]);
+                                        break;
+                                }
 		                     }
+
 		                     else
 		                          {  
 		                              $site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
@@ -119,14 +123,14 @@
 		          }
 		          else
 		          {
-		              
 		              $site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
 		          }
 		          $site->affiche();
 		    }
              else
 		    {
-		          $site-> left_sidebar= "Vous n'êtes pas connecté !";
+                $site->titre = "Erreur";
+                $site-> left_sidebar= "Vous n'êtes pas connecté !";
 		    }
 		    break;
 		case 'Achats':
@@ -139,39 +143,33 @@
 		    if($controleur->estConnecte()!= false)
 		    {
     		    $site->left_sidebar = $site->afficheSousMenuVente();		    
-    		    if(isset($params[2]))
+    		    if(isset($params[2]))//Si l'adresse est /Ventes/xxx
     		    {
         		    switch($params[2])
         		    {
-        		        case 'devis' :
+        		        case 'devis' ://Si l'adresse est /Ventes/Devis
         		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
         		            {
         		                if(isset($params[3]))
         		                {
         		                    switch($params[3])
         		                    {
-        		                        case 'ajouter':
+        		                        case 'ajouter'://Si l'adresse est /Ventes/Devis/Ajouter
         		                            $site->js = "pageAjoutDevis";    		                            
                                             $site->left_sidebar = $controleur->afficheAjoutDevis();
         		                            break;
-        		                        case 'confirmer':    		                            
+        		                        case 'confirmer': //Si /Confirmer   		                            
         		                            $site->left_sidebar = 'confirmation';
         		                            break;
-        		                        default:
-        		                            if(isset($params[4]))
-        		                            {
-        		                                $site->left_sidebar=$controleur->validationDevis();    		                                
-        		                            }
-        		                            else
-        		                            {
+        		                        default://Si autre
         		                                $site->js="pageDetailDevis";        		                               
         		                                $site->left_sidebar =$controleur->detailsDevis($params[3]);
-        		                            }
-        		                            break;
+        		                                break;
         		                  }
         		                }
         		                else
         		                {
+        		                    $site->titre="Liste Devis";
         		                    $site-> left_sidebar=$controleur->listeDevis();
         		                }
         		            }
@@ -188,9 +186,14 @@
         		            break;		            		        
     		        }
     		    }
+    		    else
+    		    {
+    		        $site->titre = "Menu Ventes";
+    		    }
 		    }
 		    else
 		    {
+		        $site->titre = "Erreur";
 		        $site-> left_sidebar= "Vous n'êtes pas connecté !";
 		    }
 		    
@@ -205,9 +208,11 @@
     		        switch($params[2])
     		        {
                         case 'Ajouter':
+                            $site->titre = "Ajouter un Article";
                             $site->left_sidebar = "Page Ajout Article";
                             break;
                         default:
+                            $site->titre = "Details Article";
                             $site->js = "pageDetailsArticle";
                             $site->left_sidebar = $controleur->afficheDetailsArticle($params[2]);
                             break;
@@ -215,6 +220,7 @@
     		    }
     		    else
     		    {
+    		        $site->titre = "Articles en stock";
     		        $site->left_sidebar = $controleur->afficheListeArticles();		        
     		    }
     		    $site->affiche();
