@@ -526,7 +526,7 @@ pre strong {
 	width:50%;
 }
 
-#details-info-article-localisation, #details-info-article-localisation input
+#details-info-article-localisation, #details-info-article-localisation select
 {
 	width:75% !important;
 }
@@ -607,11 +607,16 @@ pre strong {
 
 #div-on-mouv row table th, #div-on-mouv row table td
 {
-	width:calc(100%/7)
 	text-align:center;
 	margin:0;
 	border:solid 1px black;
 }
+
+#div-on-mouv row table td input, #div-on-mouv row table td select
+{
+	width:100%;
+}
+
 
 #div-on-mouv row tr
 {

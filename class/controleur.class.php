@@ -56,19 +56,19 @@ public function detailsDevis($idVente)
     while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
     {	       
         $a = $this->vpdo->articleParSonId($d->idArticle);
-        $ht = ($d->prixVente*$d->qteDemandee*(1-$d->txRemise));
+        $ht = ($d->CMUP*$d->qteDemandee*(1-$d->txRemise)*(1+$a->txMarge));
         $retour = $retour.'
                     <tr>
                             <td>'.$d->idArticle.'</td>
                             <td>'.$a->libelle.'</td>
-                            <td>'.$d->prixVente.'</td>
+                            <td>'.$d->CMUP.'</td>
                             <td>'.(100 * $a->txMarge).'</td>
                             <td>'.$d->qteDemandee.'</td>
                             <td>'.$d->txRemise.'</td>
                             <td>'.$d->remise.'</td>
                             <td>'.$ht.'</td>
                             <td>'.$a->txTVA.'</td>
-                            <td>'.$d->prixVente * $d->qteDemandee.'</td>
+                            <td>'.$ht * (1+$a->txTVA).'</td>
                             <td>'.$d->observation.'</td>
                     </tr>';	       
     }    
@@ -197,7 +197,7 @@ public function listeDevis()
             $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
         }
         $return = $return.'</select></span></p>
-                        <p>Date : <input id="dateDevis" type="date" required></p>
+                        <p>Date : <input id="dateDevis" type="text" readonly></p>
                     </row>
                     <row>
                         <p>Société : <input id="idSociete" type="text" readonly></p>
@@ -477,35 +477,57 @@ public function ajouterSociete()
         $em = $this->vpdo->emplacementParSonId($a->idEmp);
         $lesFamilles = $this->vpdo->listeFamilles();        
         $lesMouvements = $this->vpdo->listeMouvementsParArticle($idArticle);
+        $lesEmplacements = $this->vpdo->listeEmplacements();
+        $lesTypes = $this->vpdo->listeTypesMouvements();
+        $lesFournisseurs = $this->vpdo->listeSocietesFournisseurs();
         $retour = '
     <div class="conteneur">
         <div id="details-infos-article">
             <row>
-                <p>Nom Article : <input type="text" value="'.$a->libelle.'"></p>
+                <p>Nom Article : <input id="nomArticle" type="text" value="'.$a->libelle.'"></p>
                 <p>ID Article : <input id="idArticle" type="text" value="'.$a->idArticle.'" readonly></p>
             </row>
             <row>
-                <p>Famille Article : <select>';
+                <p>Famille Article : <select id="famArticle">';
             while($lesF = $lesFamilles->fetch(PDO::FETCH_OBJ))
             {
                 $retour = $retour.'
                     <option value="'.$lesF->idFam.'"';
                 
-                //Si l'id de la famille l'article en détail = l'id de la famille actuellement ajoutée au select
-                if($lesF->idFam = $a->idFam)
+                //Si l'id de la famille de l'article en détail = l'id de la famille actuellement ajoutée au select
+                if($lesF->idFam == $a->idFam)
                     $retour = $retour." selected"; //On la choisit par défaut.
                 
                 $retour = $retour.'>'.$lesF->idFam.' - '.$lesF->libelle.'</option>';
-            }                                          
+            }    
+            
             $retour = $retour.'</select></p>
-                <p>Code à barres : <input type="" value="'.$a->codeBarre.'"></p>
-                <p id="details-info-article-localisation">Localisation : <input type="text" value="Dépôt '.$em->depot.'; '.$em->libelle.'"></p>
+                <p>Code à barres : <input id="codeBarre" type="" value="'.$a->codeBarre.'"></p>
+                <p id="details-info-article-localisation">Localisation : <select id="empArticle">';
+                while($lesE = $lesEmplacements->fetch(PDO::FETCH_OBJ))
+                {
+                    $retour = $retour.'
+                    <option value="'.$lesE->idEmp.'"';
+                    
+                    //Si l'id de l'emplacement de l'article en détail = l'id de l'emplacement actuellement ajoutée au select
+                    if($lesE->idEmp == $a->idEmp)
+                        $retour = $retour." selected"; //On la choisit par défaut.
+                        
+                        $retour = $retour.'>'.$lesE->idEmp.' - '.$lesE->libelle.'</option>';
+                }
+                
+                $retour = $retour.'</select></p>
+            </row>
+            <row>
+                <a id="modifierInfos" class="bou-classique">Modifier les informations</a>
             </row>
         </div>
+
         <div id="onglets-details-article">
             <div id="on-cmup" active=true>Calcul CMUP</div>
             <div id="on-mouv">Entrées/Sorties de stock</div>
         </div>
+
         <div id="div-onglets-details-article">
             <div id="div-on-cmup">
                 <row>
@@ -539,35 +561,61 @@ public function ajouterSociete()
                         <th>Quantité</th>
                         <th>Observations</th>
                     </tr>';
-            }
-            
+            }            
+            //Tant qu'il y a des lignes mouvement, on les affiche.
             while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))
-            {
+            {                
                 $retour = $retour.'
-                            <tr>
-                                <td>'.$m->idMouv.'</td>
-                                <td>'.$m->idType.'</td>
-                                <td>'.$m->idFour.'</td>
-                                <td>'.$m->date.'</td>
-                                <td>'.$m->prix.'</td>
-                                <td>'.$m->qte.'</td>
-                                <td>'.$m->commentaire.'</td>
-                            </tr>
+                <tr>
+                    <td>'.$m->idMouv.'</td>
+                    <td>'.$m->idType.'</td>
+                    <td>'.$m->idSociete.'</td>
+                    <td>'.$m->date.'</td>
+                    <td>'.$m->prix.'</td>
+                    <td>'.$m->qte.'</td>
+                    <td>'.$m->commentaire.'</td>
+                </tr>
             ';   
             }
+            
+            
+            //On ajoute une ligne vide qui servira de champs d'ajout.
+            $retour = $retour. '
+                <tr>
+                    <td><input id="idMouv" type="number" value="'.(1+$this->vpdo->idDernierMouvement()->idMouv).'" readonly></td>
+                    <td><select id="typeMouv">';
+            while($t = $lesTypes->fetch(PDO::FETCH_OBJ))//Select pour les types de mouvements
+            {
+                $retour = $retour.'
+                            <option value="'.$t->idType.'">'.$t->libelle.'</option>';
+            }
+            $retour = $retour.'                  
+                        </select></td>          
+                    <td><select id="idFour">';
+            while($f = $lesFournisseurs->fetch(PDO::FETCH_OBJ))//Select pour les entreprises.
+            {
 
+                $s = $this->vpdo->societeParSonId($f->idSociete);
+                $retour = $retour.'
+                            <option value="'.$f->idSociete.'">'.$f->nom.'</option>';
+            }
+            $retour = $retour.'                  
+                        </select></td>          
+                    <td><input id="dateMouv" type="text" value="'.$this->vpdo->laDateAujourdhui().'" readonly></td>
+                    <td><input id="prixMouv" type="number" ></td>
+                    <td><input id="qteMouv" type="number" ></td>
+                    <td><input id="commentaire" type="text" ></td>
+                </tr>';
+            
             $retour = $retour.'
                         </table>
                     </row>
+                <a id="ajouterMouv" class="bou-classique">Ajouter un mouvement</a>
                 </div>
-            </div>
-';
-                
+            </div>';               
         $retour = $retour.'
-                </div>';
+        </div>';
         return $retour;
-    }
-    
-    
+    }    
 }
 ?>

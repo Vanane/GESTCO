@@ -31,6 +31,12 @@ class mypdo extends PDO{
     	}
     }
     
+    
+    public function laDateAujourdhui()
+    {
+        return $this->connexion->query("SELECT NOW() as now")->fetch(PDO::FETCH_OBJ)->now;
+    }
+    
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------LES-LISTES-----------------------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
@@ -38,8 +44,7 @@ class mypdo extends PDO{
     public  function listeDetailsDevis()
     {
         
-        $requete='SELECT * FROM DETAIL_DEVIS;';
-        
+        $requete='SELECT * FROM DETAIL_DEVIS;';        
         $result=$this->connexion->query($requete);
         if ($result)
         {
@@ -51,26 +56,42 @@ class mypdo extends PDO{
     public  function listeArticles()
     {
         
-        $requete='SELECT * FROM ARTICLE ;';
-        
+        $requete='SELECT * FROM ARTICLE ;';        
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
     }
     public  function listeContactFournisseurs()
     {
-        
-        $requete='SELECT * FROM contact_FOURNISSEUR ;';
-        
+        $requete='SELECT * FROM contact_FOURNISSEUR ;';        
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
+    }
+    
+    public function listeSocietesFournisseurs()
+    {
+        $requete='SELECT * FROM societe WHERE idSociete IN(SELECT idSociete FROM contact_fournisseur);';        
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
+    
+    
+    public function listeTypesMouvements()
+    {
+        $requete='SELECT * FROM type_mouvement;';        
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+        else
+            return null;
     }
     public  function listeContactFournisseursParID($id){
         $requete='SELECT c.* FROM contact_FOURNISSEUR c, Societe s WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.';';
@@ -85,46 +106,28 @@ class mypdo extends PDO{
         $requete='SELECT c.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.';';
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
-    }
-    public  function listeSocieteFournisseurs()
-    {
-        
-        $requete='SELECT s.* FROM Societe s, contact_FOURNISSEUR c WHERE s.idSociete=c.idSociete ;';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
+        else
+            return null;
     }
     public  function listeSocieteClients()
     {
         
-        $requete='SELECT s.idSociete,s.adresse,s.telephone,s.fax,s.siteWeb,s.raison,s.mail,s.nom FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete GROUP BY s.idSociete,s.adresse,s.telephone,s.fax,s.siteWeb,s.raison,s.mail,s.nom ;';
-        
+        $requete='SELECT s.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete;';        
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
     }
     public  function listeSociete()
-    {
-        
-        $requete='SELECT * FROM Societe';
-        
+    {        
+        $requete='SELECT * FROM Societe';        
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
     }
     
     public function familleParSonId($id)
@@ -187,6 +190,12 @@ class mypdo extends PDO{
     /*---------------------------------------------------FIN-DELETE-DEBUT-INSERT----------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
    
+            public function insertMouvement($id, $type, $societe, $article, $date, $prix, $qte, $com)
+    {
+        $sql='INSERT INTO mouvement_article VALUES("'.$id.'","'.$type.'","'.$societe.'", "'.$article.'","'.$date.'","'.$prix.'", "'.$qte.'", "'.$com.'")';
+        $result=$this->connexion->query($sql);
+        return $result;
+    }
     
     public function insertContactClient($id,$societe, $nom, $prenom, $mail, $telephone)
     {
@@ -443,6 +452,16 @@ class mypdo extends PDO{
                 return null;
     }
     
+    public function idDernierMouvement()
+    {
+        $r="SELECT  idMouv FROM mouvement_article ORDER BY idMouv DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+        else
+            return null;
+    }
+    
     public function listeEmployes()
     {
         $r = "SELECT * FROM EMPLOYE";
@@ -459,8 +478,18 @@ class mypdo extends PDO{
         $result=$this->connexion->query($r);
         if($result)
             return $result;
-            else
-                return null;
+        else
+            return null;
+    }
+    
+    public function listeEmplacements()
+    {
+        $r = 'SELECT * FROM emplacement;';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+        else
+            return null;                
     }
     
     public function listeClients()

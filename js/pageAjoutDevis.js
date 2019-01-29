@@ -2,14 +2,16 @@ var lesSelectsArticles = new Array();//Contient tous les selects de chaque ligne
 
 $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le script.
 	
-	console.log(new Date().getFullYear()+'-'+
-				new Date().getMonth()+1+'-'+
-				new Date().getDate()+' '+
-				new Date().getHours()+':'+
-				new Date().getMinutes()+':'+
-				new Date().getSeconds()
-	);
+	$.ajax({ //AJAX pour récupérer les infos d'un article.
+        type: "POST",
+        dataType: "json",
+        url: "../../ajax/ajoutDevisAjax.php",
+        success: function(r) {
+        	document.getElementById("dateDevis").value = r['date'];
+        }
+	});
 
+	
 	ajouteListenerCalculTTC("qteArticle1");//Ajoute un listener qui permet de calculer le prix au numeric qteArticle1
 	ajouteListenerCalculTTC("txArticle1");//Pareil pour txArticle1, ces deux éléments devant être initialisés de base.
 
@@ -24,12 +26,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 	
 	lesSelectsArticles.push(document.getElementById("idArticle1"));//Ajoute le premier select dans la table	
 	ajouteListener();//Puis lui attribue un event au clic.
-	today = new Date();
-	document.getElementById("dateDevis").value = 
-		new Date().getFullYear()+'-'+
-		new Date().getMonth()+1+'-'+
-		new Date().getDate();
-	
+
 	$("#ajouteLigne").click(function()
 	//Ajoute une ligne dans la table des articles au clic sur le bouton.
 	{		
