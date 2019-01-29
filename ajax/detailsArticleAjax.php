@@ -4,8 +4,6 @@ $pdo = new mypdo();
 $r = array();//Array renvoyé à la fin
 $action = $_POST['action'];//Récupération de la source de l'AJAX
 $idA = $_POST['idArticle'];
-
-
 switch ($action)
 {
     case 'calculCMUP':
@@ -26,9 +24,23 @@ switch ($action)
         $nouveauCMUP = $_POST['nouveauCMUP'];
         $pdo->updateArticle('dernierCMUP', $nouveauCMUP);
         break;
-    
-    
-    
+    case 'modifier':
+        $nom = $_POST['nomArticle'];
+        $barre = $_POST['codeBarre'];
+        $fam = $_POST['famArticle'];
+        $emp = $_POST['empArticle'];
+        $pdo->updateArticle("libelle", $nom);
+        $pdo->updateArticle("codeBarre", $barre);
+        $pdo->updateArticle("idFam", $fam);
+        $pdo->updateArticle("idEmp", $emp);
+        break;
+    case 'ajouter':                  
+        $pdo->insertMouvement(  $_POST['idMouv'], $_POST['typeMouv'],
+                                $_POST['idFour'], $_POST['idArticle'],
+                                $_POST['dateMouv'], $_POST['prixMouv'],
+                                $_POST['qteMouv'], $_POST['commentaire']
+        );        
+        break;
 }
 
 die( json_encode($r) );

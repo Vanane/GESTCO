@@ -4,7 +4,6 @@ var lesOnglets = Array();
 $("document").ready(function(){
 
 	var CMUPActuel = 0;//Sauvegarde le nouveau prix de base calculé
-	
 	//Ajoute les onglets à un array pour affecter des events en boucle.
 	lesOnglets.push("on-cmup");
 	lesOnglets.push("on-mouv");
@@ -109,11 +108,74 @@ $("document").ready(function(){
 		}
 		console.log(CMUPActuel);
 		$("#nouveauCMUP").val(CMUPActuel*(1+($(this).val()/100)));//nouveau CMUP = CMUP * taux sup
-	
-	
-	
 	});
+	
+	
+	$("#modifierInfos").click(function(){
+		if(confirm("Voulez-vous vraiment MODIFIER les informations de l'article ?"))
+		{
+			$.ajax({ //AJAX pour récupérer le CMUP de l'article.
+		        type: "POST",
+		        dataType: "json",
+		        data:
+		    	{
+		        	'action':'modifier',
+		        	'idArticle':$("#idArticle").val(),
+		    		'nomArticle':$("#nomArticle").val(),
+		    		'famArticle':$("#famArticle").find(":selected").val(),
+		    		'codeBarre':$("#codeBarre").val(),
+		    		'empArticle':$("#empArticle").find(":selected").val()
+    			},
+		        url: "../ajax/detailsArticleAjax.php",
+		        success: function(r) {
+		        	alert("Informations modifiées !");
+		        	location.reload();
+		        },
+		        error: function (xhr, ajaxOptions, thrownError)
+		        {
+		            console.log(xhr.status);
+		            console.log(thrownError);
+		            console.log(ajaxOptions);
+		    	}
+			});	
+		}
+	});
+	
+	
+	$("#ajouterMouv").click(function(){
+		$.ajax({ //AJAX pour récupérer le CMUP de l'article.
+	        type: "POST",
+	        dataType: "json",
+	        data:
+	    	{
+	        	'action':'ajouter',
+	        	'idArticle':$("#idArticle").val(),
+	        	'idMouv':$("#idMouv").val(),
+	        	'typeMouv':$("#typeMouv").find(":selected").val(),
+	        	'idFour':$("#idFour").find(":selected").val(),
+	        	'dateMouv':$("#dateMouv").val(),
+	        	'prixMouv':$("#prixMouv").val(),
+	        	'qteMouv':$("#qteMouv").val(),
+	        	'commentaire':$("#commentaire").val()
+			},
+	        url: "../ajax/detailsArticleAjax.php",
+	        success: function(r) {
+	        	alert("Nouvelle entrée insérée !");
+	        },
+	        error: function (xhr, ajaxOptions, thrownError)
+	        {
+	            console.log(xhr.status);
+	            console.log(thrownError);
+	            console.log(ajaxOptions);
+	    	}
+		});	
+	});
+	
+	
+	
 });
+
+
 
 
 
