@@ -43,19 +43,58 @@
 			  echo '<script>document.location.href="Accueil"; </script>';
 			  break;
 		case 'fournisseurs':
+		    $types="fournisseurs";
+		    $type="fournisseur";
+		    $idType="idFour";
 		    if($controleur->estConnecte()!= false)
-		    {		       
-                $site-> left_sidebar=$controleur->listeFournisseurs();
-                $site->affiche();
+		    { $site->js = "pageClient";
+		    if(isset($params[2]))
+		    {
+		        
+		        switch($params[2])
+		        {
+		            case 'ajoutersociete':
+		                $site->left_sidebar = $controleur->ajouterSociete();
+		                break;
+		            default:
+		                if(isset($params[3]))
+		                {
+		                    switch($params[3])
+		                    {
+		                        default:
+		                            $site->left_sidebar = $controleur->ajouterContact($params[3]);
+		                            break;
+		                    }
+		                }
+		                else
+		                {
+		                    $site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
+		                }
+		                break;
+		        }
+		    }
+		    else
+		    {
+		        
+		        $site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
+		    }
+		    $site->affiche();
+		    }
+		    else
+		    {
+		        $site-> left_sidebar= "Vous n'êtes pas connecté !";
 		    }
 		      break;
 		    
 		case 'clients':
+		    $types="clients";
+		    $type="client";
+		    $idType="idClient";
 		    if($controleur->estConnecte()!= false)
-		    {
+		    { $site->js = "pageClient";
 		          if(isset($params[2]))
-		          {
-		              $site->js = "pageClient";
+		          { 
+		             
 		              switch($params[2])
 		                 {
 		                 case 'ajoutersociete':
@@ -72,15 +111,16 @@
 		                              }
 		                     }
 		                     else
-		                          {
-		                          $site-> left_sidebar=$controleur->listeContactClients($params[2]);
+		                          {  
+		                              $site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
 		                          }
                              break;
 		                 }
 		          }
 		          else
 		          {
-		              $site-> left_sidebar=$controleur->listeClients();
+		              
+		              $site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
 		          }
 		          $site->affiche();
 		    }

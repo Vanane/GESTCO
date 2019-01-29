@@ -44,7 +44,7 @@ switch ($action)
         break; 
         
     case 'modifierContactClient':
-        $i=$_POST['idClient'];
+        $i=$_POST['id'];
         $n=$_POST['nom'];
         $p=$_POST['prenom'];
         $t=$_POST['telephone'];
@@ -55,6 +55,20 @@ switch ($action)
         $r['result']=$pdo->updateContactClient('telephone',$t,'idClient',$i);
         $r['result']=$pdo->updateContactClient('mail',$m,'idClient',$i);
         $r['result']=$pdo->updateContactClient('idSociete',$s,'idClient',$i);
+        break;
+    
+    case 'modifierContactFournisseur':
+        $i=$_POST['id'];
+        $n=$_POST['nom'];
+        $p=$_POST['prenom'];
+        $t=$_POST['telephone'];
+        $m=$_POST['mail'];
+        $s=$_POST['societe'];
+        $r['result']=$pdo->updateContactFournisseur('nom',$n,'idFour',$i);
+        $r['result']=$pdo->updateContactFournisseur('prenom',$p,'idFour',$i);
+        $r['result']=$pdo->updateContactFournisseur('telephone',$t,'idFour',$i);
+        $r['result']=$pdo->updateContactFournisseur('mail',$m,'idFour',$i);
+        $r['result']=$pdo->updateContactFournisseur('idSociete',$s,'idFour',$i);
         break;
         
     case 'ajouterContactClient':

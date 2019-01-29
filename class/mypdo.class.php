@@ -72,11 +72,17 @@ class mypdo extends PDO{
         }
         return null;
     }
-    public  function listeContactClientsParID($id)
-    {
-        
-        $requete='SELECT c.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.' ;';
-        
+    public  function listeContactFournisseursParID($id){
+        $requete='SELECT c.* FROM contact_FOURNISSEUR c, Societe s WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.';';
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    public  function listeContactClientsParID($id){
+        $requete='SELECT c.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.';';
         $result=$this->connexion->query($requete);
         if ($result)
         {

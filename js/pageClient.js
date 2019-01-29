@@ -38,43 +38,73 @@ function modificationclient() {
 	}
 	}
 
-function modificationContactClient(id) {
-	if (confirm("Pour valider les modifications des données de votre contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{	let idClient = id;
-		let nom = document.getElementById("nomClient"+idClient);
-		let prenom = document.getElementById("prenomClient"+idClient);
-		let telephone = document.getElementById("telClient"+idClient);
-		let mail = document.getElementById("mailClient"+idClient);
-		let societe = document.getElementById("societeClient"+idClient);
-		console.log(idClient);
-		$.ajax({
-		type: "POST",
-        dataType: "json",
-        data:
-    	{
-        	'action':'modifierContactClient',
-        	'idClient':idClient,
-    		'nom':nom.value,
-    		'prenom':prenom.value,
-    		'telephone':telephone.value,
-    		'mail':mail.value,
-    		'societe':societe.value
-    	},
-        url: "../ajax/clientAjax.php",
-        success: function(r) {
-        	location.reload()
-        	/*document.getElementById("lesBlocs").innerHTML = r['result'];*/ 
-        },
-        error: function (xhr, ajaxOptions, thrownError)
-        {
-        	console.log(idClient);
-            console.log(xhr.status);
-            console.log(thrownError);
-            console.log(ajaxOptions);
-    	}
-	});
+/* ************************************************************************************************************************************* */
+/* *************************************************DEBUT*FONCTION*MODIFIER*CONTACT***************************************************** */
+/* ************************************************************************************************************************************* */
+
+function modificationContact(id,type) {
+	if (confirm("Pour valider les modifications des données de votre contact, cliqué sur 'ok', sinon cliquer sur 'annuler'.")){
+		let idContact=id;
+		console.log("id contact égal à" + idContact);
+		console.log(type);
+		console.log("nom"+id);
+		let nom = document.getElementById("nom"+id);
+		let prenom = document.getElementById("prenom"+id);
+		let telephone = document.getElementById("tel"+id);
+		let mail = document.getElementById("mail"+id);
+		let societe = document.getElementById("societe"+id);
+			if (type="client")
+				{$.ajax({
+					type: "POST",
+			        dataType: "json",
+				        data:{		        	
+				        	'action':'modifierContactClient',
+				    		'id':idContact,
+				    		'nom':nom.value,
+				    		'prenom':prenom.value,
+				    		'telephone':telephone.value,
+				    		'mail':mail.value,
+				    		'societe':societe.value
+				    	},
+			        url: "../ajax/clientAjax.php",
+			        success: function(r) {location.reload()},
+				        error: function (xhr, ajaxOptions, thrownError){
+				        	console.log(id);
+				            console.log(xhr.status);
+				            console.log(thrownError);
+				            console.log(ajaxOptions);
+				    	}
+				});}
+			else
+				{$.ajax({
+					type: "POST",
+			        dataType: "json",
+				        data:
+				    	{			        	
+				        	'action':'modifierContactFournisseur',
+				    		'id':idContact,
+				    		'nom':nom.value,
+				    		'prenom':prenom.value,
+				    		'telephone':telephone.value,
+				    		'mail':mail.value,
+				    		'societe':societe.value
+				    	},
+			        url: "../ajax/clientAjax.php",
+			        success: function(r) {location.reload()},
+				        error: function (xhr, ajaxOptions, thrownError){
+				        	console.log(id);
+				            console.log(xhr.status);
+				            console.log(thrownError);
+				            console.log(ajaxOptions);
+				    	}
+			});}		
 	}
 	}
+
+/* ************************************************************************************************************************************* */
+/* *******************************************FIN*FONCTION*MODIFIER*CONTACT************************************************************* */
+/* ************************************************************************************************************************************* */
+
 
 function ajoutercontactclient() {
 	if (confirm("Pour confirmer la création de ce contact, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
@@ -159,33 +189,61 @@ function ajoutersociete(){
 	}
 	}
 
+/* ************************************************************************************************************************************* */	
+/* *********************************************************DEBUT*GESTION*LISTE*SOCIETE************************************************* */	
+/* ************************************************************************************************************************************* */
 
-/*function supprimercontactclient(){
-	if (confirm("Pour supprimer les données du contact de l'entreprise, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{
-	//location = "confirmerSupressionContactClient"
-		let item = document.getElementById("codeContact");
-		$.ajax({
-		type: "POST",
-        dataType: "json",
-        data:
-    	{
-        	'action':'deleteClient',
-    		'idClient':item.value
-    	},
-        url: "../ajax/clientAjax.php",
-        success: function(r) {
-        	console.log(r['idClient']);
-        },
-        error: function (xhr, ajaxOptions, thrownError)
-        {
-        	console.log(item);
-            console.log(xhr.status);
-            console.log(thrownError);
-            console.log(ajaxOptions);
-    	}
-	});
-	}
-}*/
-// pas possible de supprimer car clé étrangère aux ventes 
+function afficherListeSociete(){
+		var elmt = document.getElementById("btn-AfficherClient");
+		elmt.style.display = "none";
+		var elmt1 = document.getElementById("btn-AfficherTout");
+		elmt1.style.display = "block";
+		var elmt2 = document.getElementById("btn-AfficherFournisseur");
+		elmt2.style.display = "none";
+		var elmt3 = document.getElementById("block-Client");
+		elmt3.style.display = "none";
+		var elmt4 = document.getElementById("block-Societe");
+		elmt4.style.display = "block";
+		var elmt5 = document.getElementById("block-Fournisseur");
+		elmt5.style.display = "none";
+}
+function afficherListeClient(){
+		var elmt = document.getElementById("btn-AfficherClient");
+		elmt.style.display = "none";
+		var elmt1 = document.getElementById("btn-AfficherTout");
+		elmt1.style.display = "block";
+		var elmt2 = document.getElementById("btn-AfficherFournisseur");
+		elmt2.style.display = "block";
+		var elmt3 = document.getElementById("block-Client");
+		elmt3.style.display = "block";
+		var elmt4 = document.getElementById("block-Societe");
+		elmt4.style.display = "none";
+		var elmt5 = document.getElementById("block-Fournisseur");
+		elmt5.style.display = "none";
+}
+function afficherListeFourniseur(){
+		var elmt = document.getElementById("btn-AfficherClient");
+		elmt.style.display = "block";
+		var elmt1 = document.getElementById("btn-AfficherTout");
+		elmt1.style.display = "block";
+		var elmt2 = document.getElementById("btn-AfficherFournisseur");
+		elmt2.style.display = "none";
+		var elmt3 = document.getElementById("block-Client");
+		elmt3.style.display = "none";
+		var elmt4 = document.getElementById("block-Societe");
+		elmt4.style.display = "none";
+		var elmt5 = document.getElementById("block-Fournisseur");
+		elmt5.style.display = "block";
+}
+function toggleDisplay(elmt){		
+		   if(typeof elmt == "string")		
+		      elmt = document.getElementById(elmt);		
+		   if(elmt.style.display == "none")		
+		      elmt.style.display = "block";		
+		   else		
+		      elmt.style.display = "none";		
+}
 
+/* ************************************************************************************************************************************* */	
+/* ******************************************************FIN*GESTION*LISTE*SOCIETE****************************************************** */	
+/* ************************************************************************************************************************************* */
