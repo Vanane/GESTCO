@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -48,38 +47,38 @@ switch ($params[1]) {
 	    $type="fournisseur";
 	    $idType="idFour";
 	    if($controleur->estConnecte()!= false)
-	    { $site->js = "pageClient";
-	    if(isset($params[2]))
 	    {
-	        
-	        switch($params[2])
-	        {
-	            case 'ajoutersociete':
-	                $site->left_sidebar = $controleur->ajouterSociete();
-	                break;
-	            default:
-	                if(isset($params[3]))
-	                {
-	                    switch($params[3])
-	                    {
-	                        default:
-	                            $site->left_sidebar = $controleur->ajouterContact($params[3]);
-	                            break;
-	                    }
-	                }
-	                else
-	                {
-	                    $site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
-	                }
-	                break;
+			$site->js = "pageClient";
+			if(isset($params[2]))
+			{	        
+		
+				switch($params[2])
+				{
+					case 'ajoutersociete':
+						$site->titre = "Ajouter un Fournisseur";
+						$site->left_sidebar = $controleur->ajouterSociete();
+						break;
+					default:
+						if(isset($params[3]))
+						{
+							switch($params[3])
+							{
+								default:
+									$site->titre = "Ajouter un Contact";
+									$site->left_sidebar = $controleur->ajouterContact($params[3],$type);
+									break;
+							}
+						}
+						else
+						$site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
+						break;
+				}
 	        }
-	    }
-	    else
-	    {
-	        
-	        $site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
-	    }
-	    
+
+			else
+			{
+				$site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
+			}	    
 	    }
 	    else
 	    {
@@ -139,6 +138,7 @@ switch ($params[1]) {
 	    
 	    }
 	    break;
+		
 	case 'ventes' :
 	    if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
 	    {
@@ -190,7 +190,34 @@ switch ($params[1]) {
 	    {
 	        $site->left_sidebar = $controleur->afficheNonAcces();
 	    }
-	    break;		
+	    break;	
+	    
+	case 'preparations':
+	    if($controleur->estConnecte() == 2 || $controleur->estConnecte() == 4)
+	    {
+	        if(isset($params[2]))
+	        {
+	            switch($params[2])
+	            {
+	                default:
+	                    $site->left_sidebar = $controleur->afficheDetailsPreparation($params[2]);
+	                    break;
+	            }
+	        }
+	        else
+	        {
+	            $site->left_sidebar = $controleur->afficheListePreparations();
+	        }
+	    }
+	    else
+	    {
+	        $site->left_sidebar = $controleur->afficheNonAcces();
+	    }
+	    break;
+	default:
+	    $site->titre='Accueil';
+	    $site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
+	    break;
 	    
 	case 'articles':
 	    if($controleur->estConnecte()!= false)
@@ -213,38 +240,12 @@ switch ($params[1]) {
 		    else
 		    {
 		        $site->titre = "Articles en stock";
-		        $site->left_sidebar = $controleur->afficheListeArticles();		        
-		    }		    
+		        $site->left_sidebar = $controleur->afficheListeArticles();
+		    }
 	    }
-	    break;
-	case 'preparations':
-	    if($controleur->estConnecte() == 2 || $controleur->estConnecte() == 4)
-	    {
-	        if(isset($params[2]))
-	        {
-	            switch($params[2])
-	            {
-	                default:
-	                    $site->left_sidebar = $controleur->afficheDetailsPreparation($params[2]);
-	                    break;	                    
-	            }
-	        }
-            else
-            {
-                $site->left_sidebar = $controleur->afficheListePreparations();
-            }	        
-	    }
-	    else
-	    {
-	        $site->left_sidebar = $controleur->afficheNonAcces();
-	    }
-	    break;
-    default: 
-		$site->titre='Accueil';			
-		$site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';		
-		break;			
+		else
+			$site-> left_sidebar= "Vous n'êtes pas connecté !";		    
+		break;
 }
-
 $site->affiche();
-	
 ?>

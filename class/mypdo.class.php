@@ -203,6 +203,12 @@ class mypdo extends PDO{
         $result=$this->connexion->query($sql);
         return $result;
     }
+    public function insertContactFournisseur($id,$societe, $nom, $prenom, $mail, $telephone)
+    {
+        $sql='INSERT INTO contact_fournisseur VALUES("'.$id.'","'.$societe.'","'.$nom.'", "'.$prenom.'","'.$telephone.'","'.$mail.'")';
+        $result=$this->connexion->query($sql);
+        return $result;
+    }
     
     public function insertSociete($id, $nom, $adresse, $telephone,$fax,$siteWeb, $raison, $mail)
     {
@@ -264,18 +270,8 @@ class mypdo extends PDO{
             return null;                
     }
 
-    /*public function updateClient($nom, $adresse,$telephone,$fax, $siteweb,$raison,$mail,$idSociete)
-    {
- 
-        $r='UPDATE societe SET nom = "'.$nom.'",adresse="'.$adresse.'",telephone="'.$telephone.'", fax="'.$fax.'", siteweb="'.$siteweb.'" , raison="'.$raison.'", mail="'.$mail.'" WHERE idSociete="'.$idSociete.'";';
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
-    } // méthode différentre pour un update*/
-    
-    public function TupdateClient($attr, $value,$lacondition,$estremplie)
+
+    public function updateSociete($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
         $result=$this->connexion->query($r);
@@ -293,7 +289,15 @@ class mypdo extends PDO{
             else
                 return null;
     }
-    
+    public function updateContactFournisseur($attr, $value,$lacondition,$estremplie)
+    {
+        $r='UPDATE contact_fournisseur SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
 
     public function updateVente($attr, $value)
     {
@@ -454,7 +458,17 @@ class mypdo extends PDO{
     
     public function idDernierContactClient()
     {
-        $r="SELECT  idClient FROM contact_client ORDER BY idClient DESC";//MAX(idClient) si besoin 
+        $r="SELECT  idClient FROM contact_client ORDER BY idClient DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function idDernierContactFournisseur()
+    {
+        $r="SELECT  idFour FROM contact_fournisseur ORDER BY idFour DESC";
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
@@ -464,7 +478,7 @@ class mypdo extends PDO{
     
     public function idDernierSociete()
     {
-        $r="SELECT  idSociete FROM societe WHERE idSociete ORDER BY idSociete DESC";//MAX(idClient) si besoin
+        $r="SELECT  idSociete FROM societe WHERE idSociete ORDER BY idSociete DESC";
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
