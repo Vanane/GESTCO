@@ -1,7 +1,7 @@
 var lesSelectsArticles = new Array();//Contient tous les selects de chaque ligne article.
 
 $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le script.
-	
+		
 	$.ajax({ //AJAX pour récupérer les infos d'un article.
         type: "POST",
         dataType: "json",
@@ -21,7 +21,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		triggerClose:
 		{
 			click:true
-		},
+		}
 	});	
 	
 	lesSelectsArticles.push(document.getElementById("idArticle1"));//Ajoute le premier select dans la table	

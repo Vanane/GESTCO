@@ -143,32 +143,42 @@ $("document").ready(function(){
 	
 	
 	$("#ajouterMouv").click(function(){
-		$.ajax({ //AJAX pour récupérer le CMUP de l'article.
-	        type: "POST",
-	        dataType: "json",
-	        data:
-	    	{
-	        	'action':'ajouter',
-	        	'idArticle':$("#idArticle").val(),
-	        	'idMouv':$("#idMouv").val(),
-	        	'typeMouv':$("#typeMouv").find(":selected").val(),
-	        	'idFour':$("#idFour").find(":selected").val(),
-	        	'dateMouv':$("#dateMouv").val(),
-	        	'prixMouv':$("#prixMouv").val(),
-	        	'qteMouv':$("#qteMouv").val(),
-	        	'commentaire':$("#commentaire").val()
-			},
-	        url: "../ajax/detailsArticleAjax.php",
-	        success: function(r) {
-	        	alert("Nouvelle entrée insérée !");
-	        },
-	        error: function (xhr, ajaxOptions, thrownError)
-	        {
-	            console.log(xhr.status);
-	            console.log(thrownError);
-	            console.log(ajaxOptions);
-	    	}
-		});	
+		//
+		if($("#prixMouv").val() == null || $("#prixMouv").val() < 0 || $("#qteMouv").val() == null || $("#qteMouv").val() < 0)
+		{
+			alert("Ajout d'un mouvement : le prix ou la quantité doivent être valides !");
+			$("#prixMouv").css("background", "#ffaaaa");
+			$("#qteMouv").css("background", "#ffaaaa");			
+		}
+		else
+		{
+			$.ajax({ //AJAX pour récupérer le CMUP de l'article.
+		        type: "POST",
+		        dataType: "json",
+		        data:
+		    	{
+		        	'action':'ajouter',
+		        	'idArticle':$("#idArticle").val(),
+		        	'idMouv':$("#idMouv").val(),
+		        	'typeMouv':$("#typeMouv").find(":selected").val(),
+		        	'idFour':$("#idFour").find(":selected").val(),
+		        	'dateMouv':$("#dateMouv").val(),
+		        	'prixMouv':$("#prixMouv").val(),
+		        	'qteMouv':$("#qteMouv").val(),
+		        	'commentaire':$("#commentaire").val()
+				},
+		        url: "../ajax/detailsArticleAjax.php",
+		        success: function(r) {
+		        	alert("Nouvelle entrée insérée !");
+		        },
+		        error: function (xhr, ajaxOptions, thrownError)
+		        {
+		            console.log(xhr.status);
+		            console.log(thrownError);
+		            console.log(ajaxOptions);
+		    	}
+			});	
+		}
 	});
 	
 	

@@ -33,7 +33,12 @@ h1 {
 }
 h2 {font-size: 1.8em;}
 h3 {font-size: 1.2em;}
-h4 {font-size: 1em;}
+h4
+{
+    font-size: 1em;
+    text-align: center;
+    text-decoration: underline;
+}
 
 a, p, td, th{font-size:1.2em;}
 
@@ -381,6 +386,41 @@ pre strong {
 {
 	visibility:hidden;	
 }
+
+
+/* --- STYLE IHM LISTE PREPARATIONS --- */
+
+.div-liste-preparations bloc
+{
+	position:relative;
+	display:block;
+	width:100%;
+	overflow:hidden;
+	border-top:solid 1px black;
+	
+}
+
+.div-liste-preparations row
+{
+	width:98%;
+	padding:1%;
+	overflow:hidden;
+	background:#B2C3C0;	
+}
+
+.div-liste-preparations row p
+{
+	width:50%;
+	float:left;	
+}
+
+.div-liste-preparations row p input
+{
+	width:50%;
+	float:right;
+}
+
+
 
 
 /* --- STYLE IHM DETAIL ENTREPRISE --- */

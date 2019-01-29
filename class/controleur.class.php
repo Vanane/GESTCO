@@ -23,7 +23,7 @@ class controleur {
 		}
     }
 	
-public function detailsDevis($idVente)
+public function afficheDetailsDevis($idVente)
 {
     $v = $this->vpdo->venteParSonId($idVente);
     $c = $this->vpdo->clientParSonId($v->idClient);
@@ -34,7 +34,7 @@ public function detailsDevis($idVente)
         <div class="conteneur">
             <div id="details-vente">
                 <row>
-                    <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                    <p>Responsable Devis : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
                 </row>                    
                 <row>
                     <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
@@ -126,8 +126,18 @@ public function estConnecte()
             return $_SESSION['type'];// Si oui on retourne le type qui lui servira à ce connecter aux pages dont il a accès,
             else return false;// Sinon retourne false et donc a seulement accès au page sans sécurité.
 }
-	
-public function listeDevis()
+
+public function afficheNonAcces()
+{
+    $retour = '
+    <div class="conteneur">
+        <p>Vous n\'avez pas accès à cette page ! </p>
+    </div>';
+    return $retour;   
+}
+
+
+public function afficheListeDevis()
 {
 	    
 	$return='
@@ -138,7 +148,7 @@ public function listeDevis()
                     Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
                 </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	
-	$l = $this->vpdo->listeVentes();
+	$l = $this->vpdo->listeVenteAvecDevis();
 	while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste. 
     {    
     $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
@@ -148,13 +158,13 @@ public function listeDevis()
     $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
     
     //on prévoit des variables pour nos appels
-    // on crée un bloque avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
-    //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyé l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
+    // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
+    //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
     $return = $return.'
                 <bloc>
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
-                        <p>Responsbale devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
+                        <p>Responsable devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
                         <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
                     </row>
                     <row>
@@ -174,7 +184,96 @@ public function listeDevis()
     return $return;   // on retourne la totalité du texte
 	}
 	
-		
+
+	public function afficheListePreparations()
+	{
+	    
+	    $return='
+            <div class="conteneur div-liste-preparations">
+                <p style="margin-left: 1em">
+                    Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
+                    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
+                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
+                </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
+	    
+	    $l = $this->vpdo->listeVenteAvecPreparation();
+	    while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
+	    {
+	        $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+	        $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
+	        $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+	        $c=$v->idClient;
+	        $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
+	        
+	        //on prévoit des variables pour nos appels
+	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
+	        //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
+	        $return = $return.'
+                <bloc>
+                    <row>
+                        <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
+                        <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
+                    </row>
+                    <row>
+                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
+                        <p>Code client :<input type="text" readonly value='.$c.'></p>
+                    </row>
+                    <row>
+                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Préparer</a>
+                    </row>
+                </bloc>
+    ';
+	    }
+	    // on rajoute le bouton pour ajouter un Devis
+	    $return = $return.'</div>';
+	    return $return;   // on retourne la totalité du texte
+	}
+	
+	
+	
+	public function afficheDetailsPreparation($idVente)
+	{
+	    $v = $this->vpdo->venteParSonId($idVente);
+	    $c = $this->vpdo->clientParSonId($v->idClient);
+	    $s = $this->vpdo->societeParSonId($c->idSociete);
+	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
+	    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
+	    
+	    $retour = '
+        <div class="conteneur">
+        <div class="conteneur">
+            <div id="details-vente">
+                <row>
+                    <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                </row>                    
+                <row>
+                    <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
+                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
+                    <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
+                </row>
+                <row>
+                    <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
+                    <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
+                    <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                </row>
+            </div>
+
+
+        ';
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    $retour = $retour.'
+        </div>';
+	    return $retour;
+	}
+	
 	public function afficheAjoutDevis()
 	{
 	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
@@ -189,14 +288,14 @@ public function listeDevis()
                     </row>
                     <row>
                         <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
-                        <p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"><select id="idClient">
+                        <p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"></span><select id="idClient">
                                         <option selected hidden disabled></option>';//Ajoute une option vide pour forcer l'utilisateur à choisir.
         
         while($e = $lesClients->fetch(PDO::FETCH_OBJ))
         {
             $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
         }
-        $return = $return.'</select></span></p>
+        $return = $return.'</select></p>
                         <p>Date : <input id="dateDevis" type="text" readonly></p>
                     </row>
                     <row>
@@ -246,7 +345,7 @@ public function listeDevis()
 public function listeSociete($types,$type,$idType)
 {    
     $return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em">
-                    <center><u><h4>Voici l\'outil de gestion des  '.$types.' </h4></u></center><br>
+                   <h4>Voici l\'outil de gestion des  '.$types.' </h4><br>
                     Vous pouvez accéder au contact pour chaque societe en cliquant sur <b>"Voir détails"</b>.<br>                  
                     Si vous souhaitez ajouter un nouveau contact, cliquez sur <b>"Voir détails"</b>.<br>
                     Si vous souhaitez modifier les informations d\'une societe ou d\'un contact, cliquez sur <b>"Voir détails"</b>.<br>
@@ -602,9 +701,9 @@ public function ajouterSociete()
             $retour = $retour.'                  
                         </select></td>          
                     <td><input id="dateMouv" type="text" value="'.$this->vpdo->laDateAujourdhui().'" readonly></td>
-                    <td><input id="prixMouv" type="number" ></td>
-                    <td><input id="qteMouv" type="number" ></td>
-                    <td><input id="commentaire" type="text" ></td>
+                    <td><input id="prixMouv" type="number" value=0></td>
+                    <td><input id="qteMouv" type="number" value=0></td>
+                    <td><input id="commentaire" type="text"></td>
                 </tr>';
             
             $retour = $retour.'

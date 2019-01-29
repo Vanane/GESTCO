@@ -402,7 +402,7 @@ class mypdo extends PDO{
     public  function listeDetailsDevisParIdVente($idV)
     {
         
-        $requete='SELECT * FROM DETAIL_DEVIS WHERE idVente="'.$idV.'";';
+        $requete='SELECT * FROM detail_devis WHERE idVente="'.$idV.'";';
         
         $result=$this->connexion->query($requete);
         if ($result)
@@ -414,22 +414,42 @@ class mypdo extends PDO{
     
     public function listeVentes()
     {
-        $r="SELECT * from VENTE";
+        $r="SELECT * from vente";
         $result=$this->connexion->query($r);
         if($result)
             return $result;
-            else                
-                return null;
+        else                
+            return null;
     }
-
+    
+    public function listeVenteAvecDevis()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_devis);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+        else
+            return null;
+    }   
+    
+    public function listeVenteAvecPreparation()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_preparation);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+        else
+            return null;
+    }    
+    
     public function idDerniereVente()
     {
         $r="SELECT idVente FROM VENTE ORDER BY idVente DESC";
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
-            else
-                return null;
+        else
+            return null;
     }
     
     public function idDernierContactClient()

@@ -138,16 +138,6 @@ class page_base {
 					<li><a href="'.$this->path.'Achats/">Achats</a></li>
                 </ul>',
 	        
-	        'devis'=>'
-				<ul>
-					<li><a href="'.$this->path.'Devis/">Devis</a></li>
-                </ul>',
-	        
-	        'commandes'=>'
-				<ul>
-					<li><a  href="'.$this->path.'Commandes/">Commandes</a></li>
-				</ul>',
-	        
 	        'preparations'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Preparations/">Préparations</a></li>
@@ -158,16 +148,6 @@ class page_base {
                     <li><a href="'.$this->path.'Livraisons/">Livraisons</a></li>
                 </ul>',
 	        
-	        'facturations'=>'
-                <ul>
-                    <li><a href="'.$this->path.'Facturations/">Facturations</a></li>
-                </ul>',
-	        
-		    'conflits'=>'
-				<ul>
-    				<li><a  href="'.$this->path.'Conflits/">Conflits</a></li>
-				</ul>',		    
-		    
 	        'articles'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Articles/">Articles</a></li>
@@ -186,12 +166,7 @@ class page_base {
 	        'fournisseurs'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Fournisseurs/">Fournisseurs</a></li>
-                </ul>',
-	        
-	        'societes'=>'
-				<ul>
-					<li><a  href="'.$this->path.'Societes/">Sociétés</a></li>
-                </ul>'
+                </ul>',	        
 	    );      	       
 	        
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
