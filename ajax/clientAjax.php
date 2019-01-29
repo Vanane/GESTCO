@@ -12,7 +12,7 @@ switch ($action)
         $r['result'] = $pdo->deleteContactClient($idC);
         break;*///annuler car il faut aussi supprimer les ventes
    
-    case 'modifierClient':
+    case 'modifierSociete':
         $i=$_POST['idSociete'];
         $n=$_POST['nomSociete'];
         $sw=$_POST['siteWebSociete'];
@@ -21,14 +21,14 @@ switch ($action)
         $a=$_POST['adresseSociete'];
         $ra=$_POST['raisonSociete'];
         $m=$_POST['mailSociete'];
-        $r['result']=$pdo->TupdateClient('nom',$n,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('siteWeb',$sw,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('telephone',$t,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('fax',$f,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('adresse',$a,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('raison',$ra,'idSociete',$i);
-        $r['result']=$pdo->TupdateClient('mail',$m,'idSociete',$i);
-       // $r['result'] = $pdo->updateClient($n,$a,$t,$f,$sw,$ra,$m,$i);//méthode différente.
+        $r['result']=$pdo->updateSociete('nom',$n,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('siteWeb',$sw,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('telephone',$t,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('fax',$f,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('adresse',$a,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('raison',$ra,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('mail',$m,'idSociete',$i);
+
         break;
    
     case 'ajouterSociete':
@@ -72,13 +72,23 @@ switch ($action)
         break;
         
     case 'ajouterContactClient':
-        $i=$_POST['idClient'];
+        $i=$_POST['id'];
         $s=$_POST['societe'];
         $n=$_POST['nom'];
         $p=$_POST['prenom'];
         $t=$_POST['telephone'];
         $m=$_POST['mail'];
-        $r['result']=$pdo->insertContactClient($i,$s, $n, $p, $m, $t);
+        $r['result']=$pdo->insertContactClient($i,$s,$n,$p,$m,$t);
+        break;
+        
+    case 'ajouterContactFournisseur':
+        $i=$_POST['id'];
+        $s=$_POST['societe'];
+        $n=$_POST['nom'];
+        $p=$_POST['prenom'];
+        $t=$_POST['telephone'];
+        $m=$_POST['mail'];
+        $r['result']=$pdo->insertContactFournisseur($i,$s,$n,$p,$m,$t);
         break;
 }
 
