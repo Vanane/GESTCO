@@ -258,7 +258,7 @@ if ($types=="clients"){
 }
 else{
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
-    $lscof = $this->vpdo->listeSocieteFournisseurs();
+    $lscof = $this->vpdo->listeSocietesFournisseurs();
 }
 while($ls = $lscof->fetch(PDO::FETCH_OBJ))
     {
@@ -276,7 +276,7 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))
                     </row>
                     <row>
                         <p>Mail :<input type="text" readonly value='.$ls->mail.'></p>
-                        <a href="'.$types.'/'.$ls->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir détails</a>   
+                        <a href="'.$ls->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir détails</a>  
                     </row>
                 </bloc>';
     }    
