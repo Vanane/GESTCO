@@ -26,6 +26,7 @@ if(isset($_POST['action']))
             $r['tva'] = $q->txTVA;
             $r['marge'] = $q->txMarge;
             break;
+        
         case 'ajoutDevis'://Sur clic bouton Ajouter
             $laVente = $_POST['dVente'];//On récupère les informations de la vente
             $lesArticles =$_POST['dArticles'];//Et la liste des articles

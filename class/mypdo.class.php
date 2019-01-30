@@ -75,7 +75,7 @@ class mypdo extends PDO{
     
     public function listeSocietesFournisseurs()
     {
-        $requete='SELECT * FROM societe WHERE idSociete IN(SELECT idSociete FROM contact_fournisseur);';        
+        $requete='SELECT * FROM societe WHERE idSociete IN(SELECT idSociete FROM contact_fournisseur GROUP BY idFour);';        
         $result=$this->connexion->query($requete);
         if ($result)
             return ($result);
@@ -110,10 +110,10 @@ class mypdo extends PDO{
         else
             return null;
     }
-    public  function listeSocieteClients()
+    public  function listeSocietesClients()
     {
         
-        $requete='SELECT s.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete;';        
+        $requete='SELECT s.* FROM Societe s, contact_client c WHERE s.idSociete=c.idSociete GROUP BY idSociete;';        
         $result=$this->connexion->query($requete);
         if ($result)
             return ($result);
@@ -160,6 +160,117 @@ class mypdo extends PDO{
             else
                 return null;
     }
+    
+    public  function listeComptes($identifiant,$mdp)
+    {
+        
+        $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
+    
+    public function listeVentes()
+    {
+        $r="SELECT * from vente";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeVenteAvecDevis()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_devis);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeVenteAvecPreparation()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_preparation);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+        else
+            return null;
+    }    
+    
+    public  function listeDetailsDevisParIdVente($idV)
+    {
+        
+        $requete='SELECT * FROM detail_devis WHERE idVente="'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+
+    public function listeDetailsCommandeParIdVente($idV)
+    {
+        $requete='SELECT * FROM detail_commande WHERE idVente="'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+
+    
+    public function listeEmployes()
+    {
+        $r = "SELECT * FROM EMPLOYE";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeEmployesParType($type)
+    {
+        $r = 'SELECT * FROM EMPLOYE WHERE idType='.$type.'';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeEmplacements()
+    {
+        $r = 'SELECT * FROM emplacement;';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeClients()
+    {
+        $r = 'SELECT * FROM CONTACT_CLIENT';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
     
     /*------------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------FIN-LISTE-DEBUT-DELETE-----------------------------------------*/
@@ -388,75 +499,7 @@ class mypdo extends PDO{
             else
                 return null;
     }
-    
-    public  function listeComptes($identifiant,$mdp)
-    {
-        
-        $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
-    }
-    
-   
-    public  function listeDetailsDevisParIdVente($idV)
-    {
-        
-        $requete='SELECT * FROM detail_devis WHERE idVente="'.$idV.'";';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
-    }
-    
-    public function listeDetailsCommandeParIdVente($idV)
-    {
-        $requete='SELECT * FROM detail_commande WHERE idVente="'.$idV.'";';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
-    }
-    public function listeVentes()
-    {
-        $r="SELECT * from vente";
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else                
-            return null;
-    }
-    
-    public function listeVenteAvecDevis()
-    {
-        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_devis);";
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else
-            return null;
-    }   
-    
-    public function listeVenteAvecPreparation()
-    {
-        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_preparation);";
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else
-            return null;
-    }    
-    
+
     public function idDerniereVente()
     {
         $r="SELECT idVente FROM VENTE ORDER BY idVente DESC";
@@ -505,46 +548,6 @@ class mypdo extends PDO{
             return $result;
         else
             return null;
-    }
-    
-    public function listeEmployes()
-    {
-        $r = "SELECT * FROM EMPLOYE";
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
-    }
-    
-    public function listeEmployesParType($type)
-    {
-        $r = 'SELECT * FROM EMPLOYE WHERE idType='.$type.'';
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else
-            return null;
-    }
-    
-    public function listeEmplacements()
-    {
-        $r = 'SELECT * FROM emplacement;';
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else
-            return null;                
-    }
-    
-    public function listeClients()
-    {
-        $r = 'SELECT * FROM CONTACT_CLIENT';
-        $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;                
     }
     
     public  function employeParIdVente($idVente)

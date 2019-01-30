@@ -145,7 +145,8 @@ public function afficheListeDevis()
                 <p style="margin-left: 1em">
                     Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
                     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
-                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
+                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis".
+                    <a href="Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>
                 </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	
 	$l = $this->vpdo->listeVenteAvecDevis();
@@ -382,16 +383,19 @@ public function afficheListeDevis()
 	
 public function listeSociete($types,$type,$idType)
 {    
-    $return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em">
-                   <h4>Voici l\'outil de gestion des  '.$types.' </h4><br>
+$return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em">
+                    <h4>Voici l\'outil de gestion des  '.$types.' </h4><br>
                     Vous pouvez accéder au contact pour chaque societe en cliquant sur <b>"Voir détails"</b>.<br>                  
-                    Si vous souhaitez ajouter un nouveau contact, cliquez sur <b>"Voir détails"</b>.<br>
+                    Si vous souhaitez ajouter un contact, vous pouvez cliquez sur <b>"Ajouter un contact"</b>.<br>
+                    Vous pouvez aussi cliquez sur <b>"Voir détails"</b> puis sur <b>"Ajouter un contact"</b>.<br>
                     Si vous souhaitez modifier les informations d\'une societe ou d\'un contact, cliquez sur <b>"Voir détails"</b>.<br>
                     Si vous souhaitez ajouter une nouvelle societe, cliquez sur le bouton <b>"Ajouter une Societe"</b>.<br>
-                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter une société</a>';                    
+
+                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une société</a>
+                    <a href="ajoutercontactsociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter un contact</a>';                    
 if ($types=="clients"){
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
-    $lscof = $this->vpdo->listeSocieteClients();
+    $lscof = $this->vpdo->listeSocietesClients();
 }
 else{
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
@@ -492,17 +496,15 @@ public function listeContact($idSociete, $types,$type, $idType)
 /* ************************************************************************************************************************************* */
 
 
-public function ajouterContact($idSociete, $type)//à revoir pour fournisseur
+public function ajouterContact($idSociete, $type)
 {  
-    if ($type=="client"){
-    $idContact = $this->vpdo->idDernierContactClient()->idClient+1;
-    $return='<p>client</p>';}
-    else{
-    $idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;
-    $return='<p>Fourni</p>';}
+    if ($type=="client")
+    {$idContact = $this->vpdo->idDernierContactClient()->idClient+1;}
+    else
+    {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
    
     $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;
-    $return=$return.'<div class="conteneur div-liste-entreprises">
+    $return='<div class="conteneur div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts pour <b>'.$infoSociete.'</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
@@ -529,13 +531,57 @@ public function ajouterContact($idSociete, $type)//à revoir pour fournisseur
 	return $return;
 }
 
-
 /* ************************************************************************************************************************************* */
 /* *****************************************************AUTRE*METHODE*MEME*BUT********************************************************** */
 /* ************************************************************************************************************************************* */
 
 
-public function ajouterSociete()
+public function ajouterContactSociete($type)
+{
+    if ($type=="client")
+    {$idContact = $this->vpdo->idDernierContactClient()->idClient+1;}
+    else
+    {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
+    $lesSocietes = $this->vpdo->listeSociete();
+    //$s=$this-> vpdo ->listeSociete();
+    $return='<div class="conteneur div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil d\'ajout des contacts.<br>
+                        Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
+                        Les cases <b>"Code du contact"</b> ne peut pas être changées.<br>
+                    </p> ';
+    $return = $return.'
+<div id="bloc-liste" class="conteneur div-liste-entreprises">
+    <row>
+        <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
+        <p>Id & nom société :<span class="tooltip" id="ttidSociete" title="Vous n\'avez pas choisi de société !"></span>
+        <select id="idSocieteContact"><option selected hidden disabled></option>'; //Note : voir le span
+        while($e = $lesSocietes->fetch(PDO::FETCH_OBJ))
+            {
+                $return = $return.'<option value="'.$e->idSociete.'">'.$e->idSociete.' - '.$e->nom.'</option>';
+            }
+        $return=$return.'</select></p><p>Nom du contact(*) : <input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
+    </row>
+    <row>
+        <p>Prenom du contact(*) : <input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
+        <p>Téléphone du contact(*) : <input type="text" id="tel'.$type.'" maxlength="10" required  value=""></p>
+        <p>Mail du contact(*) : <input type="text" id="mail'.$type.'" maxlength="40" required value=""></p>    
+     </row>
+     <row>
+        <a onclick=\'ajoutercontactsociete("'.$type.'")\' class="bou-classique">Valider le contact</a>
+    </row>
+</div>';
+    //<p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"></span><select id="idClient">
+    //<option selected hidden disabled></option>';
+    return $return;
+}
+
+
+/* ************************************************************************************************************************************* */
+/* *****************************************************AUTRE*METHODE*MEME*BUT********************************************************** */
+/* ***************************************************************************************************************************************/
+
+public function ajouterSociete($type)
     {
         $idSociete = $this->vpdo->idDernierSociete()->idSociete+1;
         $return='<div class="conteneur  div-liste-entreprises">
@@ -560,7 +606,7 @@ public function ajouterSociete()
          <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required maxlength="48"  value=""> </p>          
          <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required maxlength="40"  value=""></p>
     </row>
-         <a onclick=\'ajoutersociete()\' class="btn-classique"> Valider </a>
+         <a onclick=\'ajoutersociete("'.$type.'")\' class="bou-classique"> Valider </a>
     </row>
 </div>';
         
