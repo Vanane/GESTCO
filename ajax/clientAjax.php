@@ -90,6 +90,13 @@ switch ($action)
         $m=$_POST['mail'];
         $r['result']=$pdo->insertContactFournisseur($i,$s,$n,$p,$m,$t);
         break;
+        
+    case 'infoEntreprise':
+        $idSociete = $pdo->societeParSonId($_POST['idSociete'])->idSociete;
+        $q = $pdo->societeParSonId($idSociete);
+        $r['idS'] = $q->idSociete;
+        $r['nomS'] = $q->nom;
+        break;
 }
 
 die( json_encode($r) );

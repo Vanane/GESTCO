@@ -55,16 +55,20 @@ switch ($params[1]) {
 				switch($params[2])
 				{
 					case 'ajoutersociete':
-						$site->titre = "Ajouter un Fournisseur";
-						$site->left_sidebar = $controleur->ajouterSociete();
+						$site->titre = "Ajouter une Société";
+						$site->left_sidebar = $controleur->ajouterSociete($type);
 						break;
+					case 'ajoutercontactsociete':
+					    $site->titre = "Ajouter un Contact Fournisseur";
+					    $site->left_sidebar = $controleur->ajouterContactSociete($type);
+					    break;
 					default:
 						if(isset($params[3]))
 						{
 							switch($params[3])
 							{
 								default:
-									$site->titre = "Ajouter un Contact";
+									$site->titre = "Ajouter un Contact Fournisseur";
 									$site->left_sidebar = $controleur->ajouterContact($params[3],$type);
 									break;
 							}
@@ -97,18 +101,23 @@ switch ($params[1]) {
 	             
 	              switch($params[2])
                  {
-	                 case 'ajouter'://Ajouter Client
-	                     $site->titre = "Ajouter un Client";		                     
-	                     $site->left_sidebar = $controleur->ajouterSociete();
-	                     break;
-                     default:
+                 case 'ajoutersociete':
+                    $site->titre = "Ajouter une Societe";
+                    $site->left_sidebar = $controleur->ajouterSociete($type);
+                    break;
+                 case 'ajoutercontactsociete':
+                     $site->titre = "Ajouter un Contact Client";
+                     $site->left_sidebar = $controleur->ajouterContactSociete($type);
+                     break;
+                    default:
 	                     if(isset($params[3]))
 	                     {
+	                        
 	                         switch($params[3])
-                            {        
-                                case 'ajouter'://Ajouter contact
+	                         {       
+                                    default://Ajouter contact
                                     $site->titre = "Ajouter un Contact";                                        
-                                    $site->left_sidebar = $controleur->ajouterContactClient($params[2]);
+                                    $site->left_sidebar = $controleur->ajouterContact($params[3],$type);
                                     break;
                             }
 	                     }
