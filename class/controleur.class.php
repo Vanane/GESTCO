@@ -38,8 +38,8 @@ public function afficheDetailsDevis($idVente)
                 </row>                    
                 <row>
                     <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
-                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
-                    <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
+                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
+                    <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
                 </row>
                 <row>
                     <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
@@ -78,9 +78,9 @@ public function afficheDetailsDevis($idVente)
             </div>
         </div>';
   if($v->dateCommande != null)//Si le devis a déjà été confirmé en commande, on ne fait pas de bouton JS.
-      $retour = $retour.'<a class="bou-classique">Devis confirmé</a>';
+      $retour = $retour.'<a class="btn-classique">Devis confirmé</a>';
     else
-        $retour=$retour.'<a id="confirmer" class="bou-classique">Confirmer Devis</a>';
+        $retour=$retour.'<a id="confirmer" class="btn-classique">Confirmer Devis</a>';
     return $retour;
 }	
 		
@@ -165,7 +165,7 @@ public function afficheListeDevis()
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
                         <p>Responsable devis :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
+                        <p>Date devis :<input type="text" readonly value="'.$v->dateDevis.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
@@ -173,14 +173,14 @@ public function afficheListeDevis()
                         <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
                     </row>
                     <row>
-                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Voir Details</a>
+                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
                     </row>
                 </bloc>
     ';
 	}
     // on rajoute le bouton pour ajouter un Devis
     $return = $return.'</div>
-    <a href="Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>';
+    <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter un Devis</a>';
     return $return;   // on retourne la totalité du texte
 	}
 	
@@ -190,20 +190,26 @@ public function afficheListeDevis()
 	    
 	    $return='
             <div class="conteneur div-liste-preparations">
-                <p style="margin-left: 1em">
-                    Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
-                    Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
-                    Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis" en bas de la page.
-                </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
+                <h4>Liste des commandes en préparation :</h4>
+                <p>
+                    Voici l\'outil de gestion des préparations de commandes.
+                </p>
+                <p>
+                    Vous pouvez ici consulter toutes les commandes en attente de préparation. 
+                    Pour en sélectionner une, il suffit de cliquer sur "Préparer".                    
+                </p>
+                <p>
+                    Vous serez alors renvoyé vers la page détaillant la commande.
+                </p>            
+
+';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	    
 	    $l = $this->vpdo->listeVenteAvecPreparation();
 	    while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
 	    {
-	        $e=$this->vpdo->employeParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
 	        $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
 	        $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
 	        $c=$v->idClient;
-	        $p=$this->vpdo->prixTotalParIdVente($ligneIdVente->idVente)->fetch(PDO::FETCH_OBJ);
 	        
 	        //on prévoit des variables pour nos appels
 	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
@@ -212,14 +218,14 @@ public function afficheListeDevis()
                 <bloc>
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
-                        <p>Date devis :<input type="text" readonly value='.$v->dateDevis.'></p>
+                        <p>Date d\'envoi :<input type="text" readonly value="'.$v->dateCommande.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
                         <p>Code client :<input type="text" readonly value='.$c.'></p>
                     </row>
                     <row>
-                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="bou-classique">Préparer</a>
+                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="btn-classique">Préparer</a>
                     </row>
                 </bloc>
     ';
@@ -236,43 +242,75 @@ public function afficheListeDevis()
 	    $v = $this->vpdo->venteParSonId($idVente);
 	    $c = $this->vpdo->clientParSonId($v->idClient);
 	    $s = $this->vpdo->societeParSonId($c->idSociete);
-	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
+	    $lesDetails = $this->vpdo->listeDetailsCommandeParIdVente($v->idVente);
 	    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
 	    
 	    $retour = '
         <div class="conteneur">
-        <div class="conteneur">
+            <aide>
+                <a id="btnAide" class="btn-classique btn-large">Masquer l\'aide</a>
+                <h4>Préparation de commande :</h4>
+                <p>
+                    Voici l\'interface de préparation de commande.
+                    Vous retrouverez ici les informations concernant la vente en train d\'être traitée,
+                    Ainsi que la liste des articles à préparer et à emmener.
+                </p>
+                <p>
+                    Pour voir les informations d\'un article, il suffit de cliquer sur le bouton correspondant.
+                    Vous pourrez alors entrer le code-barre ou bien le scanner, dans la zone de texte "Scanner le code". Après vérification, vous pourrez choisir le nombre d\'articles que vous retirerez.
+                </p>            
+                <p>
+                    S\'il manque des articles pour compléter la commande, ou bien que le code scanné n\'est pas celui de l\'article, le bouton virera alors au orange, signifiant qu\'il n\'est pas complet.
+                    Vous pourrez tout de même valider la préparation, qui donnera alors lieu à une démarche auprès du client, géré par les employés commerciaux.
+                </p>
+            </aide>
+
+
             <div id="details-vente">
+                <h4>Informations Vente :</h4>
                 <row>
-                    <p>Responsable Devis : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                    <p>Responsable Commande : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
                 </row>                    
                 <row>
                     <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
-                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly required></p>
-                    <p>Date : <input type="date" value="'.substr($v->dateDevis, 0,10).'" readonly required></p>
-                </row>
-                <row>
-                    <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
-                    <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
-                    <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
+                    <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
                 </row>
             </div>
-
-
+            <h4>Articles à fournir :</h4>
+            <div id="details-preparation-articles">
         ';
 	    
-	    
-	    
-	    
-	    
-	    
-	    
+	    $lesDetails = $this->vpdo->listeDetailsCommandeParIdVente($v->idVente);//On récupère les détaisl de la vente	 
+	    $i=0;//Incrément pour donner un id différent à chaque bloc article
+        while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
+        {
+            $i++;
+            $a = $this->vpdo->articleParSonId($d->idArticle);
+            $retour = $retour.'
+                    <a id="btnArticle'.$i.'"class="btn-classique btn-details-preparation">'.$d->idArticle.'</a>
+                    <row id="rowArticle'.$i.'">
+                        <p>Code Article : <input id="codeArticle" type="text" value="'.$a->codeBarre.'" readonly></p>
+                        <p>Nom :<input type="text" value="'.$a->libelle.'" readonly></p>
+                        <p>Emplacement<input type="text" value="'.$a->idEmp.'" readonly></p>
+                        <p>Scanner le code : <input id="codeScan" type="number"></p>
+                        <p class="p-demi">A fournir :<input id="qteDemandee" type="number" value='.$d->qteDemandee.' min=0 readonly></p>
+                        <p class="p-demi right">Fourni :<input id="qteFournie" type="number" value=0 min=0 readonly></p>
+                        <p><a href="../Articles/'.$d->idArticle.'" class="btn-classique">Details article</a></p>
+                    </row>
+                ';
+        }
+        $retour = $retour.'
+            </div>';//On ferme details-articles
 	    
 	    
 	    $retour = $retour.'
-        </div>';
+            <a id="validePrepa" class="btn-classique btn-large">Valider Préparation</a>
+        </div>';//On ferme conteneur
 	    return $retour;
 	}
+	
+	
 	
 	public function afficheAjoutDevis()
 	{
@@ -328,10 +366,10 @@ public function afficheListeDevis()
                             <td><input id="obsArticle1" type="text"></td>
                       </tr>
                     </table>
-                    <a id="ajouteLigne" class="bou-classique bou-plusLigne">+</a>
+                    <a id="ajouteLigne" class="btn-classique btn-plusLigne">+</a>
                 </div>
             </div>
-	    <a id="enregistrer" class="bou-classique">Enregistrer le devis</a>';
+	    <a id="enregistrer" class="btn-classique">Enregistrer le devis</a>';
 	    return $return;
 	}
 	
@@ -350,7 +388,7 @@ public function listeSociete($types,$type,$idType)
                     Si vous souhaitez ajouter un nouveau contact, cliquez sur <b>"Voir détails"</b>.<br>
                     Si vous souhaitez modifier les informations d\'une societe ou d\'un contact, cliquez sur <b>"Voir détails"</b>.<br>
                     Si vous souhaitez ajouter une nouvelle societe, cliquez sur le bouton <b>"Ajouter une Societe"</b>.<br>
-                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une société</a>';                    
+                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter une société</a>';                    
 if ($types=="clients"){
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
     $lscof = $this->vpdo->listeSocieteClients();
@@ -375,7 +413,7 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))
                     </row>
                     <row>
                         <p>Mail :<input type="text" readonly value='.$ls->mail.'></p>
-                        <a href="'.$ls->idSociete.'" id="btn-voirDetail" class="bou-classique">Voir détails</a>  
+                        <a href="'.$ls->idSociete.'" id="btn-voirDetail" class="btn-classique">Voir détails</a>  
                     </row>
                 </bloc>';
     }    
@@ -421,10 +459,10 @@ public function listeContact($idSociete, $types,$type, $idType)
                       <row>
                         <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required value='.$s->fax.'> </p>          
                         <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required value='.$s->mail.'></p>
-                        <a onclick="modificationSociete()" class="bou-classique">Modifier les informations</a>
+                        <a onclick="modificationSociete()" class="btn-classique">Modifier les informations</a>
                       </row> 
                 </div> 
-            <p></p>';
+            <h4>Liste des contacts :</h4>';
 
     while($ligneIdContact = $lccof->fetch(PDO::FETCH_OBJ))
     { 
@@ -440,11 +478,11 @@ public function listeContact($idSociete, $types,$type, $idType)
         <p>Id société du contact : <input type="text" id="societe'.$ligneIdContact->$idType.'" required value='.$ligneIdContact->idSociete.'></p>
      </row>   
      <row>
-        <a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="bou-classique">Modifier le contact</a>
+        <a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="btn-classique">Modifier le contact</a>
     </row>
 </div>';
     }
-    $return = $return.'</div><a href="ajoutercontact/'.$idSociete.'" class="bou-classique">Ajouter un contact</a>';
+    $return = $return.'</div><a href="ajoutercontact/'.$idSociete.'" class="btn-classique">Ajouter un contact</a>';
     return $return;
 }
 
@@ -484,7 +522,7 @@ public function ajouterContact($idSociete, $type)//à revoir pour fournisseur
         <p>id société '.$infoSociete.' : <input type="text" readonly required id="societe'.$type.'" value="'.$idSociete.'"></p>
      </row>
      <row>
-        <a onclick=\'ajoutercontact("'.$type.'")\' class="bou-classique">Valider le contact</a>  
+        <a onclick=\'ajoutercontact("'.$type.'")\' class="btn-classique">Valider le contact</a>  
     </row>
 </div>';
 	
@@ -522,7 +560,7 @@ public function ajouterSociete()
          <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required maxlength="48"  value=""> </p>          
          <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required maxlength="40"  value=""></p>
     </row>
-         <a onclick=\'ajoutersociete()\' class="bou-classique"> Valider </a>
+         <a onclick=\'ajoutersociete()\' class="btn-classique"> Valider </a>
     </row>
 </div>';
         
@@ -561,7 +599,7 @@ public function ajouterSociete()
             <p>Quantité réelle disponible : <input id="qteArticle" type="number" value='.$qte->qteArticle.' readonly></p>
         </row>
         <row>
-            <a class="bou-classique" href="'.$a->idArticle.'">Détails article</a>
+            <a class="btn-classique" href="'.$a->idArticle.'">Détails article</a>
         </row>
     </bloc>
                 ';
@@ -620,7 +658,7 @@ public function ajouterSociete()
                 $retour = $retour.'</select></p>
             </row>
             <row>
-                <a id="modifierInfos" class="bou-classique">Modifier les informations</a>
+                <a id="modifierInfos" class="btn-classique">Modifier les informations</a>
             </row>
         </div>
 
@@ -640,7 +678,7 @@ public function ajouterSociete()
                 </row>
                 <row>
                     <p>Nouveau CMUP calculé : <input id="nouveauCMUP" type="number" readonly></p>
-                    <a id="modifierArticle" class="bou-classique">Etablir un nouveau CMUP</a>
+                    <a id="modifierArticle" class="btn-classique">Etablir un nouveau CMUP</a>
                 </row>
             </div>
 
@@ -711,7 +749,7 @@ public function ajouterSociete()
             $retour = $retour.'
                         </table>
                     </row>
-                <a id="ajouterMouv" class="bou-classique">Ajouter un mouvement</a>
+                <a id="ajouterMouv" class="btn-classique">Ajouter un mouvement</a>
                 </div>
             </div>';               
         $retour = $retour.'

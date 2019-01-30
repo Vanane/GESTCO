@@ -13,7 +13,7 @@ if (!isset($params[1]))
 }
 else 
 {
-    $site->right_sidebar='<a class="bou-classique" style="float:left" onclick="history.go(-1)">Retour</a>';	    
+    $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.go(-1)">Retour</a>';	    
 }	
 switch ($params[1]) {
 	case 'accueil' :
@@ -200,6 +200,7 @@ switch ($params[1]) {
 	            switch($params[2])
 	            {
 	                default:
+	                    $site->js = "pageDetailsPrepa";
 	                    $site->left_sidebar = $controleur->afficheDetailsPreparation($params[2]);
 	                    break;
 	            }

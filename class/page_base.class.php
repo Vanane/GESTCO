@@ -9,7 +9,7 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande' );
-	protected $path="http://localhost/GESTCO/";
+	protected $path="http://192.168.168.194/GESTCO/";
 	
 	public function __construct() {
 		$numargs = func_num_args();
@@ -172,14 +172,14 @@ class page_base {
 		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
 		{
 		    echo'
-				<ul id="bou-connexion">
+				<ul id="btn-connexion">
 					<li><a href="'.$this->path.'Connexion">Connexion</a></li>
 				</ul>';		  
 		} 
 		else
 		{
 		    echo '
-              <ul id="bou-deconnexion">
+              <ul id="btn-deconnexion">
 		        <li><a href="'.$this->path.'Deconnexion">Déconnexion</a></li>
 		      </ul>';		    		   
 		    switch($_SESSION['type'])

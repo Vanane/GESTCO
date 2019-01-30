@@ -16,7 +16,7 @@ class mypdo extends PDO{
     	{
     		echo 'hote: '.$this->PARAM_hote.' '.$_SERVER['DOCUMENT_ROOT'].'<br />';
     		echo 'Erreur : '.$e->getMessage().'<br />';
-    		echo 'N� : '.$e->getCode();
+    		echo 'N° : '.$e->getCode();
     		$this->connexion=false;
     		//echo '<script>alert ("pbs acces bdd");</script>)';
     	}
@@ -416,6 +416,17 @@ class mypdo extends PDO{
         return null;
     }
     
+    public function listeDetailsCommandeParIdVente($idV)
+    {
+        $requete='SELECT * FROM detail_commande WHERE idVente="'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     public function listeVentes()
     {
         $r="SELECT * from vente";

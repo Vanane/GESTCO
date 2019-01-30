@@ -158,7 +158,7 @@ pre strong {
 	width:100%;
 	box-sizing:border-box;
 	border:solid 1px black;
-	overflow:visible;
+	overflow:hidden;
 }	
 
 .conteneur row 
@@ -234,12 +234,12 @@ pre strong {
 	text-decoration:none;	
 }
 		
-#bou-connexion
+#btn-connexion
 {
 	background-color: D3D602 !important;
 }
 
-#bou-deconnexion
+#btn-deconnexion
 {
 	background-color: #E95122 !important;	
 }
@@ -272,7 +272,7 @@ pre strong {
 
 /* --- STYLE IHM AJOUT DEVIS --- */
 
-.bou-classique
+.btn-classique
 {
 	display: block;
 	padding:0.5em;
@@ -284,14 +284,14 @@ pre strong {
    	transition: all linear 0.1s;   	  
 }
 
-.bou-plusLigne
+.btn-plusLigne
 {
 	padding:0.8em 0;
 	margin:0;
 	width:100%;
 }
 
-.bou-classique:hover
+.btn-classique:hover
 {
    	transition: all linear 0.1s;   	  	
 }
@@ -341,9 +341,9 @@ pre strong {
 {
 	position:relative;
 	width:100%;		
-	height:250px;
 	box-sizing:border-box;
 	border-bottom:solid 1px black;	
+	overflow:hidden;
 }
 
 #details-vente p
@@ -421,6 +421,13 @@ pre strong {
 }
 
 
+/* --- STYLE IHM DETAILS PREPARATION --- */
+
+#details-preparation-articles
+{
+	
+	
+}
 
 
 /* --- STYLE IHM DETAIL ENTREPRISE --- */
@@ -711,11 +718,11 @@ pre strong {
 	{
 		width:50% !important;
 		box-sizing:border-box;
-		border:solid 5px #ddd;
+		border:solid 3px white;
 		background-color: #EEE;	
 	}
 		
-	#bou-connexion, #bou-deconnexion
+	#btn-connexion, #btn-deconnexion
 	{
 		width:100% !important;
 	}
@@ -748,5 +755,83 @@ pre strong {
 		font-size:1em;
 		text-align:center;
 	}	
+	
+	.btn-large
+	{
+		margin:0;
+		margin-top:1em;
+		width:100%;
+	}
+	
+	/* --- STYLE IHM DIV DETAILS VENTE  --- */
+	
+	#details-vente p
+	{
+		float:left;
+		width:98%;
+		margin-left: 1%;
+		margin-right: 1%;
+		box-sizing:border-box;
+	}
+	
+	#details-vente p input, #details-vente p select
+	{
+		float:right;
+		width:100%;	
+	}
+	
+	
+	#details-vente row
+	{
+		width:100%;
+	}
+	
+	#details-vente row:first-child p
+	{	
+		width:97%;
+	}
+	
+	/* --- STYLE IHM DETAILS PREPARATION --- */
+	
+	#details-preparation-articles
+	{
+		width:100%;
+		overflow:hidden;
+	}
+	
+	.btn-details-preparation
+	{
+		width:100%;
+		background:#dd5555;
+		margin:0;
+		padding:0.75em;
+		border-top:solid 5px white;
+	}
+	
+	#details-preparation-articles row
+	{
+		width:100%;
+		padding: 0 2%;	
+		border-bottom:solid 1px black;
+		box-sizing:border-box;
+		display:none;
+	}
+	
+	#details-preparation-articles row .btn-classique
+	{
+		font-size:0.85em;
+	}
+	
+	#details-preparation-articles p.p-demi
+	{
+		width:45%;
+		float:left;
+	}
+	
+	#details-preparation-articles p.right
+	{
+		float:right;
+	}
+	
 }
 
