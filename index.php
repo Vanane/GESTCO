@@ -43,13 +43,14 @@ switch ($params[1]) {
 		  echo '<script>document.location.href="Accueil"; </script>';
 		  break;
 	case 'fournisseurs':
-	    $types="fournisseurs";
-	    $type="fournisseur";
-	    $idType="idFour";
-	    if($controleur->estConnecte()!= false)
+	    // j'initialise les trois variables dont j'ai besoin pour utiliser mes méthodes
+	    $types="fournisseurs";//txt du type au pluriel
+	    $type="fournisseur";//txt type au singulier
+	    $idType="idFour";//txt de l'id dans la BDD
+	    if($controleur->estConnecte()!= false)//je vérifie si l'utilisateur est connecté, si il ne l'est pas j'affiche la méthode afficheNonAcces()
 	    {
-			$site->js = "pageClient";
-			if(isset($params[2]))
+			$site->js = "pageClient";//j'utilise ma page js
+			if(isset($params[2]))//je répartie mes pages, j'appelle les méthodes dont j'ai besoin.
 			{	        
 		
 				switch($params[2])
@@ -69,19 +70,19 @@ switch ($params[1]) {
 							{
 								default:
 									$site->titre = "Ajouter un Contact Fournisseur";
-									$site->left_sidebar = $controleur->ajouterContact($params[3],$type);
+									$site->left_sidebar = $controleur->ajouterContact($params[3],$type);//le param[3] qui me permet d'ajouter un contact pour la sociét voulu
 									break;
 							}
 						}
 						else
-						$site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);
+						$site-> left_sidebar=$controleur->listeContact($params[2],$types,$type, $idType);//même idée avec param[2], j'affiche les contacts de la soiciété qui possède l'idSociété=param[2]
 						break;
 				}
 	        }
 
 			else
 			{
-				$site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);
+				$site-> left_sidebar=$controleur->listeSociete($types,$type,$idType);// j'affiche la liste de société, j'envoie les variables de type
 			}	    
 	    }
 	    else
@@ -90,7 +91,7 @@ switch ($params[1]) {
 	    }
 	      break;
 	    
-	case 'clients':
+	case 'clients': // comme pour les fournisseurs (ci dessus, la seul difference est dans les variables qui ici sont client.
 	    $types="clients";
 	    $type="client";
 	    $idType="idClient";
