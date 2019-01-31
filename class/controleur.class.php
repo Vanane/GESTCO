@@ -573,7 +573,7 @@ public function ajouterContactSociete($type)// je récupère le type
     <row>
         <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
         <p>Id & nom société(*) :<span class="tooltip" id="ttInsertContactIdSociete" title="Vous n\'avez pas choisi de société !"></span>
-        <select id="idSocieteContact"><option selected hidden disabled></option>'; //Nicolas : voir le span
+        <select id="idSocieteContact"><option selected hidden disabled></option>'; 
         while($e = $lesSocietes->fetch(PDO::FETCH_OBJ))
             {
                 $return = $return.'<option value="'.$e->idSociete.'">'.$e->idSociete.' - '.$e->nom.'</option>';
@@ -599,7 +599,7 @@ public function ajouterContactSociete($type)// je récupère le type
 
 /* ************************************************************************************************************************************* */
 /* *****************************************************AUTRE*METHODE*MEME*BUT********************************************************** */
-/* ***************************************************************************************************************************************/
+/* ************************************************************************************************************************************* */
 
 public function ajouterSociete($type)//je récupère toujours le type
     {
@@ -637,6 +637,91 @@ public function ajouterSociete($type)//je récupère toujours le type
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
 /* ****************************************FIN*GESTION*LISTE*CLIENT*ET*FOURNISSEUR****************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* ****************************************************DEBUT*LISTE*DES*ACHATS*********************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+    
+   public function listeAchats()
+    {
+        $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des Achats.</b><br>
+                        Si vous souhaitez ajouter un nouvelle Achat, cliquez sur <b>" Ajouter achat"</b>.<br>
+                        <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter achat</a>
+                    </p> ';
+    $lads = $this->vpdo->listeAjoutdeStock();
+while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la liste
+   { 
+       $lf=$this->vpdo->societeParSonId($ls->idSociete);
+       $la=$this->vpdo->articleParSonId($ls->idArticle);
+       $return = $return.'
+                <bloc>
+                   	<row>
+                        <p>Date de l\'Achat :<input type="text" readonly maxlength="12" value='.$ls->date.'></p>
+                        <p>Quantité :<input type="text" readonly maxlength="12" value='.$ls->qte.'></p>
+                        <p>Fournisseur : <input type="text" readonly  value="'.$ls->idSociete.' - '.$lf->nom.'"></p>                       
+                    </row>
+                    <row>
+                        <p>Id Article :<input type="text" readonly maxlength="48" value='.$ls->idArticle.'> </p>
+                        <p>Prix Unitaire :<input type="text" readonly maxlength="64" value="'.$ls->prix.'"> </p>
+                        <p>Commentaire :<input type="text" readonly value='.$ls->commentaire.'></p>
+                    </row>
+                    <row>
+                        <p>Libelle de l\'Article :<input type="text" readonly maxlength="48" value='.$la->libelle.'> </p>
+                        <p>Prix Total Achat :<input type"text" readonly value ='.($ls->prix) *($ls->qte).'></p>
+                        <p>Id Achat: <input type="text" readonly maxlength="24" value='.$ls->idMouv.'> </p>                       
+                    </row>
+                </bloc>';
+   }
+   $return=$return.'</div></div>';
+   return $return;
+  }
+  
+/* ************************************************************************************************************************************* */
+/* ************************************************FIN*LISTE*DES*ACHATS****DEBUT*AJOUT*ACHAT******************************************** */
+/* ************************************************************************************************************************************* */
+  
+  
+  public function ajoutAchat()//Nicolas - pas de plus car par d'idVente
+  {
+      $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des Achats.</b><br>
+                        Vous pouvez sur cette page ajoutez un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
+                    </p> ';
+$return = $return.'
+                <bloc>
+                   	<row>
+                        <p>Id Achat: <input type="text" readonly maxlength="24" required value=""> </p>
+                        <p>Date de l\'Achat :<input type="text"  required maxlength="12" value=""></p>
+                        <p>Id Article :<input type="text"  maxlength="48" required value=""> </p>
+                        
+                    </row>
+                    <row>
+                        <p>Prix Unitaire :<input type="text"maxlength="64" required value=""> </p>
+                        <p>Quantité :<input type="text" maxlength="12" required value=""></p>
+                        <p>Commentaire :<input type="text"  required  value=""></p>
+                    </row>
+                    <row>
+                              <p>id Fournisseur : <input type="text"  required  value=""></p>           
+                    </row>
+                        <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Confirmer achat</a>
+                </bloc>';
+      
+      $return=$return.'</div></div>';
+      return $return;
+  }
+  
+  
+  
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* ***********************************************************FIN*AJOUT*ACHAT*********************************************************** */
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
     

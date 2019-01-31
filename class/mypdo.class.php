@@ -41,6 +41,18 @@ class mypdo extends PDO{
     /*---------------------------------------------------LES-LISTES-----------------------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
     
+    public  function listeAjoutdeStock()
+    {
+        
+        $requete='SELECT * FROM mouvement_article WHERE idType=1 ORDER BY date DESC;';
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
     public  function listeDetailsDevis()
     {
         

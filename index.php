@@ -142,12 +142,34 @@ switch ($params[1]) {
             $site-> left_sidebar= $controleur->afficheNonAcces();
 	    }
 	    break;
-	case 'Achats':
+	case 'achats':
 	    if($controleur->estConnecte()!= false)
 	    {
+	       $site->js = "pageAchats";
+	       switch($params[2])
+	       {
+	           case 'ajouterachat':
+	               $site->left_sidebar = $controleur->ajoutAchat();
+	               break;
+	           
+	           case 'default' :	          
+	               $site->left_sidebar = $controleur->listeAchats();
+	               break;
 	    
+	    
+	    
+	    
+	        
+	        
+	        
+	        
+	        }
 	    }
-	    break;
+	    else 
+	    {
+	        $site->left_sidebar = $controleur->afficheNonAcces();
+	    }
+	    break;	
 		
 	case 'ventes' :
 	    if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
