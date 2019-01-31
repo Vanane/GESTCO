@@ -145,24 +145,20 @@ switch ($params[1]) {
 	case 'achats':
 	    if($controleur->estConnecte()!= false)
 	    {
-	       $site->js = "pageAchats";
-	       switch($params[2])
-	       {
-	           case 'ajouterachat':
-	               $site->left_sidebar = $controleur->ajoutAchat();
-	               break;
-	           
-	           case 'default' :	          
-	               $site->left_sidebar = $controleur->listeAchats();
-	               break;
-	    
-	    
-	    
-	    
+	        $site->js = "pageAchats";
 	        
-	        
-	        
-	        
+	        if(isset($params[2]))
+	        {
+	              switch($params[2])
+	              {
+	                   case 'ajouterachat':
+	                   $site->left_sidebar = $controleur->ajoutAchat();
+	                   break;
+	              }
+	        }
+	        else 
+	        {
+	            $site->left_sidebar = $controleur->listeAchats();
 	        }
 	    }
 	    else 

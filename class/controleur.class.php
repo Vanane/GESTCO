@@ -689,6 +689,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   
   public function ajoutAchat()//Nicolas - pas de plus car par d'idVente
   {
+      $idMouv = $this->vpdo->idDernierMouvement()->idMouv+1;
       $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Achats.</b><br>
@@ -697,18 +698,18 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 $return = $return.'
                 <bloc>
                    	<row>
-                        <p>Id Achat: <input type="text" readonly maxlength="24" required value=""> </p>
-                        <p>Date de l\'Achat :<input type="text"  required maxlength="12" value=""></p>
-                        <p>Id Article :<input type="text"  maxlength="48" required value=""> </p>
+                        <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"> </p>
+                        <p>Date de l\'Achat :<input type="text" id="date"  required maxlength="12" value=""></p>
+                        <p>Id Article :<input type="text" id="idArticle"  maxlength="48" required value=""> </p>
                         
                     </row>
                     <row>
-                        <p>Prix Unitaire :<input type="text"maxlength="64" required value=""> </p>
-                        <p>Quantité :<input type="text" maxlength="12" required value=""></p>
-                        <p>Commentaire :<input type="text"  required  value=""></p>
+                        <p>Prix Unitaire :<input type="text" id="prix"  maxlength="64" required value=""> </p>
+                        <p>Quantité :<input type="text" id="qte"  maxlength="12" required value=""></p>
+                        <p>Commentaire :<input type="text" id="commentaire"  required  value=""></p>
                     </row>
                     <row>
-                              <p>id Fournisseur : <input type="text"  required  value=""></p>           
+                        <p>id Fournisseur : <input type="text" id="idFour"  required  value=""></p>           
                     </row>
                         <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Confirmer achat</a>
                 </bloc>';
