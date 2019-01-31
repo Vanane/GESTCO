@@ -42,7 +42,7 @@ if(isset($_POST['action']))
                 //Si la ligne devis pour ce produit existe déjà.
                 //Permet d'éviter les erreurs de doublons, et cumule alors les deux
                 //Quantités des deux lignes en conflit
-                    $r['resultDevis'.$i] = $pdo->updateDetailDevis('qteDemandee', ($lesArticles['qteArticle'.$i]+$devis->qteDemandee));               
+                    $r['resultDevis'.$i] = $pdo->updateTableUneCondition('detail_devis', 'qteDemandee', ($lesArticles['qteArticle'.$i]+$devis->qteDemandee));               
                 else
                 {
                     //On récupère la TVA, calcule le TTC et insère.

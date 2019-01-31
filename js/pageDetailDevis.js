@@ -8,7 +8,8 @@ $("document").ready(function(){
 		        dataType: "json",
 		        data:
 		    	{
-		        	'idVente':$("#idVente").val(),
+		        	'action':'ajoutCommande',
+		        	'idV':$("#idVente").val(),
 		        	'dateCommande':(new Date().getFullYear()+'-'+
 				    				new Date().getMonth()+1+'-'+
 				    				new Date().getDate()+' '+

@@ -22,17 +22,17 @@ switch ($action)
         break;
     case 'modifCMUP':
         $nouveauCMUP = $_POST['nouveauCMUP'];
-        $pdo->updateArticle('dernierCMUP', $nouveauCMUP);
+        $pdo->updateTableUneCondition('Article', 'dernierCMUP', $nouveauCMUP, 'idArticle', $idA);
         break;
     case 'modifier':
         $nom = $_POST['nomArticle'];
         $barre = $_POST['codeBarre'];
         $fam = $_POST['famArticle'];
         $emp = $_POST['empArticle'];
-        $pdo->updateArticle("libelle", $nom);
-        $pdo->updateArticle("codeBarre", $barre);
-        $pdo->updateArticle("idFam", $fam);
-        $pdo->updateArticle("idEmp", $emp);
+        $pdo->updateTableUneCondition('Article', "libelle", $nom, 'idArticle', $idA);
+        $pdo->updateTableUneCondition('Article', "codeBarre", $barre, 'idArticle', $idA);
+        $pdo->updateTableUneCondition('Article', "idFam", $fam, 'idArticle', $idA);
+        $pdo->updateTableUneCondition('Article', "idEmp", $emp, 'idArticle', $idA);
         break;
     case 'ajouter':                  
         $pdo->insertMouvement(  $_POST['idMouv'], $_POST['typeMouv'],

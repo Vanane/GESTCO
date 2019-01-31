@@ -169,7 +169,7 @@ class page_base {
                 </ul>',	        
 	    );      	       
 	        
-		if(!(isset($_SESSION['id']) && isset($_SESSION['type'])))
+		if(!isset($_SESSION['id']) && !isset($_SESSION['type']))
 		{
 		    echo'
 				<ul id="btn-connexion">

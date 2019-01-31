@@ -1,9 +1,11 @@
 $("document").ready(function(){
 	
 	var rowCount = $("#details-preparation-articles row").length;//On sauvegarde le nombre d'articles.	
-	
+	var datas = {}; //Tableau de données envoyé à la requête ajax.
+	toggleCSS('aide', 'display', 'block', 'none');//Sur clic, masque le texte de présentation
+
 	$("#btnAide").click(function(){
-		$("aide").css('display', 'none');//Sur clic, masque le texte de présentation
+		toggleCSS('aide', 'display', 'none', 'block');//Sur clic, masque le texte de présentation
 	});	
 	
 	for(i=1;i<=rowCount;i++)
@@ -48,7 +50,6 @@ $("document").ready(function(){
 	
 	$("#validePrepa").click(function(){
 		let error = false;
-		let reliquat = false;
 		let i = 0;
 		while(i<=rowCount)
 		{
@@ -58,7 +59,6 @@ $("document").ready(function(){
 				if(parseInt($("#rowArticle"+i).find("#qteFournie").val()) < parseInt($("#rowArticle"+i).find("#qteDemandee").val()))
 				{
 					alert("L'article "+$("#btnArticle"+i).html()+" n'a pas été remis en quantité suffisante. Souhaitez-vous continuer ?");
-					reliquat = true;			
 				}
 			}
 			else
@@ -68,16 +68,42 @@ $("document").ready(function(){
 			}
 		}
 		
-		//If error : Rien
-		//If reliquat : action = reliquat, Else : action = pasReliquat 
-		
-		
+		if(!error)
+		{		
+			datas['idV'] = parseInt($('#idVente').val());
+			datas['nbArticles'] = rowCount;
+			datas['idE'] = $("#idE").attr('data-ide');
+			for(i=1;i<=rowCount;i++)
+			{
+				let inc = i;
+				datas['idA'+inc] = $("#btnArticle"+inc).html();
+				datas['qteD'+inc] = parseInt($("#rowArticle"+inc).find("#qteDemandee").val());
+				datas['qteF'+inc] = parseInt($("#rowArticle"+inc).find("#qteFournie").val());				
+			}
+			
+			$.ajax({ //AJAX pour valider la préparation.
+		        type: "POST",
+		        dataType: "json",
+		        data:
+		    	{
+		        	'action':'validePrepa',
+		    		'datas':datas
+		    	},
+		        url: "../ajax/detailsPrepaAjax.php",
+		        success: function(r) {
+		        	alert("Préparation enregistrée !");
+		        	console.log(r);
+		        	history.back();
+		        },
+		        error: function (xhr, ajaxOptions, thrownError)
+		        {
+		            console.log(xhr.status);
+		            console.log(thrownError);
+		            console.log(ajaxOptions);
+		    	}
+			});	
+		}
 	});
-	
-	
-	
-	
-	
 });
 
 function toggleCSS(el,c,v1,v2)//Inverse les propriétés si l'une est présente
@@ -88,3 +114,4 @@ function toggleCSS(el,c,v1,v2)//Inverse les propriétés si l'une est présente
 	else
 		el.css(c, v2);
 }
+
