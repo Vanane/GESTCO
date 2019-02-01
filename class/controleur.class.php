@@ -695,23 +695,25 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         Voici l\'outil de gestion des Achats.</b><br>
                         Vous pouvez sur cette page ajoutez un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
                     </p> ';
-$return = $return.'
+      $return = $return.'
                 <bloc>
                    	<row>
-                        <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"> </p>
-                        <p>Date de l\'Achat :<input type="text" id="date"  required maxlength="12" value=""></p>
-                        <p>Id Article :<input type="text" id="idArticle"  maxlength="48" required value=""> </p>
+                        <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"></p>
+                        <p>Date de l\'Achat : <input type="text" id="date"  required maxlength="12" value=""></p>
+                        <p>Id Article : <input type="text" id="idArticle"  maxlength="48" required value=""> </p>
                         
                     </row>
                     <row>
-                        <p>Prix Unitaire :<input type="text" id="prix"  maxlength="64" required value=""> </p>
-                        <p>Quantité :<input type="text" id="qte"  maxlength="12" required value=""></p>
-                        <p>Commentaire :<input type="text" id="commentaire"  required  value=""></p>
+                        <p>Prix Unitaire : <input type="text" id="prix"  maxlength="64" required value=""></p>
+                        <p>Quantité : <input type="text" id="qte"  maxlength="12" required value=""></p>
+                        <p>Commentaire : <input type="text" id="commentaire"  required  value=""></p>
                     </row>
                     <row>
                         <p>id Fournisseur : <input type="text" id="idFour"  required  value=""></p>           
                     </row>
-                        <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Confirmer achat</a>
+                        <a onclick=\'ajouterachat()\' class="btn-classique">
+                        <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+                        Confirmer achat</a>
                 </bloc>';
       
       $return=$return.'</div></div>';
