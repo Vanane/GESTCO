@@ -121,14 +121,12 @@ public function confirmationLogin($login,$mdp)
 	    return $retour;
 }
 	
-
 public function estConnecte()
 {
         if(isset($_SESSION['id']) && isset($_SESSION['type'])) // on verfie que l'utilisateur a bien un id et un type
             return $_SESSION['type'];// Si oui on retourne le type qui lui servira à ce connecter aux pages dont il a accès,
             else return false;// Sinon retourne false et donc a seulement accès au page sans sécurité.
 }
-
 
 public function afficheNonAcces()
 {
@@ -149,7 +147,7 @@ public function afficheListeDevis()
                     Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
                     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
                     Si vous souhaitez ajouter un devis, cliquez sur le bouton "Ajouter un devis".
-                    <a href="Ajouter" id="btn-ajouter" class="bou-classique">Ajouter un Devis</a>
+                    <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter un Devis</a>
                 </p>';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	
 	$l = $this->vpdo->listeVenteAvecDevis();
@@ -384,7 +382,8 @@ public function afficheListeDevis()
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 	
 public function listeSociete($types,$type,$idType)
-{    
+{    // je récupère 3 données, type, types et id idType
+     //ils me permettent d'adapter ma page en client ou en fournisseur en fonction de l'appel effectuer dans index
 $return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em">
                     <h4>Voici l\'outil de gestion des  '.$types.' </h4><br>
                     Vous pouvez accéder au contact pour chaque societe en cliquant sur <b>"Voir détails"</b>.<br>                  
@@ -393,17 +392,18 @@ $return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em
                     Si vous souhaitez modifier les informations d\'une societe ou d\'un contact, cliquez sur <b>"Voir détails"</b>.<br>
                     Si vous souhaitez ajouter une nouvelle societe, cliquez sur le bouton <b>"Ajouter une Societe"</b>.<br>
 
-                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter une société</a>
-                    <a href="ajoutercontactsociete" id="btn-confirmerModifEntreprise" class="bou-classique">Ajouter un contact</a>';                    
-if ($types=="clients"){
+                    <a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter une société</a>
+                    <a href="ajoutercontactsociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter un contact</a>';                    
+if ($types=="clients")
+{//je vérifie si l'utilisateur a cliquer sur clients ou sur fournisseurs
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
-    $lscof = $this->vpdo->listeSocietesClients();
+    $lscof = $this->vpdo->listeSocietesClients();// en fonction de la réponse je récupère une liste différente
 }
 else{
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
     $lscof = $this->vpdo->listeSocietesFournisseurs();
 }
-while($ls = $lscof->fetch(PDO::FETCH_OBJ))
+while($ls = $lscof->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la liste
     {
     $return = $return.'
                 <bloc>
@@ -423,8 +423,9 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))
                     </row>
                 </bloc>';
     }    
-    $return=$return.'</div></div>';
-    return $return;
+    $return=$return.'</div></div>';// chaque boucle effectuer affiche les données d'une société, 
+    //il y a aussi un bouton "Voir détails" qui est créé qui envoie sur le lien de la société souhaité (avec : href="'.$ls->idSociete.'")
+    return $return;// je retourne la totalité de l'html
 }
 
 /* ************************************************************************************************************************************* */
@@ -433,13 +434,14 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))
 
 
 public function listeContact($idSociete, $types,$type, $idType)
-{
-    $s = $this->vpdo->societeParSonId($idSociete);
-    if ($types=="clients")
+{   // je récupère 4 données, puisque qu'il sagit de la liste des contacts pour une société en particulier, j'ai besoin de l'id de la Société.
+    // je récupères aussi types, type et idType, toujours pour m'addapter en fournisseur ou client
+    $s = $this->vpdo->societeParSonId($idSociete);//je récupère la société avec l'id passer en paramètre de la page
+    if ($types=="clients")//adapte la liste de contact en focntion du types
     {
         $lccof = $this->vpdo->listeContactClientsParId($idSociete);
     }
-    else
+    else 
     {
         $lccof = $this->vpdo->listeContactFournisseursParId($idSociete);
     }
@@ -465,10 +467,15 @@ public function listeContact($idSociete, $types,$type, $idType)
                       <row>
                         <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required value='.$s->fax.'> </p>          
                         <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required value='.$s->mail.'></p>
-                        <a onclick="modificationSociete()" class="btn-classique">Modifier les informations</a>
+                        <a onclick="modificationSociete()" class="btn-classique">
+                        <span class="tooltip" id="ttUpdateSocieteInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+                        Modifier les informations</a>
+    
                       </row> 
                 </div> 
-            <h4>Liste des contacts :</h4>';
+            <h4>Liste des contacts :</h4>';//j'affiche les données de l'entreprise. 
+   //Je crée un bouton qui fait appel à une page Js puis à Ajax afin de modifier les informations de l'entreprise. 
+   // L'utilisaiton de span class"tooltip" me permet d'afficher un pop-up quand les informations les plus improtantes ne sont pas remplit.
 
     while($ligneIdContact = $lccof->fetch(PDO::FETCH_OBJ))
     { 
@@ -484,12 +491,16 @@ public function listeContact($idSociete, $types,$type, $idType)
         <p>Id société du contact : <input type="text" id="societe'.$ligneIdContact->$idType.'" required value='.$ligneIdContact->idSociete.'></p>
      </row>   
      <row>
-        <a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="btn-classique">Modifier le contact</a>
+        <a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="btn-classique">
+        <span class="tooltip" id="ttModifContactInfo'.$ligneIdContact->$idType.'" title="Vous n\'avez pas rempli toutes les informations !"></span>
+        Modifier le contact</a>
     </row>
 </div>';
     }
     $return = $return.'</div><a href="ajoutercontact/'.$idSociete.'" class="btn-classique">Ajouter un contact</a>';
-    return $return;
+    return $return; //j'affiche les données de toutes les informations des contacts de l'entreprise. 
+    //Je crée un bouton qui fait appel à une page Js puis à Ajax afin de modifier les informations du contact.
+    // L'utilisaiton de span class"tooltip" me permet d'afficher un pop-up quand les informations ne sont pas remplit.
 }
 
 
@@ -500,12 +511,14 @@ public function listeContact($idSociete, $types,$type, $idType)
 
 public function ajouterContact($idSociete, $type)
 {  
-    if ($type=="client")
-    {$idContact = $this->vpdo->idDernierContactClient()->idClient+1;}
-    else
+    // je récupère 2 données, puisque qu'il sagit du bouton pour créer un contact pour une société en particulier, j'ai besoin de l'id de la Société.
+    // je récupere toujours type, pour savoir si il sagit d'un contact client ou fournisseur.
+    if ($type=="client")//je m'adapte
+    {$idContact = $this->vpdo->idDernierContactClient()->idClient+1;}//je récupère le dernier id utilisé et y ajoute 1
+    else                                                                // de cette manière je suis sur que l'id n'est pas utiliser
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
    
-    $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;
+    $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;// je récupère le nom de la société pour afficher le nom dans le texte
     $return='<div class="conteneur border div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts pour <b>'.$infoSociete.'</b><br>
@@ -526,11 +539,14 @@ public function ajouterContact($idSociete, $type)
         <p>id société '.$infoSociete.' : <input type="text" readonly required id="societe'.$type.'" value="'.$idSociete.'"></p>
      </row>
      <row>
-        <a onclick=\'ajoutercontact("'.$type.'")\' class="btn-classique">Valider le contact</a>  
+        <a onclick=\'ajoutercontact("'.$type.'")\' class="btn-classique">
+        <span class="tooltip" id="ttInsertContactInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+        Valider le contact</a>  
     </row>
 </div>';
 	
-	return $return;
+	return $return;// J'affiche les cases qui doivent être remplie. Encore une fois js appellé pour effectuer une requete ajax. 
+	// toujours l'utilisation de span pour vérifier que les informations sont bien remplies.
 }
 
 /* ************************************************************************************************************************************* */
@@ -538,13 +554,13 @@ public function ajouterContact($idSociete, $type)
 /* ************************************************************************************************************************************* */
 
 
-public function ajouterContactSociete($type)
-{
-    if ($type=="client")
+public function ajouterContactSociete($type)// je récupère le type
+{   
+    if ($type=="client")//je m'adapte
     {$idContact = $this->vpdo->idDernierContactClient()->idClient+1;}
     else
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
-    $lesSocietes = $this->vpdo->listeSociete();
+    $lesSocietes = $this->vpdo->listeSociete();//je crée une liste des sociétés
     //$s=$this-> vpdo ->listeSociete();
     $return='<div class="conteneur border div-liste-entreprises">
                     <p style="margin-left: 1em">
@@ -556,34 +572,36 @@ public function ajouterContactSociete($type)
 <div id="bloc-liste" class="conteneur div-liste-entreprises">
     <row>
         <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
-        <p>Id & nom société :<span class="tooltip" id="ttidSociete" title="Vous n\'avez pas choisi de société !"></span>
-        <select id="idSocieteContact"><option selected hidden disabled></option>'; //Note : voir le span
+        <p>Id & nom société(*) :<span class="tooltip" id="ttInsertContactIdSociete" title="Vous n\'avez pas choisi de société !"></span>
+        <select id="idSocieteContact"><option selected hidden disabled></option>'; 
         while($e = $lesSocietes->fetch(PDO::FETCH_OBJ))
             {
                 $return = $return.'<option value="'.$e->idSociete.'">'.$e->idSociete.' - '.$e->nom.'</option>';
             }
-        $return=$return.'</select></p><p>Nom du contact(*) : <input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
+        $return=$return.'</select></p><p>Nom du contact(*) :<input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
     </row>
     <row>
-        <p>Prenom du contact(*) : <input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
-        <p>Téléphone du contact(*) : <input type="text" id="tel'.$type.'" maxlength="10" required  value=""></p>
-        <p>Mail du contact(*) : <input type="text" id="mail'.$type.'" maxlength="40" required value=""></p>    
+        <p>Prenom du contact(*) :<input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
+        <p>Téléphone du contact(*) :<input type="text" id="tel'.$type.'" maxlength="10" required  value=""></p>
+        <p>Mail du contact(*) :<input type="text" id="mail'.$type.'" maxlength="40" required value=""></p>    
      </row>
      <row>
-        <a onclick=\'ajoutercontactsociete("'.$type.'")\' class="bou-classique">Valider le contact</a>
+            
+            <a onclick=\'ajoutercontactsociete("'.$type.'")\'class="btn-classique"> 
+            <span class="tooltip" id="ttInsertContactInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+             Valider le contact</a>
     </row>
 </div>';
-    //<p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"></span><select id="idClient">
-    //<option selected hidden disabled></option>';
-    return $return;
+    return $return;//j'affiche une liste de société, ainsi l'utilisateur peur ajouter un contact à n'importe qu'elle entreprise.
+    // même une entreprise qui n'a pas le type.
 }
 
 
 /* ************************************************************************************************************************************* */
 /* *****************************************************AUTRE*METHODE*MEME*BUT********************************************************** */
-/* ***************************************************************************************************************************************/
+/* ************************************************************************************************************************************* */
 
-public function ajouterSociete($type)
+public function ajouterSociete($type)//je récupère toujours le type
     {
         $idSociete = $this->vpdo->idDernierSociete()->idSociete+1;
         $return='<div class="conteneur border div-liste-entreprises">
@@ -607,17 +625,104 @@ public function ajouterSociete($type)
      <row>
          <p>  fax de l\'entreprise : <input type="text" id="faxSociete" required maxlength="48"  value=""> </p>          
          <p>  Mail de l\'entreprise : <input type="text" id="mailSociete" required maxlength="40"  value=""></p>
-    </row>
-         <a onclick=\'ajoutersociete("'.$type.'")\' class="bou-classique"> Valider </a>
+         <a onclick=\'ajoutersociete("'.$type.'")\' class="btn-classique"> 
+         <span class="tooltip" id="ttInsertSocieteInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+         Valider </a>
     </row>
 </div>';
         
-        return $return;
+        return $return;//Comme ci-dessus, cette fois je récupère juste le type pour pouvoir l'envoyer dans le Js
     }
 
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
 /* ****************************************FIN*GESTION*LISTE*CLIENT*ET*FOURNISSEUR****************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* ****************************************************DEBUT*LISTE*DES*ACHATS*********************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+    
+   public function listeAchats()
+    {
+        $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des Achats.</b><br>
+                        Si vous souhaitez ajouter un nouvelle Achat, cliquez sur <b>" Ajouter achat"</b>.<br>
+                        <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter achat</a>
+                    </p> ';
+    $lads = $this->vpdo->listeAjoutdeStock();
+while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la liste
+   { 
+       $lf=$this->vpdo->societeParSonId($ls->idSociete);
+       $la=$this->vpdo->articleParSonId($ls->idArticle);
+       $return = $return.'
+                <bloc>
+                   	<row>
+                        <p>Date de l\'Achat :<input type="text" readonly maxlength="12" value='.$ls->date.'></p>
+                        <p>Quantité :<input type="text" readonly maxlength="12" value='.$ls->qte.'></p>
+                        <p>Fournisseur : <input type="text" readonly  value="'.$ls->idSociete.' - '.$lf->nom.'"></p>                       
+                    </row>
+                    <row>
+                        <p>Id Article :<input type="text" readonly maxlength="48" value='.$ls->idArticle.'> </p>
+                        <p>Prix Unitaire :<input type="text" readonly maxlength="64" value="'.$ls->prix.'"> </p>
+                        <p>Commentaire :<input type="text" readonly value='.$ls->commentaire.'></p>
+                    </row>
+                    <row>
+                        <p>Libelle de l\'Article :<input type="text" readonly maxlength="48" value='.$la->libelle.'> </p>
+                        <p>Prix Total Achat :<input type"text" readonly value ='.($ls->prix) *($ls->qte).'></p>
+                        <p>Id Achat: <input type="text" readonly maxlength="24" value='.$ls->idMouv.'> </p>                       
+                    </row>
+                </bloc>';
+   }
+   $return=$return.'</div></div>';
+   return $return;
+  }
+  
+/* ************************************************************************************************************************************* */
+/* ************************************************FIN*LISTE*DES*ACHATS****DEBUT*AJOUT*ACHAT******************************************** */
+/* ************************************************************************************************************************************* */
+  
+  
+  public function ajoutAchat()//Nicolas - pas de plus car par d'idVente
+  {
+      $idMouv = $this->vpdo->idDernierMouvement()->idMouv+1;
+      $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des Achats.</b><br>
+                        Vous pouvez sur cette page ajoutez un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
+                    </p> ';
+$return = $return.'
+                <bloc>
+                   	<row>
+                        <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"> </p>
+                        <p>Date de l\'Achat :<input type="text" id="date"  required maxlength="12" value=""></p>
+                        <p>Id Article :<input type="text" id="idArticle"  maxlength="48" required value=""> </p>
+                        
+                    </row>
+                    <row>
+                        <p>Prix Unitaire :<input type="text" id="prix"  maxlength="64" required value=""> </p>
+                        <p>Quantité :<input type="text" id="qte"  maxlength="12" required value=""></p>
+                        <p>Commentaire :<input type="text" id="commentaire"  required  value=""></p>
+                    </row>
+                    <row>
+                        <p>id Fournisseur : <input type="text" id="idFour"  required  value=""></p>           
+                    </row>
+                        <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Confirmer achat</a>
+                </bloc>';
+      
+      $return=$return.'</div></div>';
+      return $return;
+  }
+  
+  
+  
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* ***********************************************************FIN*AJOUT*ACHAT*********************************************************** */
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
     

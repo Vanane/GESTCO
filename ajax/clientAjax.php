@@ -13,14 +13,14 @@ switch ($action)
         break;*///annuler car il faut aussi supprimer les ventes
    
     case 'modifierSociete':
-        $i=$_POST['idSociete'];
-        $n=$_POST['nomSociete'];
-        $sw=$_POST['siteWebSociete'];
-        $t=$_POST['telSociete'];
-        $f=$_POST['faxSociete'];
-        $a=$_POST['adresseSociete'];
-        $ra=$_POST['raisonSociete'];
-        $m=$_POST['mailSociete'];
+        $i=$_POST['id'];
+        $n=$_POST['nom'];
+        $sw=$_POST['siteWeb'];
+        $t=$_POST['tel'];
+        $f=$_POST['fax'];
+        $a=$_POST['adresse'];
+        $ra=$_POST['raison'];
+        $m=$_POST['mail'];
         $r['result']=$pdo->updateSociete('nom',$n,'idSociete',$i);
         $r['result']=$pdo->updateSociete('siteWeb',$sw,'idSociete',$i);
         $r['result']=$pdo->updateSociete('telephone',$t,'idSociete',$i);
