@@ -31,7 +31,7 @@ public function afficheDetailsDevis($idVente)
     $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
     $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
     $retour = '
-        <div class="conteneur">
+        <div class="conteneur border">
             <div id="details-vente">
                 <row>
                     <p>Responsable Devis : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
@@ -87,22 +87,22 @@ public function afficheDetailsDevis($idVente)
 public function formulaireLogin()
 {
 	    
-	    return '    <form action="confirmation" method="post">
-    Votre login : <input type="text" name="login">
-    <br />
-    Votre mot de passe : <input type="password" name="pwd"><br />
-    <input type="submit" value="Connexion">
-    </form>';
+	    return '
+        <div class="conteneur">
+            <form id="form-connexion" action="confirmation" method="post">
+                <span>Identifiant :</span><input type="text" name="login"><br>
+                <span>Mot de passe :</span><input type="password" name="pwd"><br/>
+                <a class="btn-classique" onclick="$(\'#form-connexion\').submit()">Connexion</a>
+            </form>';
 }	
 	
 public function confirmationLogin($login,$mdp)
 {  // verifie si l'identifiant et le mots de passe est valide
 	    $mdp=md5($mdp);
 	    $result = $this->vpdo->listeComptes($login,$mdp)->fetch(PDO::FETCH_OBJ);
+	    $retour = '';
 	    if($result != null)
 	    {
-	        echo 'connecte';
-	        session_start ();
 	        // on enregistre les parametres du visiteur comme variables de session
 	        $_SESSION['id'] = $result->identifiant;// son identifiant
 	        $_SESSION['idEmploye'] = $result->idEmploye; //Son id de base de données 
@@ -114,10 +114,11 @@ public function confirmationLogin($login,$mdp)
 	    }
 	    else {
 	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
-	        echo '<body onLoad="alert(\'Identifiant ou mots de passe incorrect ! \')">';
+	        $retour =  '<script>alert(\'Identifiant ou mots de passe incorrect ! \')</script>';
 	    }
-	    // puis on le redirige vers la page d'accueil	    
-	    header ('location: Accueil');	    
+	    // puis on le redirige vers la page d'accueil	
+	    $retour = $retour."<script>location = 'Accueil'</script>";
+	    return $retour;
 }
 	
 public function estConnecte()
@@ -187,8 +188,7 @@ public function afficheListeDevis()
 	
 
 	public function afficheListePreparations()
-	{
-	    
+	{	    
 	    $return='
             <div class="conteneur div-liste-preparations">
                 <h4>Liste des commandes en préparation :</h4>
@@ -205,7 +205,7 @@ public function afficheListeDevis()
 
 ';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	    
-	    $l = $this->vpdo->listeVenteAvecPreparation();
+	    $l = $this->vpdo->listePreparationsAFaire($_SESSION['idEmploye']);
 	    while($ligneIdVente = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
 	    {
 	        $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
@@ -218,7 +218,7 @@ public function afficheListeDevis()
 	        $return = $return.'
                 <bloc>
                     <row>
-                        <p>Code vente :<input type="text" readonly value='.$ligneIdVente->idVente.'></p>
+                        <p>Code vente :<input id="idV" type="text" readonly value='.$ligneIdVente->idVente.'></p>
                         <p>Date d\'envoi :<input type="text" readonly value="'.$v->dateCommande.'"></p>
                     </row>
                     <row>
@@ -226,13 +226,14 @@ public function afficheListeDevis()
                         <p>Code client :<input type="text" readonly value='.$c.'></p>
                     </row>
                     <row>
-                       <a href="'.$ligneIdVente->idVente.'" id="btn-voirDetail" class="btn-classique">Préparer</a>
+                       <a id="btnPrepa'.$v->idVente.'" class="btn-classique" data-idVente="'.$v->idVente.'">Préparer</a>
                     </row>
                 </bloc>
     ';
 	    }
 	    // on rajoute le bouton pour ajouter un Devis
-	    $return = $return.'</div>';
+	    $return = $return.'</div>
+                       <input hidden id="idE" value="'.$_SESSION['idEmploye'].'">';
 	    return $return;   // on retourne la totalité du texte
 	}
 	
@@ -243,13 +244,13 @@ public function afficheListeDevis()
 	    $v = $this->vpdo->venteParSonId($idVente);
 	    $c = $this->vpdo->clientParSonId($v->idClient);
 	    $s = $this->vpdo->societeParSonId($c->idSociete);
-	    $lesDetails = $this->vpdo->listeDetailsCommandeParIdVente($v->idVente);
-	    $e = $this->vpdo->employeParSonId($lesDetails->fetch(PDO::FETCH_OBJ)->idEmploye);
+	    $lesDetails = $this->vpdo->listeDetailsPreparationParIdVente($v->idVente);
+	    $e = $this->vpdo->employeParSonId($_SESSION['idEmploye']);
 	    
 	    $retour = '
-        <div class="conteneur">
+        <div class="conteneur border">
+            <a id="btnAide" class="btn-classique btn-large">Masquer/Afficher l\'aide</a>
             <aide>
-                <a id="btnAide" class="btn-classique btn-large">Masquer l\'aide</a>
                 <h4>Préparation de commande :</h4>
                 <p>
                     Voici l\'interface de préparation de commande.
@@ -270,7 +271,7 @@ public function afficheListeDevis()
             <div id="details-vente">
                 <h4>Informations Vente :</h4>
                 <row>
-                    <p>Responsable Commande : <input type="text" data-employe="'.$e->idEmploye.'" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                    <p>Responsable Commande : <input id="idE" type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" data-idE="'.$e->idEmploye.'" readonly></p>
                 </row>                    
                 <row>
                     <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
@@ -282,23 +283,22 @@ public function afficheListeDevis()
             <div id="details-preparation-articles">
         ';
 	    
-	    $lesDetails = $this->vpdo->listeDetailsCommandeParIdVente($v->idVente);//On récupère les détaisl de la vente	 
+	    $lesDetails = $this->vpdo->listeDetailsPreparationParIdVente($v->idVente);//On récupère les détaisl de la vente	 
 	    $i=0;//Incrément pour donner un id différent à chaque bloc article
         while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
         {
             $i++;
             $a = $this->vpdo->articleParSonId($d->idArticle);
             $retour = $retour.'
-                    <a id="btnArticle'.$i.'"class="btn-classique btn-details-preparation">'.$d->idArticle.'</a>
-                    <row id="rowArticle'.$i.'">
-                        <p>Code Article : <input id="codeArticle" type="text" value="'.$a->codeBarre.'" readonly></p>
-                        <p>Nom :<input type="text" value="'.$a->libelle.'" readonly></p>
-                        <p>Emplacement<input type="text" value="'.$a->idEmp.'" readonly></p>
-                        <p>Scanner le code : <input id="codeScan" type="number"></p>
-                        <p class="p-demi">A fournir :<input id="qteDemandee" type="number" value='.$d->qteDemandee.' min=0 readonly></p>
-                        <p class="p-demi right">Fourni :<input id="qteFournie" type="number" value=0 min=0 readonly></p>
-                        <p><a href="../Articles/'.$d->idArticle.'" class="btn-classique">Details article</a></p>
-                    </row>
+                <a id="btnArticle'.$i.'"class="btn-classique btn-details-preparation">'.$d->idArticle.'</a>
+                <row id="rowArticle'.$i.'">
+                    <p>Code Article : <input id="codeArticle" type="text" value="'.$a->codeBarre.'" readonly></p>
+                    <p>Nom :<input type="text" value="'.$a->libelle.'" readonly></p>
+                    <p>Emplacement<input type="text" value="'.$a->idEmp.'" readonly></p>
+                    <p>Scanner le code : <input id="codeScan" type="number"></p>
+                    <p class="p-demi">A fournir :<input id="qteDemandee" type="number" value='.$d->qteDemandee.' min=0 readonly></p>
+                    <p class="p-demi right">Fourni :<input id="qteFournie" type="number" value='.$d->qteFournie.' min=0 readonly></p>
+                </row>
                 ';
         }
         $retour = $retour.'
@@ -320,7 +320,7 @@ public function afficheListeDevis()
 	    $lesClients = $this->vpdo->listeClients();
 	    $lesArticles = $this->vpdo->listeArticles();
 	    $return = '
-            <div class="conteneur">
+            <div class="conteneur border">
                 <div id="details-vente">
                     <row>
                         <p>Responsable Devis : <input id="respDevis" type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
@@ -519,7 +519,7 @@ public function ajouterContact($idSociete, $type)
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
    
     $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;// je récupère le nom de la société pour afficher le nom dans le texte
-    $return='<div class="conteneur div-liste-entreprises">
+    $return='<div class="conteneur border div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts pour <b>'.$infoSociete.'</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
@@ -562,7 +562,7 @@ public function ajouterContactSociete($type)// je récupère le type
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
     $lesSocietes = $this->vpdo->listeSociete();//je crée une liste des sociétés
     //$s=$this-> vpdo ->listeSociete();
-    $return='<div class="conteneur div-liste-entreprises">
+    $return='<div class="conteneur border div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts.<br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
@@ -604,7 +604,7 @@ public function ajouterContactSociete($type)// je récupère le type
 public function ajouterSociete($type)//je récupère toujours le type
     {
         $idSociete = $this->vpdo->idDernierSociete()->idSociete+1;
-        $return='<div class="conteneur  div-liste-entreprises">
+        $return='<div class="conteneur border div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout de nouvelle entreprise.</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider"</b>.<br>
@@ -775,7 +775,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         $lesTypes = $this->vpdo->listeTypesMouvements();
         $lesFournisseurs = $this->vpdo->listeSocietesFournisseurs();
         $retour = '
-    <div class="conteneur">
+    <div class="conteneur border">
         <div id="details-infos-article">
             <row>
                 <p>Nom Article : <input id="nomArticle" type="text" value="'.$a->libelle.'"></p>

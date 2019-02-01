@@ -199,7 +199,8 @@ switch ($params[1]) {
     		                    $site-> left_sidebar=$controleur->afficheListeDevis();
     		                }
     		            break;
-    		        case 'commande' :
+    		        case 'commandes' :
+    		            $site->left_sidebar = "Faire un système comme pour devis : quand on clique, on passe les détails commande en detail préparation, en mettant idEmploye = NULL. La liste Préparation derrière se servira de ça pour reconnaitre les ventes déjà affectées ou non (une prépa est affectée à l'user connecté quand il clique sur 'Préparer).";
     		            break;
     		        case 'livraison' :
     		            break;
@@ -235,6 +236,7 @@ switch ($params[1]) {
 	        }
 	        else
 	        {
+                $site->js = "pageListePrepa";
 	            $site->left_sidebar = $controleur->afficheListePreparations();
 	        }
 	    }
