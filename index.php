@@ -145,7 +145,7 @@ switch ($params[1]) {
 	case 'achats':
 	    if($controleur->estConnecte()!= false)
 	    {
-	        $site->js = "pageAchats";
+	        $site->js = "pageAchat";
 	        
 	        if(isset($params[2]))
 	        {

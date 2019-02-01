@@ -689,6 +689,8 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   
   public function ajoutAchat()//Nicolas - pas de plus car par d'idVente
   {
+      $lesFournisseurs= $this->vpdo->listeSocietesFournisseurs();
+      $lesArticles= $this->vpdo->listeArticles();
       $idMouv = $this->vpdo->idDernierMouvement()->idMouv+1;
       $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
@@ -699,18 +701,25 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                 <bloc>
                    	<row>
                         <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"></p>
-                        <p>Date de l\'Achat : <input type="text" id="date"  required maxlength="12" value=""></p>
-                        <p>Id Article : <input type="text" id="idArticle"  maxlength="48" required value=""> </p>
+                        <p>Date de l\'Achat : <input type="date" id="date"  required maxlength="12" value=""></p>
+                        <p>Id Article : <select id="idArticle"><option selected hidden disabled></option>';
+  while($f = $lesArticles->fetch(PDO::FETCH_OBJ))
+  {
+      $return = $return.'<option value="'.$f->idArticle.'">'.$f->idArticle.'</option>';
+  }
                         
-                    </row>
+  $return = $return.'</select></p>              
+                   </row>
                     <row>
                         <p>Prix Unitaire : <input type="text" id="prix"  maxlength="64" required value=""></p>
                         <p>Quantité : <input type="text" id="qte"  maxlength="12" required value=""></p>
+                        <p>id Fournisseur : <select id="idFour"><option selected hidden disabled></option>';
+                        while($f = $lesFournisseurs->fetch(PDO::FETCH_OBJ))
+                        {
+                              $return = $return.'<option value="'.$f->idSociete.'">'.$f->idSociete.' - '.$f->nom.'</option>';
+                        }
+                         $return = $return.'</select></p></row>        
                         <p>Commentaire : <input type="text" id="commentaire"  required  value=""></p>
-                    </row>
-                    <row>
-                        <p>id Fournisseur : <input type="text" id="idFour"  required  value=""></p>           
-                    </row>
                         <a onclick=\'ajouterachat()\' class="btn-classique">
                         <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
                         Confirmer achat</a>
@@ -719,7 +728,13 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       $return=$return.'</div></div>';
       return $return;
   }
-  
+  /*
+  <select id="idSocieteContact"><option selected hidden disabled></option>';
+  while($e = $lesSocietes->fetch(PDO::FETCH_OBJ))
+  {
+      $return = $return.'<option value="'.$e->idSociete.'">'.$e->idSociete.' - '.$e->nom.'</option>';
+  }
+  */
   
   
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
