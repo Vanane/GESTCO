@@ -32,7 +32,7 @@ if(isset($_POST['action']))
             $lesArticles =$_POST['dArticles'];//Et la liste des articles
             
             //On insère la vente dans la base pour les clés étrangères
-            $r['resultVente'] = $pdo->insertVente($laVente['idVente'], $laVente['idClient'], $laVente['idEmploye'], $laVente['dateDevis']);
+            $r['resultVente'] = $pdo->insertVente($laVente['idVente'], $laVente['idClient'], $laVente['idEmploye'], $pdo->laDateAujourdhui());
             
             //Pour chaque ligne allant de 1 à lesArticles.Count()
             for($i=1;$i<=$laVente['nbArticles'];$i++)

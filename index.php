@@ -13,8 +13,9 @@ if (!isset($params[1]))
 }
 else 
 {
-    $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.go(-1)">Retour</a>';	    
-}	
+    $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.back()">Retour</a>';	    
+}
+
 switch ($params[1]) {
 	case 'accueil' :
 		$site->titre='Accueil';
@@ -145,7 +146,7 @@ switch ($params[1]) {
 	case 'achats':
 	    if($controleur->estConnecte()!= false)
 	    {
-	        $site->js = "pageAchats";
+	        $site->js = "pageAchat";
 	        
 	        if(isset($params[2]))
 	        {
@@ -170,7 +171,6 @@ switch ($params[1]) {
 	case 'ventes' :
 	    if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
 	    {
-	        $site->left_sidebar = $site->afficheSousMenuVente();	        
 		    if(isset($params[2]))//Si l'adresse est /Ventes/xxx
 		    {
     		    switch($params[2])
@@ -181,32 +181,50 @@ switch ($params[1]) {
     		                    switch($params[3])
     		                    {
     		                        case 'ajouter'://Si l'adresse est /Ventes/Devis/Ajouter
-    		                            $site->js = "pageAjoutDevis";    		                            
-                                        $site->left_sidebar = $controleur->afficheAjoutDevis();
-    		                            break;
-    		                        case 'confirmer': //Si /Confirmer   		                            
-    		                            $site->left_sidebar = 'confirmation';
+    		                            $site->js = "pageAjoutDevisOuCommande";    		                            
+    		                            $site->left_sidebar = $controleur->afficheAjoutDevisOuCommande();
     		                            break;
     		                        default://Si autre
-    		                                $site->js="pageDetailDevis";        		                               
+    		                                $site->js="pageDetailDevis"; 
+    		                                $site->titre = "Devis n°".$params[3];    		                                
     		                                $site->left_sidebar =$controleur->afficheDetailsDevis($params[3]);
     		                                break;
     		                  }
     		                }
     		                else
     		                {
+    		                    $site->js = "pageListeDevis";
     		                    $site->titre="Liste Devis";
     		                    $site-> left_sidebar=$controleur->afficheListeDevis();
     		                }
     		            break;
     		        case 'commandes' :
-    		            $site->left_sidebar = "Faire un système comme pour devis : quand on clique, on passe les détails commande en detail préparation, en mettant idEmploye = NULL. La liste Préparation derrière se servira de ça pour reconnaitre les ventes déjà affectées ou non (une prépa est affectée à l'user connecté quand il clique sur 'Préparer).";
+    		            if(isset($params[3]))
+    		            {
+    		                switch($params[3])
+    		                {
+    		                    case 'ajouter'://Si l'adresse est /Ventes/Devis/Ajouter
+    		                        $site->js = "pageAjoutDevisOuCommande";
+    		                        $site->left_sidebar = $controleur->afficheAjoutDevisOuCommande();
+    		                        break;
+    		                    default://Si autre
+    		                        $site->js="pageDetailsCommande";
+    		                        $site->titre = "Commande n°".$params[3];
+    		                        $site->left_sidebar =$controleur->afficheDetailsCommande($params[3]);
+    		                        break;
+    		                }
+    		            }
+    		            else
+    		            {
+    		                $site->titre="Liste Commandes";
+    		                $site->left_sidebar = $controleur->afficheListeCommandes();
+    		            }
     		            break;
-    		        case 'livraison' :
+    		        case 'livraisons' :
     		            break;
-    		        case 'facturation' :
+    		        case 'facturations' :
     		            break;
-    		        case 'conflit' :
+    		        case 'reliquats' :
     		            break;		            		        
 		        }
 		    }
@@ -245,10 +263,6 @@ switch ($params[1]) {
 	        $site->left_sidebar = $controleur->afficheNonAcces();
 	    }
 	    break;
-	default:
-	    $site->titre='Accueil';
-	    $site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
-	    break;
 	    
 	case 'articles':
 	    if($controleur->estConnecte()!= false)
@@ -277,6 +291,14 @@ switch ($params[1]) {
 		else
 			$site-> left_sidebar= "Vous n'êtes pas connecté !";		    
 		break;
+	
+	default:
+	    $site->titre='Accueil';
+	    $site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';
+	    break;
+	    
 }
+$site->footer = $controleur->afficheFooter();
+
 $site->affiche();
 ?>

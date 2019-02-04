@@ -6,19 +6,32 @@ $action = $_POST['action'];//Récupération de la source de l'AJAX
 $idA = $_POST['idArticle'];
 switch ($action)
 {
-    case 'calculCMUP':
-        $lesMouvements = $pdo->listeMouvementsParArticle($idA);
+    case 'calculCMUPQte':
+        $lesMouvements = $pdo->listeMouvementsParArticle($idA);   
+        $lesPreparations = $pdo->listeDetailsPreparationParArticle($idA);
         $prixTotal = 0; //On définit les variables à 0.
-        $qteTotale = 0; //.
-        while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))
-        {
+        $qteReelle = 0; //.
+        $qteVirtuelle = 0;
+        while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))//Pour chaque entrée ou dégradation de stockk on calcule le prix moyen
+        {            
             $prixTotal = $prixTotal + $m->prix * $m->qte;
-            $qteTotale = $qteTotale + $m->qte;
+        }                       
+        
+        while($p = $lesPreparations->fetch(PDO::FETCH_OBJ))//Pour chaque vente, on calcule le prix moyen soustrait à l'autre moyenne
+        {
+            $prixTotal = $prixTotal - $p->CMUP * $p->qteFournie;
         }
-        $CMUP = $prixTotal/$qteTotale;
+        $qteReelle = $pdo->qteReelleArticleParSonId($idA); 
+        $qteVirtuelle = $pdo->qteVirtuelleArticleParSonId($idA);
+        $CMUP = $prixTotal/$qteReelle;    
+        
         $r['nouveauCMUP'] = $CMUP;
-        $r['qte'] = $qteTotale;
+        $r['qteReelle'] = $qteReelle;
+        $r['qteVirtuelle'] = $qteVirtuelle;
         $r['prix'] = $prixTotal;
+        
+        
+        
         break;
     case 'modifCMUP':
         $nouveauCMUP = $_POST['nouveauCMUP'];

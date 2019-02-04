@@ -17,7 +17,7 @@ $("document").ready(function(){
 				    				new Date().getMinutes()+':'+
 				    				new Date().getSeconds())
 		    	},
-		        url: "../../ajax/ajoutCommandeAjax.php",
+		        url: "../../ajax/detailsDevisAjax.php",
 		        success: function(r) {
 		        	alert("Commande formulée avec succès !");
 		        },

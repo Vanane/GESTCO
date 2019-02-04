@@ -3,6 +3,7 @@
 class page_base {
 	protected $right_sidebar;
 	protected $left_sidebar;
+	protected $footer;
 	protected $titre;
 	protected $js=array('jquery-3.3.1.min', 'tooltipster.main.min', 'tooltipster.bundle.min');
 	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min');
@@ -46,8 +47,12 @@ class page_base {
 				break;
 			}
 			case 'left_sidebar' : {
-				$this->left_sidebar = $this->left_sidebar.$valeur;
-				break;
+			    $this->left_sidebar = $this->left_sidebar.$valeur;
+			    break;
+			}
+			case 'footer' : {
+			    $this->left_sidebar = $this->left_sidebar.$valeur;
+			    break;
 			}
 			default:
 			{
@@ -128,25 +133,37 @@ class page_base {
 	
 	protected function afficheMenu() {		
 	    $lesMenus=array(	        
-	        'ventes'=>'
+	        'devis'=>'
+                <ul>
+        	        <li><a href="'.$this->path.'Ventes/Devis/">Devis</a></li>
+    	        </ul>',
+	        'commandes'=>'
+    	        <ul>
+    	            <li><a href="'.$this->path.'Ventes/Commandes/">Commandes</a></li>
+    	        </ul>',
+	        'preparations'=>'
 				<ul>
-					<li><a href="'.$this->path.'Ventes/">Ventes</a></li>
-                </ul>',
+					<li><a  href="'.$this->path.'Preparations/">Préparations</a></li>
+				</ul>',	        
+	        'factures'=>'
+                <ul>
+    	            <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
+    	        </ul>',
+	        'livraisons'=>'
+                <ul>
+                    <li><a href="'.$this->path.'Livraisons/">Livraisons</a></li>
+                </ul>',	        	       
+	        'reliquats'=>'
+                <ul>
+    	            <li><a href="'.$this->path.'Ventes/Reliquats/">Reliquats</a></li>
+    	        </ul>',
+	        
 	        
 	        'achats'=>'
 				<ul>
 					<li><a href="'.$this->path.'Achats/">Achats</a></li>
                 </ul>',
 	        
-	        'preparations'=>'
-				<ul>
-					<li><a  href="'.$this->path.'Preparations/">Préparations</a></li>
-				</ul>',
-	        
-	        'livraisons'=>'
-                <ul>
-                    <li><a href="'.$this->path.'Livraisons/">Livraisons</a></li>
-                </ul>',
 	        
 	        'articles'=>'
 				<ul>
@@ -185,7 +202,14 @@ class page_base {
 		    switch($_SESSION['type'])
 		    {
 		        case 1:   //Cas utilisateur est commercial
-		            echo $lesMenus['ventes'].$lesMenus['achats'].$lesMenus['articles'].$lesMenus['clients'].$lesMenus['fournisseurs'];
+		            echo    $lesMenus['devis'].
+        		            $lesMenus['commandes'].
+        		            $lesMenus['factures'].
+        		            $lesMenus['reliquats'].
+        		            $lesMenus['achats'].
+                            $lesMenus['articles'].
+                            $lesMenus['clients'].
+                            $lesMenus['fournisseurs'];
 		            break;
 		        case 2:   //Cas utilisateur est préparateur 
 		            echo $lesMenus['preparations'].$lesMenus['articles'];
@@ -232,45 +256,7 @@ class page_base {
 				';
 							
 	}
-	
-	/*************************** retourne sous-menu de la page vente selon le rôle ***************************/
-	
-	public function afficheSousMenuVente()
-	{
-	    return '
-                <div class="sous-menu menu_horizontal">
-                    <p>Choisissez une option</p>
-                    <ul>
-                        <li><a href="'.$this->path.'Ventes/Devis/">Devis</a></li>
-                    </ul>
-                    <ul>
-                        <li><a href="'.$this->path.'Ventes/Commandes/">Commandes</a></li>
-                    </ul>
-                    <ul>
-                        <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
-                    </ul>
-                    <ul>
-                        <li><a href="'.$this->path.'Ventes/Conflits/">Reliquats</a></li>
-                    </ul>
-                </div>';
-	}
-	/************************************** Affiche la page ajout devis ************************************/
-	
-	/****************************************** Affichage du pied de la page ***************************/
-	private function afficheFooter() {
-		echo '
-		<!-- Footer -->
-			<footer>
-				<p></p>
-				<p id="copyright">
-                GRETA de Loire-Atlantique - 16 Rue Dufour,  44000 Nantes - Tel : 02 40 14 56 56									
-				<a href="https://www.greta-paysdelaloire.fr">GRETA Nantes</a> 
-				</p>
-            </footer>
-		';
-	}
 
-	
 	/********************************************* Fonction permettant l'affichage de la page ****************/
 
 	public function affiche() {
@@ -305,7 +291,7 @@ class page_base {
     						</div>
   						</div>
 						<div style="clear:both;">
-							<?php $this->afficheFooter(); ?>
+							<?php $this->footer; ?>
 						</div>
 					</div>
 				</body>

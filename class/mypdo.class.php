@@ -197,9 +197,19 @@ class mypdo extends PDO{
                 return null;
     }
     
-    public function listeVenteAvecDevis()
+    public function listeVentesAvecDevis()
     {
         $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_devis);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeVentesAvecCommande()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_commande);";
         $result=$this->connexion->query($r);
         if($result)
             return $result;
@@ -220,17 +230,28 @@ class mypdo extends PDO{
     
     public  function listeDetailsDevisParIdVente($idV)
     {
-        
         $requete='SELECT * FROM detail_devis WHERE idVente="'.$idV.'";';
         
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
     }
 
+    
+    public function listeDetailsDevisParArticle($idA)
+    {
+        $requete='SELECT * FROM detail_devis WHERE idArticle="'.$idA.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
+    
+    
     public function listeDetailsCommandeParIdVente($idV)
     {
         $requete='SELECT d.* FROM detail_commande d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'" ORDER BY a.idEmp ASC;';
@@ -256,6 +277,15 @@ class mypdo extends PDO{
         return null;
     }
     
+    public function listeDetailsPreparationParArticle($id)
+    {
+        $requete='SELECT * FROM detail_preparation WHERE idArticle = "'.$id.'";';        
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
     
     public function listeEmployes()
     {
@@ -354,9 +384,9 @@ class mypdo extends PDO{
         return $result;
     }
    
-    public function insertVente($idVente, $idClient, $idEmploye, $date)
+    public function insertVente($idVente, $idClient)
     {
-        $q = 'INSERT INTO vente VALUES ('.$idVente.',"'.$idClient.'", "'.$date.'", null, null, null, null);';
+        $q = 'INSERT INTO vente VALUES ('.$idVente.',"'.$idClient.'", null, null, null, null, null);';
         $result = $this->connexion->query($q);
         return $result;
     }
@@ -378,9 +408,9 @@ class mypdo extends PDO{
     
     public function insertDetailPreparation($idV, $idA, $idEm, $qteD, $qteF, $tx, $remise, $cmup, $obs)
     {
-        $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qteD.'", "'.$qteF.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', "'.$qteD.'", "'.$qteF.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     
         public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $cmup, $comp, $obs)
@@ -418,7 +448,7 @@ class mypdo extends PDO{
         if($result)
             return $result;
             else
-                return null;
+                return $r;
     }
     
 
@@ -478,7 +508,7 @@ class mypdo extends PDO{
     
     public function devisParSonId($idV, $idA)
     {
-        $r='SELECT * from detail_devis WHERE idArticle = "'.$idA.'" AND idVente = "'.$idV.'";';
+        $r='SELECT * from detail_devis WHERE idVente = "'.$idV.'" AND idArticle = "'.$idA.'";';
         $result=$this->connexion->query($r);
         if($result)
         {
@@ -486,7 +516,7 @@ class mypdo extends PDO{
             return $result;
         }
         else
-            return null;
+            return $r;
     }
     
     public function commandeParSonId($idV, $idA)
@@ -623,15 +653,51 @@ class mypdo extends PDO{
         }
         return null;
     }
+ 
     
-    public function qteTotaleArticleParSonId($id)
+    public function qteReelleArticleParSonId($id)
     {
-        $requete='SELECT * FROM lesstocksdechaqueproduit WHERE idArticle = "'.$id.'";';
+        $lesMouvements = $this->listeMouvementsParArticle($id);
+        $lesPreparations = $this->listeDetailsPreparationParArticle($id);
+        $retour = 0;
+        while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))//Pour chaque entrée ou dégradation de stockk on calcule le prix moyen
+        {
+            $retour = $retour + $m->qte;
+        }
+        
+        while($p = $lesPreparations->fetch(PDO::FETCH_OBJ))//Pour chaque vente, on calcule le prix moyen soustrait à l'autre moyenne
+        {
+            $retour = $retour - $p->qteFournie;
+        }
+        return $retour;
+    }
+    
+    
+    public function qteVirtuelleArticleParSonId($id)
+    {
+        $lesMouvements = $this->listeMouvementsParArticle($id);
+        $lesDevis = $this->listeDetailsDevisParArticle($id);
+        $retour = 0;
+        while($m = $lesMouvements->fetch(PDO::FETCH_OBJ))//On fait la somme des mouvements, entrées ou dégradations
+        {
+            $retour = $retour + $m->qte;
+        }
+        
+        while($d = $lesDevis->fetch(PDO::FETCH_OBJ))//Pour chaque devis de la base, on soustrait la quantité à livrer.
+        {
+            $retour = $retour - $d->qteDemandee;
+        }        
+        return $retour;
+    }
+    
+    public function infosSociete()
+    {
+        $requete='SELECT * FROM informations_societe';
         $result=$this->connexion->query($requete)->fetch(PDO::FETCH_OBJ);
         if ($result)
             return ($result);
-        return null;       
+        else
+            return null;
     }
- 
 }
 ?>

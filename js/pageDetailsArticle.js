@@ -24,13 +24,15 @@ $("document").ready(function(){
         dataType: "json",
         data:
     	{
-        	'action':'calculCMUP',
+        	'action':'calculCMUPQte',
     		'idArticle':$("#idArticle").val()
     	},
         url: "../ajax/detailsArticleAjax.php",
         success: function(r) {
         	$("#nouveauCMUP").val(r['nouveauCMUP']);
         	CMUPActuel = $("#nouveauCMUP").val();
+        	$("#div-qtes #virtuel").val(r['qteVirtuelle']);
+        	$("#div-qtes #reel").val(r['qteReelle']);
         },
         error: function (xhr, ajaxOptions, thrownError)
         {
@@ -170,6 +172,7 @@ $("document").ready(function(){
 		        url: "../ajax/detailsArticleAjax.php",
 		        success: function(r) {
 		        	alert("Nouvelle entrée insérée !");
+		        	location.reload();
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
 		        {
