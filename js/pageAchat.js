@@ -12,7 +12,7 @@ $('document').ready(function(){
 
 
 
-function ajouterachat() {// j'affiche un message pour éviter les erreurs de click //Nicolas
+function ajouterachat() {// j'affiche un message pour éviter les erreurs de click 
 	if (confirm("Pour valider la création de ce nouvelle achat, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
 		var erreur=false;

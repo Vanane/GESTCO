@@ -41,6 +41,19 @@ class mypdo extends PDO{
     /*---------------------------------------------------LES-LISTES-----------------------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
     
+   
+    public  function listeLivraisons()
+    {
+        
+        $requete='SELECT * FROM detail_livraison ORDER BY idVente DESC;';
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+     
     public  function listeAjoutdeStock()
     {
         
@@ -207,6 +220,7 @@ class mypdo extends PDO{
                 return null;
     }
     
+    
     public function listePreparationsAFaire($idEmp)
     {
         $r="SELECT * FROM vente WHERE idVente IN (SELECT idVente FROM detail_preparation WHERE idEmploye IS NULL OR idEmploye = '".$idEmp."') AND datePrepa IS NULL;";
@@ -217,6 +231,25 @@ class mypdo extends PDO{
             return null;
     }    
     
+    public function listeLivraisonsAFaire()
+    {
+        $r="SELECT * FROM detail_livraison WHERE idEmploye is null GROUP BY idVente ;";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeLivraisonsFaite()
+    {
+        $r="SELECT * FROM detail_livraison WHERE idEmploye is not null GROUP BY idVente ;";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
     
     public  function listeDetailsDevisParIdVente($idV)
     {
@@ -255,7 +288,17 @@ class mypdo extends PDO{
         }
         return null;
     }
-    
+    public function listeDetailsLivraisonParIdVente($idV)
+    {
+        $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     
     public function listeEmployes()
     {

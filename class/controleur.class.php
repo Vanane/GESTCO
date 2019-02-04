@@ -687,7 +687,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* ************************************************************************************************************************************* */
   
   
-  public function ajoutAchat()//Nicolas - pas de plus car par d'idVente
+  public function ajoutAchat()
   {
       $lesFournisseurs= $this->vpdo->listeSocietesFournisseurs();
       $lesArticles= $this->vpdo->listeArticles();
@@ -728,14 +728,6 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       $return=$return.'</div></div>';
       return $return;
   }
-  /*
-  <select id="idSocieteContact"><option selected hidden disabled></option>';
-  while($e = $lesSocietes->fetch(PDO::FETCH_OBJ))
-  {
-      $return = $return.'<option value="'.$e->idSociete.'">'.$e->idSociete.' - '.$e->nom.'</option>';
-  }
-  */
-  
   
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
@@ -743,6 +735,145 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
     
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* *******************************************************DEBUT*GESTION*LIVRAISON******************************************************* */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+  public function listeLivraisons()   
+  {
+      $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des Livraisons.<br>
+                        Voici si dessous la totalité des préparation en attente de livraison<br>
+                        Vous pouvez accèdez aux livraisons déjà livré en cliquant sur <b>"Voir Historique"</b><br>
+                        <a onclick=\'gestionHistorique()\' class="btn-classique"  id="btn-historique" style="display:block;">Voir Historique</a>
+                        <a onclick=\'gestionHistorique()\' class="btn-classique" id="btn-encours" style="display:none;">Voir les livraisons à faire</a>
+                    </p><bloc id="encours" style="display:block;"> ';
+      $llaf = $this->vpdo->listeLivraisonsAFaire();
+      $llf = $this->vpdo->listeLivraisonsFaite();
+     
+      while($ll = $llaf->fetch(PDO::FETCH_OBJ))
+      {
+          $vpi = $this->vpdo->venteParSonId($ll->idVente);
+         $return = $return.'
+                <bloc>
+                   	<row>
+                        <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$ll->idVente.'></p>
+                        <p>Date de la préparation :<input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'></p>
+                        <a href="enCours/'.$ll->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
+                    </row>
+                </bloc>';
+      }
+      $return=$return.' </bloc><bloc id="historique"  style="display:none;">';
+      while($lf = $llf->fetch(PDO::FETCH_OBJ))
+      {
+          $vpi = $this->vpdo->venteParSonId($lf->idVente);
+          $ei=$this->vpdo->employeParSonId($lf->idEmploye);
+          $return = $return.'
+                <bloc>
+                    <row>
+                        <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$lf->idVente.'></p>
+                        <p>Date de la préparation :<input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'></p>
+                        <p>Id Employé : <input type="text" readonly  value="'.$ei->idEmploye.' - '.$ei->nom.'"></p>
+                        <a href="'.$lf->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
+                    </row>
+                </bloc>';
+      }
+      $return=$return.'</bloc></div>';
+      return $return;
+  }
+  
+  /* ************************************************************************************************************************************* */
+  /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
+  /* ************************************************************************************************************************************* */
+  
+  public function detailLivraisons($idVente)//Nicolas
+  {    $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
+                        Si dessous, voici la liste des articles pour cette Vente.<br>
+                    </p><bloc id="encours" style="display:block;"> ';
+       $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
+       $vpi = $this->vpdo->venteParSonId($idVente);
+       $epsi=$this->vpdo->employeParSonId($ldval->fetch(PDO::FETCH_OBJ) -> idEmploye);
+       $return=$return.'<p>Date de la préparation : <input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'> 
+                         Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'"></p>';
+           while($ll = $ldval->fetch(PDO::FETCH_OBJ))
+          {
+              
+              $return = $return.'
+                        <bloc>
+                           	<row>
+                                <p>id Article :<input type="text" readonly maxlength="12" value='.$ll->idArticle.'></p>
+                                <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
+                                <p>Quantité fournie :<input type="text" readonly maxlength="12" value='.$ll->qteFournie.'></p>
+                            </row>
+                            <row>
+                                <p>CMUP :<input type="text" readonly maxlength="12" value='.$ll->CMUP.'></p>
+                                <p>TxRemise :<input type="text" readonly maxlength="12" value='.$ll->txRemise.'></p>
+                                <p>Remise :<input type="text" readonly maxlength="12" value='.$ll->remise.'></p>
+                            </row>
+                            <row>
+                                <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>
+                                <p>Observation :<input type="text" readonly maxlength="12" value='.$ll->observation.'></p>
+                            </row>
+                        </bloc>';
+          }     
+      // signature
+          $return=$return.'</div>';
+      return $return;     
+  }
+  public function detailLivraisonsEnCours($idVente)//Nicolas
+  {   $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
+                        Si dessous, voici la liste des articles pour cette Vente.<br>
+                        Cette livraison n\'a pas encore été livré.
+                    </p><bloc id="encours" style="display:block;"> ';
+  $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
+  $lesEmployes = $this->vpdo->listeEmployes();
+  $return=$return.'<p>Date de la préparation : <input type="date" required  maxlength="12" value="">
+                   Employe responsable : <select id="idArticle"><option selected hidden disabled></option>';
+  while($le = $lesEmployes->fetch(PDO::FETCH_OBJ))
+  {
+      $return = $return.'<option value="'.$le->idEmploye.'">'.$le->idEmploye.' - '.$le->nom.' '.$le->prenom.'</option>';
+  }
+          
+  $return = $return.'</select></p><p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>';
+  while($ll = $ldval->fetch(PDO::FETCH_OBJ))
+  {
+      
+      $return = $return.'
+                        <bloc>
+                           	<row>
+                                <p>id Article :<input type="text" readonly maxlength="12"  value='.$ll->idArticle.'></p>
+                                <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
+                                
+                            </row>
+                            <row>
+                                <p>Quantité fournie(*) :<input type="text" maxlength="12" required value='.$ll->qteFournie.'></p>
+                                <p>Observation :<input type="text"  maxlength="12" value=""></p>
+                               
+                            </row>
+                        </bloc>';
+  }
+  // signature
+  $return=$return.'             <div id="canvasDiv"></div>
+                                <a onclick=\'ajouterlivraison()\' class="btn-classique">
+                                <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+                                Confirmer la livraison</a>
+                                </div>';
+      return $return;
+  
+  }
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* *********************************************************FIN*GESTION*LIVRAISON******************************************************* */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+  
     public function afficheListeArticles()
     {
         $lesArticles = $this->vpdo->listeArticles();                
