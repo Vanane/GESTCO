@@ -14,7 +14,8 @@ switch ($action)
     $q=$_POST['qte'];
     $c=$_POST['commentaire'];
     $d=$_POST['date'];
-    $pdo->insertMouvement($idAc,'1',$idF,$idAr,$d,$p,$q,$c);
+    $t=$_POST['type'];
+    $pdo->insertMouvement($idAc,$t,$idF,$idAr,$d,$p,$q,$c);
     break; 
 }
 die( json_encode($r) );

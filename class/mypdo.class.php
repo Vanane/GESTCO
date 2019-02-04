@@ -41,6 +41,19 @@ class mypdo extends PDO{
     /*---------------------------------------------------LES-LISTES-----------------------------------------------------*/
     /*------------------------------------------------------------------------------------------------------------------*/
     
+   
+    public  function listeLivraisons()
+    {
+        
+        $requete='SELECT * FROM detail_livraison ORDER BY idVente DESC;';
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+     
     public  function listeAjoutdeStock()
     {
         
@@ -227,6 +240,25 @@ class mypdo extends PDO{
             return null;
     }    
     
+    public function listeLivraisonsAFaire()
+    {
+        $r="SELECT * FROM detail_livraison WHERE idEmploye is null GROUP BY idVente ;";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeLivraisonsFaite()
+    {
+        $r="SELECT * FROM detail_livraison WHERE idEmploye is not null GROUP BY idVente ;";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
     
     public  function listeDetailsDevisParIdVente($idV)
     {
@@ -276,6 +308,17 @@ class mypdo extends PDO{
         }
         return null;
     }
+    public function listeDetailsLivraisonParIdVente($idV)
+    {
+        $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
+        
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
     
     public function listeDetailsPreparationParArticle($id)
     {
@@ -286,7 +329,7 @@ class mypdo extends PDO{
         else
             return null;
     }
-    
+
     public function listeEmployes()
     {
         $r = "SELECT * FROM EMPLOYE";
@@ -410,7 +453,7 @@ class mypdo extends PDO{
     {
         $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', "'.$qteD.'", "'.$qteF.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
     
         public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $cmup, $comp, $obs)
@@ -448,7 +491,7 @@ class mypdo extends PDO{
         if($result)
             return $result;
             else
-                return $r;
+                return null;
     }
     
 
@@ -516,7 +559,7 @@ class mypdo extends PDO{
             return $result;
         }
         else
-            return $r;
+            return null;
     }
     
     public function commandeParSonId($idV, $idA)
@@ -653,7 +696,6 @@ class mypdo extends PDO{
         }
         return null;
     }
- 
     
     public function qteReelleArticleParSonId($id)
     {

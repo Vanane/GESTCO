@@ -13,9 +13,8 @@ if (!isset($params[1]))
 }
 else 
 {
-    $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.back()">Retour</a>';	    
-}
-
+    $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.go(-1)">Retour</a>';	    
+}	
 switch ($params[1]) {
 	case 'accueil' :
 		$site->titre='Accueil';
@@ -48,7 +47,7 @@ switch ($params[1]) {
 	    $types="fournisseurs";//txt du type au pluriel
 	    $type="fournisseur";//txt type au singulier
 	    $idType="idFour";//txt de l'id dans la BDD
-	    if($controleur->estConnecte()!= false)//je vérifie si l'utilisateur est connecté, si il ne l'est pas j'affiche la méthode afficheNonAcces()
+	    if($controleur->estConnecte()==1 || $controleur->estConnecte() == 4)//je vérifie si l'utilisateur est connecté, si il ne l'est pas j'affiche la méthode afficheNonAcces()
 	    {
 			$site->js = "pageClient";//j'utilise ma page js
 			if(isset($params[2]))//je répartie mes pages, j'appelle les méthodes dont j'ai besoin.
@@ -96,7 +95,7 @@ switch ($params[1]) {
 	    $types="clients";
 	    $type="client";
 	    $idType="idClient";
-	    if($controleur->estConnecte()!= false)
+	    if($controleur->estConnecte()==1 || $controleur->estConnecte() == 4)
 	    { $site->js = "pageClient";
 	          if(isset($params[2]))
 	          { 
@@ -144,7 +143,7 @@ switch ($params[1]) {
 	    }
 	    break;
 	case 'achats':
-	    if($controleur->estConnecte()!= false)
+	    if($controleur->estConnecte()== 1|| $controleur->estConnecte() == 4)
 	    {
 	        $site->js = "pageAchat";
 	        
@@ -264,6 +263,42 @@ switch ($params[1]) {
 	    }
 	    break;
 	    
+	case 'livraisons':
+	    if($controleur->estConnecte() == 3 || $controleur->estConnecte() == 4 || $controleur->estConnecte() == 1)
+	    {
+	        $site->js = "pageLivraisons";
+	        if(isset($params[2]))
+	        {
+	            if (isset($params[3]))
+	            {
+	                switch($params[3])
+	                {
+	                 default:
+	                     $site->left_sidebar = $controleur->detailLivraisonsEnCours($params[3]);
+	                 break;    
+	                }
+	            }
+	            else
+	            {
+	            switch($params[2])
+	            {
+	                   default:
+	                   $site->left_sidebar = $controleur->detailLivraisons($params[2]);
+	                   break;
+	            }
+	            }
+	        }
+	        else
+	        {
+	            $site->left_sidebar = $controleur->listeLivraisons();
+	        }
+	    }
+	    else
+	    {
+	        $site->left_sidebar = $controleur->afficheNonAcces();
+	    }
+	    break;
+   
 	case 'articles':
 	    if($controleur->estConnecte()!= false)
 	    {    		       
