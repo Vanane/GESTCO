@@ -13,7 +13,7 @@ $("document").ready(function(){
 		    	},
 		        url: "../../ajax/detailsCommandeAjax.php",
 		        success: function(r) {
-		        	alert("Préparation en cours !");
+		        	alert("Préparation envoyée !");
 		        	history.back();
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)

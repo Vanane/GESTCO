@@ -12,14 +12,15 @@ switch($_POST['action'])
         while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
         //Pour chaque ligne devis retournée selon idVente,
         //On fait une insertion dans commande.
+        //On passe simplement les informations des lignes commandes dans préparation.
         {
-            $r['result'] = $r['result'].$pdo->insertDetailPreparation(
+            $r['result'] = $pdo->insertDetailPreparation(
                 $idVente, $l->idArticle,
                 "null", $l->qteDemandee,
                 0, $l->txRemise,
-                $l->remise, $l->CMUP,
-                $l->observation
-                );
+                $l->CMUP, $l->marge,
+                $l->tva, $l->observation
+            );
         }        
         break;
 }

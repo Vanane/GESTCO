@@ -18,13 +18,13 @@ if(isset($_POST['action']))
                 if($r['qteF'.$i] != $r['qteD'.$i])
                 {
                     $r['reliquat'] = true;
-                    $c = $pdo->commandeParSonId($r['idV'], $r['idA'.$i]);                   
-                    $r['requete'] = $pdo->insertDetailReliquat(
+                    $c = $pdo->commandeParSonId($r['idV'], $r['idA'.$i]);      
+                    //Le 2 est pour le type de reliquat (partiel), le 1er null pour le type d'action, le 2ème pour la compensation
+                    $pdo->insertDetailReliquat(
                         $r['idV'], $r['idA'.$i],
                         $r['idE'], '2',
                         'null', ($r['qteD'.$i] - $r['qteF'.$i]),
-                        $c->CMUP, 'null',
-                        'Articles manquants à la préparation'
+                        'null', 'Articles manquants à la préparation'
                     );
                 }
                 

@@ -186,7 +186,7 @@ switch ($params[1]) {
     		                        default://Si autre
     		                                $site->js="pageDetailDevis"; 
     		                                $site->titre = "Devis n°".$params[3];    		                                
-    		                                $site->left_sidebar =$controleur->afficheDetailsDevis($params[3]);
+    		                                $site->left_sidebar =$controleur->afficheDetailsDevisOuCommande($params[3],$params[2]);
     		                                break;
     		                  }
     		                }
@@ -209,7 +209,7 @@ switch ($params[1]) {
     		                    default://Si autre
     		                        $site->js="pageDetailsCommande";
     		                        $site->titre = "Commande n°".$params[3];
-    		                        $site->left_sidebar =$controleur->afficheDetailsCommande($params[3]);
+    		                        $site->left_sidebar =$controleur->afficheDetailsDevisOuCommande($params[3],$params[2]);
     		                        break;
     		                }
     		            }
