@@ -34,8 +34,8 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		tr += '<td><input id="nomArticle" type="text" readonly></td>';
 		tr += '<td><input id="CMUPArticle" type="number" readonly></td>';
 		tr += '<td><input id="margeArticle" type="number" readonly></td>';
-		tr += '<td><input id="qteArticle" type="number" min=0 value=0></td>';
-		tr += '<td><input id="txArticle" type="number" min="0" max="100" value=0 step:0.5></td>';
+		tr += '<td><input id="qteArticle" type="number" min=1 value=1></td>';
+		tr += '<td><input id="txArticle" type="number" min=0 max=100 step=0.5 value=0></td>';
 		tr += '<td><input id="remise" type="number" readonly></td>';
 		tr += '<td><input id="ht" type="number" readonly></td>';
 		tr += '<td><input id="tva" type="number" readonly></td>';
@@ -73,6 +73,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		$(tr).find("#"+id).change(function(){
 			let qte = $(tr).find("#qteArticle");
 			let cmup = $(tr).find("#CMUPArticle");
+			let marge = $(tr).find("#margeArticle");
 			let tva = $(tr).find("#tva");
 			let rem = $(tr).find("#remise");
 			let txrem = $(tr).find("#txArticle");
@@ -83,10 +84,10 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			if(txrem.val()<0 || txrem.val()>100 || txrem.val()=="")
 				txrem.val(0);
 			
-			ht.val(qte.val()*cmup.val());
-			ttc.val(ht.val()*(1+(tva.val()/100)));
-			rem.val(ttc.val()*(txrem.val()/100));//Math.round et /100 pour arrondir à 2 décimales
-			ttc.val(ttc.val()-rem.val());
+			ht.val(qte.val()*cmup.val()*(1+marge.val()/100));//Hors-taxe = qte * prix unité * marge à faire.
+			ttc.val(ht.val()*(1+(tva.val()/100)));//TTC = HT * tva en %
+			rem.val(ttc.val()*(txrem.val()/100));//Remise = TTC * tx Remise en %
+			ttc.val(ttc.val()-rem.val());//TTC = TTC - Remise €
 			
 		});
 	}
@@ -164,9 +165,11 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
         		else
         		{	
             		dArticles['idArticle'+(i-compteur)] = $("#tr"+i+" #idArticle").find(":selected").val();        			
-	        		dArticles['CMUPArticle'+(i-compteur)] = $("#tr"+i+" #CMUPArticle").val();        		
 	        		dArticles['qteArticle'+(i-compteur)] = $("#tr"+i+" #qteArticle").val();
-	        		dArticles['txRemise'+(i-compteur)] = $("#tr"+i+" #txArticle").val();
+	        		dArticles['txRemise'+(i-compteur)] = ($("#tr"+i+" #txArticle").val()/100);
+	        		dArticles['CMUPArticle'+(i-compteur)] = ($("#tr"+i+" #CMUPArticle").val());
+	        		dArticles['margeArticle'+(i-compteur)] = ($("#tr"+i+" #margeArticle").val()/100);
+	        		dArticles['tva'+(i-compteur)] = ($("#tr"+i+" #tva").val()/100);
 	        		dArticles['obsArticle'+(i-compteur)] = $("#tr"+i+" #obsArticle").val();	        		
         		}
         		i++;
@@ -182,7 +185,6 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			}
 			else
 				dVente['idClient'] = $("#idClient").find(":selected").val();
-
         	if(!erreur)
     		{
 		    	$.ajax({

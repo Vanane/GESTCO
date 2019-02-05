@@ -433,40 +433,38 @@ class mypdo extends PDO{
         return $result;
     }
     
-    public function insertDetailDevis($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
+    public function insertDetailDevis($idV, $idA, $idEm, $qte, $tx, $cmup, $marge, $tva, $obs)
     {
-        $q = 'INSERT INTO detail_devis VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_devis VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $result;
-    }
-
-    
-    public function insertDetailCommande($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
-    {
-        $q = 'INSERT INTO detail_commande VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
-        $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     
-    public function insertDetailPreparation($idV, $idA, $idEm, $qteD, $qteF, $tx, $remise, $cmup, $obs)
+    
+    public function insertDetailCommande($idV, $idA, $idEm, $qte, $tx, $cmup, $marge, $tva, $obs)
     {
-        $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', "'.$qteD.'", "'.$qteF.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_commande VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     
-    public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
+    public function insertDetailPreparation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup, $marge, $tva, $obs)
+    {
+        $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', '.$qteD.', '.$qteF.', '.$tx.', '.$cmup.', '.$marge.', '.$tva.', "'.$obs.'");';
+        $result = $this->connexion->query($q);
+        return $q;
+    }
+       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
     {
         $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
         return $result;
     }
-    
-        public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $cmup, $comp, $obs)
+    public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $comp, $obs)
     {
-        $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$cmup.', '.$comp.', "'.$obs.'");';
+        $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$comp.', "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     
 /* **************************************************************************************************************** */    
@@ -614,7 +612,7 @@ class mypdo extends PDO{
     
     public function employeParSonId($id)
     {
-        $r='SELECT * from EMPLOYE WHERE idEmploye = '.$id;
+        $r='SELECT * FROM employe WHERE idEmploye = "'.$id.'";';
         $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
         if($result)
             return $result;
@@ -682,27 +680,39 @@ class mypdo extends PDO{
         }
         return null;
     }
-    public  function entrepriseParIdVente($idVente)
+
+    public  function entrepriseParIdVente($idV)
     {
-        $requete='SELECT s.* FROM detail_devis d, vente v, contact_client c, societe s WHERE d.idVente=v.idVente AND v.idClient= c.idClient  AND c.idSociete = s.idSociete AND v.idVente='.$idVente.'';
+        $requete='SELECT s.* FROM societe s JOIN contact_client c ON s.idSociete = c.idSociete JOIN vente v ON v.idClient = c.idClient WHERE idVente = '.$idV;
         $result=$this->connexion->query($requete);
         if ($result)
-        {
-            return ($result);
-        }
-        return null;
+            return $result->fetch(PDO::FETCH_OBJ);
+        else
+            return null;
     }
-    public  function prixTotalParIdVente($idVente)
-    {       
-        $requete='SELECT prixTotal FROM calculPrixTotal WHERE idVente ='.$idVente.'';
+
+
+ public function totalDevisParIdVente($idV)
+    {
+        $requete='SELECT * FROM TTCDevis WHERE idVente ="'.$idV.'";';
         $result=$this->connexion->query($requete);
         if ($result)
-        {
-            return ($result);
-        }
-        return null;
+            return $result->fetch(PDO::FETCH_OBJ);
+            else
+                return null;
     }
     
+    
+    public function totalCommandeParIdVente($idV)
+    {
+        $requete='SELECT * FROM TTCCommande WHERE idVente ="'.$idV.'";';
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return $result->fetch(PDO::FETCH_OBJ);
+            else
+                return null;
+    }
+        
     public function qteReelleArticleParSonId($id)
     {
         $lesMouvements = $this->listeMouvementsParArticle($id);
@@ -741,11 +751,11 @@ class mypdo extends PDO{
     public function infosSociete()
     {
         $requete='SELECT * FROM informations_societe';
-        $result=$this->connexion->query($requete)->fetch(PDO::FETCH_OBJ);
+        $result=$this->connexion->query($requete);
         if ($result)
-            return ($result);
-        else
-            return null;
+            return $result->fetch(PDO::FETCH_OBJ);
+            else
+                return null;
     }
 }
 ?>

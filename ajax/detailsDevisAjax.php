@@ -23,8 +23,9 @@ switch($_POST['action'])
                 $pdo->insertDetailCommande(
                     $l->idVente, $l->idArticle,
                     $l->idEmploye, $l->qteDemandee,
-                    $l->txRemise, $l->remise,
-                    $l->CMUP, $l->observation
+                    $l->txRemise, $l->CMUP,
+                    $l->marge, $l->tva,
+                    $l->observation
                 );
             }
         }
