@@ -14,16 +14,17 @@ switch($_POST['action'])
             break;
         else
         {
+            //$o=$_POST['observation'];
             $pdo->updateTableUneCondition('Vente', "dateLivraison", $dateLivraison, 'idVente', $idVente);//On ajoute la date de transfert livraison.            
-            $r['resultLivraison'] = "";
+            //$r['resultLivraison'] = "";
             while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
             //Pour chaque ligne livraison retournée selon idVente,
             //On fait une insertion dans Livraison. 
             {
-                $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', '$l->idEmploye','idVente', '$l->idVente','idArticle','$l->idArticle');
-                $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', '$l->idEmploye','idVente', '$l->idVente','idArticle','$l->idArticle');
-                $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', '$l->idEmploye','idVente', '$l->idVente','idArticle','$l->idArticle');
-                $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', '$l->idEmploye','idVente', '$l->idVente','idArticle','$l->idArticle');
+                $r['resultLivraison'] = "dans la boucle";
+               /* $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', $l->idEmploye,'idVente', $l->idVente,'idArticle',$l->idArticle);
+                $pdo->updateTableDeuxConditions('detail_livraison', 'qteFournie',$l->Fournie,'idVente', $l->idVente,'idArticle',$l->idArticle);
+                $pdo->updateTableDeuxConditions('detail_livraison', 'obersvation', $o,'idVente', $l->idVente,'idArticle',$l->idArticle);*/
             }
         }
         break;

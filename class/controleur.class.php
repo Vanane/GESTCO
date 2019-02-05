@@ -1002,6 +1002,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         Vous pouvez accèdez aux livraisons déjà livré en cliquant sur <b>"Voir Historique"</b><br>
                         <a onclick=\'gestionHistorique()\' class="btn-classique"  id="btn-historique" style="display:block;">Voir Historique</a>
                         <a onclick=\'gestionHistorique()\' class="btn-classique" id="btn-encours" style="display:none;">Voir les livraisons à faire</a>
+                        <br><b>Listes des livraisons :</b>
                     </p><bloc id="encours" style="display:block;"> ';
       $llaf = $this->vpdo->listeLivraisonsAFaire();
       $llf = $this->vpdo->listeLivraisonsFaite();
@@ -1027,7 +1028,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                 <bloc>
                     <row>
                         <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$lf->idVente.'></p>
-                        <p>Date de la préparation :<input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'></p>
+                        <p>Date de la livraison :<input type="text" readonly maxlength="12" value='.$vpi->dateLivraison.'></p>
                         <p>Id Employé : <input type="text" readonly  value="'.$ei->idEmploye.' - '.$ei->nom.'"></p>
                         <a href="'.$lf->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
                     </row>
@@ -1052,11 +1053,12 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
        $vpi = $this->vpdo->venteParSonId($idVente);
        $ep= $pourIdEmploye->fetch(PDO::FETCH_OBJ)->idEmploye;
        $epsi=$this->vpdo->employeParSonId($ep);
-       $return=$return.'<p>Date de la préparation : <input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'> 
-                         Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'"></p>';
+       $pttcu=$this->vpdo->totalCommandeParIdVente($idVente);
+       $return=$return.'<p>Date de la livraison : <input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'> 
+                         Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'">
+                         Prix total TTC de la commande : <input type="text" readonly maxlength="12" value='.$pttcu->prixTotal.'>€</p>';
        while($ll = $ldval->fetch(PDO::FETCH_OBJ))
           {
-              
               $return = $return.'
                         <bloc>
                            	<row>
@@ -1064,12 +1066,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                                 <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
                                 <p>Quantité fournie :<input type="text" readonly maxlength="12" value='.$ll->qteFournie.'></p>
                             </row>
-                            <row>
-                                <p>CMUP :<input type="text" readonly maxlength="12" value='.$ll->TTCUnitaire.'></p>
-                                <p>TxRemise :<input type="text" readonly maxlength="12" value='.$ll->txRemise.'></p>
-                                <p>Remise :<input type="text" readonly maxlength="12" value='.$ll->remise.'></p>
-                            </row>
-                            <row>
+                            <row>                        
                                 <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>
                                 <p>Observation :<input type="text" readonly maxlength="12" value='.$ll->observation.'></p>
                             </row>
@@ -1090,7 +1087,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                     </p><bloc id="encours" style="display:block;"> ';
   $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
   $lesEmployes = $this->vpdo->listeEmployes();
-  $return=$return.'<p>Date de la préparation : <input type="date" id="dateLivraison" required  maxlength="12" value="">
+  $return=$return.'<p>Date de la livraison : <input type="date" id="dateLivraison" required  maxlength="12" value="">
                    Employe responsable : <select id="idEmploye"><option selected hidden disabled></option>';
   while($le = $lesEmployes->fetch(PDO::FETCH_OBJ))
   {
@@ -1108,7 +1105,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                                 <p>Quantité demandée :<input type="text" id="qteDemandee" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
                             </row>
                             <row>
-                                <p>Observation :<input type="text"  id="obersvation" maxlength="12" value=""></p>
+                                <p>Observation :<input type="text"  id="observation" maxlength="12" value=""></p>
                                 <p>Quantité fournie(*) :<input type="text" id="qteFournie" maxlength="12" required value='.$ll->qteFournie.'></p>                               
                             </row>
                         </bloc>'; 
