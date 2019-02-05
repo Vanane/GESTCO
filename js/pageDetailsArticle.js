@@ -29,7 +29,7 @@ $("document").ready(function(){
     	},
         url: "../ajax/detailsArticleAjax.php",
         success: function(r) {
-        	$("#nouveauCMUP").val(r['nouveauCMUP']);
+        	$("#nouveauCMUP").val(Math.round(r['nouveauCMUP']*100)/100); //round(x*100)/100 pour arrondir à 10^2
         	CMUPActuel = $("#nouveauCMUP").val();
         	$("#div-qtes #virtuel").val(r['qteVirtuelle']);
         	$("#div-qtes #reel").val(r['qteReelle']);
@@ -46,11 +46,7 @@ $("document").ready(function(){
 
 	//Masque le deuxième onglet, le premier étant affiché par défaut.
 	$("#div-"+lesOnglets[1]).addClass("hidden");
-
-	
-	
-	
-	
+			
 	/****************************************/
 	/************** EVENEMENTS **************/
 	/****************************************/

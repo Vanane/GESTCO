@@ -186,14 +186,16 @@ public function afficheListeDevis()
 	        
 	        $retour = $retour.'
                 <bloc';
-	        if($this->vpdo->listeDetailsCommandeParIdVente($v->idVente) != null)
+	        if($this->vpdo->listeDetailsPreparationParIdVente($v->idVente)->fetch(PDO::FETCH_OBJ) == false)
+	            $retour = $retour.' id="non-valide"';
+	        else 
 	            $retour = $retour.' id="valide"';
 	            
 	        //on prévoit des variables pour nos appels
 	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
 	        //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
 	        $retour = $retour.'
-                <bloc>
+                    >
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
                         <p>Responsable :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
@@ -612,6 +614,17 @@ public function afficheListeDevis()
 	
 	
 	
+	
+	public function afficheListeReliquats()
+	{
+	    $retour ='<div class="conteneur border">aa';
+	    
+	    
+	    
+	    
+	    $retour = $retour.'</div>';	    	    	   
+	    return $retour;
+	}
 	
 /*______________________________________________________________________________________________________________________________________*/
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
@@ -1307,13 +1320,10 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
     {
         $s = $this->vpdo->infosSociete();
         $retour = '
-			<footer>
-				<p></p>
 				<p id="copyright">
                 '.$s->nom.' - '.$s->adresse.' - Tel : '.$s->telephone.'
 				<a href="'.$s->siteWeb.'">GRETA Nantes</a>
 				</p>
-            </footer>
 		';
         return $retour;
     }

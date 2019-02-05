@@ -12,11 +12,12 @@ $('document').ready(function(){
 	
 	$.each($("#filtre p input"), function(index, value){
 		$(value).click(function(){
+			console.log("blbl");
 			switch($(value).attr('value'))
 			{
 			case 'filtreV':
 				
-				$("bloc").each(function(i, v){
+				$("bloc#non-valide").each(function(i, v){
 					let el = v;
 					$(v).css('display', 'none');
 				});
@@ -27,7 +28,7 @@ $('document').ready(function(){
 				break;
 			case 'filtreNonV':
 				
-				$("bloc").each(function(i, v){
+				$("bloc#non-valide").each(function(i, v){
 					let el = v;
 					$(v).css('display', 'block');
 				});

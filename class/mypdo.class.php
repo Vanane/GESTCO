@@ -303,10 +303,9 @@ class mypdo extends PDO{
         
         $result=$this->connexion->query($requete);
         if ($result)
-        {
             return ($result);
-        }
-        return null;
+        else
+            return null;
     }
     public function listeDetailsLivraisonParIdVente($idV)
     {

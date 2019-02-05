@@ -7,6 +7,7 @@ $controleur=new controleur();
 $request = strtolower($_SERVER['REQUEST_URI']);
 $params = explode('/', trim($request, '/'));
 $params = array_filter($params);
+
 if (!isset($params[1]))
 {
 	$params[1]='accueil';
@@ -216,6 +217,7 @@ switch ($params[1]) {
     		            else
     		            {
     		                $site->titre="Liste Commandes";
+    		                $site->js = "pageListeCommandes";
     		                $site->left_sidebar = $controleur->afficheListeCommandes();
     		            }
     		            break;
@@ -224,6 +226,19 @@ switch ($params[1]) {
     		        case 'facturations' :
     		            break;
     		        case 'reliquats' :
+    		            if(isset($params[3]))
+    		            {
+    		                switch($params[3])
+    		                {
+    		                    default:
+    		                        $controleur->afficheDetailsReliquat($params[3]);
+    		                        break;
+    		                }
+    		            }
+    		            else
+    		            {
+                            $controleur->afficheListeReliquats();
+    		            }
     		            break;		            		        
 		        }
 		    }
@@ -333,7 +348,7 @@ switch ($params[1]) {
 	    break;
 	    
 }
-$site->footer = $controleur->afficheFooter();
 
+$site->footer = $controleur->afficheFooter();
 $site->affiche();
 ?>

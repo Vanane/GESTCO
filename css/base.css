@@ -96,6 +96,14 @@ strong {
 }
 
 
+.footer
+{
+	display:block;
+	position: relative;
+	float:right;
+	width:100%;
+}
+
 /* --- STYLES POUR CERTAINS CONTENUS DES GABARITS --- */
 
 pre, code {

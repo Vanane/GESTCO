@@ -51,7 +51,7 @@ class page_base {
 			    break;
 			}
 			case 'footer' : {
-			    $this->left_sidebar = $this->left_sidebar.$valeur;
+			    $this->footer = $this->footer.$valeur;
 			    break;
 			}
 			default:
@@ -291,7 +291,9 @@ class page_base {
     						</div>
   						</div>
 						<div style="clear:both;">
-							<?php $this->footer; ?>
+							<div class="footer">
+								<?php echo $this->footer; ?>
+							</div>
 						</div>
 					</div>
 				</body>
