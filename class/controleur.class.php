@@ -1001,12 +1001,14 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
                         Si dessous, voici la liste des articles pour cette Vente.<br>
                     </p><bloc id="encours" style="display:block;"> ';
+       $pourIdEmploye = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
        $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
        $vpi = $this->vpdo->venteParSonId($idVente);
-       $epsi=$this->vpdo->employeParSonId($ldval->fetch(PDO::FETCH_OBJ) -> idEmploye);
+       $ep= $pourIdEmploye->fetch(PDO::FETCH_OBJ)->idEmploye;
+       $epsi=$this->vpdo->employeParSonId($ep);
        $return=$return.'<p>Date de la préparation : <input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'> 
                          Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'"></p>';
-           while($ll = $ldval->fetch(PDO::FETCH_OBJ))
+       while($ll = $ldval->fetch(PDO::FETCH_OBJ))
           {
               
               $return = $return.'
@@ -1026,12 +1028,14 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                                 <p>Observation :<input type="text" readonly maxlength="12" value='.$ll->observation.'></p>
                             </row>
                         </bloc>';
-          }     
+          }   
+
       // signature
           $return=$return.'</div>';
       return $return;     
   }
-  public function detailLivraisonsEnCours($idVente)//Nicolas
+  
+  public function detailLivraisonsEnCours($idVente)//Nicolas, verif case remplit, géré reliquat, géré signature, géré Js et Ajax
   {   $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
@@ -1040,37 +1044,35 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                     </p><bloc id="encours" style="display:block;"> ';
   $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
   $lesEmployes = $this->vpdo->listeEmployes();
-  $return=$return.'<p>Date de la préparation : <input type="date" required  maxlength="12" value="">
-                   Employe responsable : <select id="idArticle"><option selected hidden disabled></option>';
+  $return=$return.'<p>Date de la préparation : <input type="date" id="dateLivraison" required  maxlength="12" value="">
+                   Employe responsable : <select id="idEmploye"><option selected hidden disabled></option>';
   while($le = $lesEmployes->fetch(PDO::FETCH_OBJ))
   {
       $return = $return.'<option value="'.$le->idEmploye.'">'.$le->idEmploye.' - '.$le->nom.' '.$le->prenom.'</option>';
   }
           
-  $return = $return.'</select></p><p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>';
+  $return = $return.'</select></p><p>Id de la Vente :<input type="text" readonly id="idVente" maxlength="12" value='.$idVente.'></p>';
   while($ll = $ldval->fetch(PDO::FETCH_OBJ))
   {
-      
+      // gestion des ventes
       $return = $return.'
                         <bloc>
                            	<row>
-                                <p>id Article :<input type="text" readonly maxlength="12"  value='.$ll->idArticle.'></p>
-                                <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
-                                
+                                <p>id Article :<input type="text" id="idArticle" readonly maxlength="12"  value='.$ll->idArticle.'></p>
+                                <p>Quantité demandée :<input type="text" id="qteDemandee" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
                             </row>
                             <row>
-                                <p>Quantité fournie(*) :<input type="text" maxlength="12" required value='.$ll->qteFournie.'></p>
-                                <p>Observation :<input type="text"  maxlength="12" value=""></p>
-                               
+                                <p>Observation :<input type="text"  id="obersvation" maxlength="12" value=""></p>
+                                <p>Quantité fournie(*) :<input type="text" id="qteFournie" maxlength="12" required value='.$ll->qteFournie.'></p>                               
                             </row>
-                        </bloc>';
+                        </bloc>'; 
   }
-  // signature
-  $return=$return.'             <div id="canvasDiv"></div>
+  // signature (lien sur Trello)
+  $return=$return.'             </bloc>
                                 <a onclick=\'ajouterlivraison()\' class="btn-classique">
                                 <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
                                 Confirmer la livraison</a>
-                                </div>';
+                                </bloc></div>';
       return $return;
   
   }

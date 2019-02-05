@@ -311,7 +311,6 @@ class mypdo extends PDO{
     public function listeDetailsLivraisonParIdVente($idV)
     {
         $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
-        
         $result=$this->connexion->query($requete);
         if ($result)
         {
@@ -456,11 +455,18 @@ class mypdo extends PDO{
         return $result;
     }
     
+    public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
+    {
+        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $result = $this->connexion->query($q);
+        return $result;
+    }
+    
         public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $cmup, $comp, $obs)
     {
         $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$cmup.', '.$comp.', "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
     
 /* **************************************************************************************************************** */    
