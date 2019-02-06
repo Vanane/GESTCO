@@ -309,7 +309,7 @@ class mypdo extends PDO{
     }
     public function listeDetailsLivraisonParIdVente($idV)
     {
-        $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
+        $requete='SELECT * FROM detail_livraison WHERE idVente = "'.$idV.'";';
         $result=$this->connexion->query($requete);
         if ($result)
         {
@@ -436,7 +436,7 @@ class mypdo extends PDO{
     {
         $q = 'INSERT INTO detail_devis VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
     
     
@@ -444,18 +444,24 @@ class mypdo extends PDO{
     {
         $q = 'INSERT INTO detail_commande VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
     
     public function insertDetailPreparation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup, $marge, $tva, $obs)
     {
         $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', '.$qteD.', '.$qteF.', '.$tx.', '.$cmup.', '.$marge.', '.$tva.', "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
-       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
+       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $cmup, $obs)
     {
-        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$obs.'");';
+        $result = $this->connexion->query($q);
+        return $result;
+    }
+    public function insertDetailFacturation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup,$marge,$tva, $obs)
+    {
+        $q = 'INSERT INTO detail_facture VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qteD.'","'.$qteF.'" "'.$tx.'", "'.$cmup.'", "'.$marge.'","'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
         return $result;
     }
@@ -463,7 +469,7 @@ class mypdo extends PDO{
     {
         $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$comp.', "'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $q;
+        return $result;
     }
     
 /* **************************************************************************************************************** */    
@@ -482,9 +488,9 @@ class mypdo extends PDO{
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
         $result=$this->connexion->query($r);
         if($result)
-            return $result;
+            return $r;
             else
-                return null;
+                return $r;
     }
     
     public function updateTableDeuxConditions($table, $attr, $value, $col1, $id1, $col2, $id2)
@@ -492,9 +498,9 @@ class mypdo extends PDO{
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col1.' = "'.$id1.'" AND '.$col2.' = "'.$id2.'";';
         $result=$this->connexion->query($r);
         if($result)
-            return $result;
+            return $r;
             else
-                return null;
+                return $r;
     }
     
 

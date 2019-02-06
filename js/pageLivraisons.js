@@ -9,7 +9,7 @@ function gestionHistorique(){
 	toggleDisplay(elmt2);
 	toggleDisplay(elmt3);
 }
-	
+
 function toggleDisplay(elmt){		
 	   if(typeof elmt == "string")		
 	      elmt = document.getElementById(elmt);		
@@ -22,9 +22,9 @@ function toggleDisplay(elmt){
 function ajouterlivraison() {// voir ci dessus pour le détail du code
 	if (confirm("Pour confirmer la livraison de cette Livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
+		let idEmploye= document.getElementById("idEmploye");
 		let idVente = document.getElementById("idVente");
-		let dateLivraison = document.getElementById("dateLivraison");
-		let observation=document.getElementById("observation");
+		console.log(idVente);
 		$.ajax({ //AJAX pour transférer de detail_livraison à detail_facturation
 	        type: "POST",
 	        dataType: "json",
@@ -32,13 +32,11 @@ function ajouterlivraison() {// voir ci dessus pour le détail du code
 	    	{
 	        	'action':'ajoutLivraison',
 	        	'idV':idVente.value,
-	        	'dateLivraison':dateLivraison.value,
-	        	'observation':observation.value
+	        	'idEmploye':idEmploye.value,
 	    	},
 	        url: "../../ajax/detailsLivraisonAjax.php",
 	        success: function(r) {
 	        	alert("Livraison confirmer avec succès !");
-	        	console.log(resultLivraison);
 	        },
 	        error: function (xhr, ajaxOptions, thrownError)
 	        {
@@ -46,6 +44,8 @@ function ajouterlivraison() {// voir ci dessus pour le détail du code
 	            console.log(thrownError);
 	            console.log(ajaxOptions);
 	        }
-	});}
+		});
+		
+	}
 		
 	}
