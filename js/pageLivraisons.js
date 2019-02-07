@@ -1,3 +1,26 @@
+/*$('document').ready(function(){//Nicolas
+	let idVente = document.getElementById("idVente");
+	let listeIdArticle;
+	$.ajax({ 
+        type: "POST",
+        dataType: "json",
+        data:
+    	{
+        	'action':'boucleArticle,
+        	'idV':idVente.value,
+    	},
+    	url: "../../ajax/detailsLivraisonAjax.php",
+        success: function(r) {
+        	$(listeidArticle).val(r['result']);
+        },
+        error: function (xhr, ajaxOptions, thrownError)
+        {
+            console.log(xhr.status);
+            console.log(thrownError);
+            console.log(ajaxOptions);
+        }
+	});
+});*/
 
 function gestionHistorique(){
 	var elmt = document.getElementById("historique");
@@ -19,13 +42,23 @@ function toggleDisplay(elmt){
 	      elmt.style.display = "none";		
 }
 
-function ajouterlivraison() {// voir ci dessus pour le détail du code
+function ajouterlivraison() {
 	if (confirm("Pour confirmer la livraison de cette Livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
 		let idEmploye= document.getElementById("idEmploye");
 		let idVente = document.getElementById("idVente");
-		console.log(idVente);
-		$.ajax({ //AJAX pour transférer de detail_livraison à detail_facturation
+		var redirection =("http://localhost/GESTCO/Livraisons/");
+		
+		/*var qteFournie ={}; //Nicolas
+		while (isset listeIdArticle)
+		boucle des articles de la vente
+		if qteFournie == qteDemandee
+		ajax
+		else
+		rien*/
+		
+		
+		$.ajax({ 
 	        type: "POST",
 	        dataType: "json",
 	        data:
@@ -37,6 +70,7 @@ function ajouterlivraison() {// voir ci dessus pour le détail du code
 	        url: "../../ajax/detailsLivraisonAjax.php",
 	        success: function(r) {
 	        	alert("Livraison confirmer avec succès !");
+	        	location.href =(redirection);
 	        },
 	        error: function (xhr, ajaxOptions, thrownError)
 	        {

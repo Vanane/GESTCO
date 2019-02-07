@@ -341,7 +341,24 @@ switch ($params[1]) {
 		else
 			$site-> left_sidebar= "Vous n'êtes pas connecté !";		    
 		break;
-	
+	case 'employes':
+	    if($controleur->estConnecte() == 4 )
+	    { 
+	        $site->js = "pageEmploye";
+	        if(isset($params[2]))
+	        {            
+	                $site->left_sidebar = $controleur->ajouterEmploye();	 
+	        }
+	        else
+	        {
+	            $site->left_sidebar = $controleur->listeEmploye();
+	        }          
+	    }
+	    else
+	    {
+	        $site-> left_sidebar= "Vous n'êtes pas connecté !";
+	    }
+    break;
 	default:
 	    $site->titre='Accueil';
 	    $site-> left_sidebar='<p id="p-404">Erreur 404 : page non trouvée.</p>';

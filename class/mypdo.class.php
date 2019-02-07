@@ -461,9 +461,9 @@ class mypdo extends PDO{
     }
     public function insertDetailFacturation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup,$marge,$tva, $obs)
     {
-        $q = 'INSERT INTO detail_facture VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qteD.'","'.$qteF.'" "'.$tx.'", "'.$cmup.'", "'.$marge.'","'.$tva.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_facture VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', "'.$qteD.'","'.$qteF.'","'.$tx.'","'.$cmup.'","'.$marge.'","'.$tva.'","'.$obs.'");';
         $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $comp, $obs)
     {
@@ -545,7 +545,7 @@ class mypdo extends PDO{
             else
                 return null;
     }
-    
+
     
     public function articleParSonId($id)
     {
@@ -624,6 +624,16 @@ class mypdo extends PDO{
             else
                 return null;
     }
+    
+    public function typeEmployeParSonId($id)
+    {
+        $r='SELECT * from type_employe WHERE idType = "'.$id.'";';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }  
 
     public function idDerniereVente()
     {

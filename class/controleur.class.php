@@ -1042,7 +1042,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
   /* ************************************************************************************************************************************* */
   
-  public function detailLivraisons($idVente)//Nicolas
+  public function detailLivraisons($idVente)   
   {    $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
@@ -1119,6 +1119,68 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* *********************************************************FIN*GESTION*LIVRAISON******************************************************* */
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* *********************************************************DEBUT*GESTION*EMPLOYE******************************************************* */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+  
+  public function listeEmploye()//Nicolas
+  {
+      $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Voici l\'outil de gestion des employés.<br>
+                        Voici si dessous la totalité des employés de l\'entreprise.<br>
+                        <a href="ajouteremploye" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter un employé</a>
+                        <br><b>Listes des Employés :</b>
+                    </p><bloc id="encours" style="display:block;"> ';
+      $les = $this->vpdo->listeEmployes();
+      
+      while($le = $les->fetch(PDO::FETCH_OBJ))
+      {
+          $te = $this->vpdo->typeEmployeParSonId($le->idType);
+          $return = $return.'
+                <bloc>
+                    <row>
+                        <p>Id de l\'employe :<input type="text" readonly maxlength="12" value='.$le->idEmploye.'></p>
+                        <p>Identifiant de l\'employe :<input type="text" readonly maxlength="12" value='.$le->identifiant.'></p>
+                        <p>Nom de l\'employe :<input type="text" readonly maxlength="12" value='.$le->nom.'></p>
+                    </row> 
+                    <row>   
+                        <p>Prénom de l\'employe : <input type="text" readonly  value="'.$le->prenom.'"></p>
+                        <p>Type de l\'employe :<input type="text" readonly maxlength="12" value="'.$le->idType.' - '.$te->libelle.'"></p>
+                        <p>Adresse de l\'employe :<input type="text"  maxlength="48" value='.$le->adresse.'></p>
+                    </row>                      
+                    <row>   
+                        <p>Téléphone de l\'employe : <input type="text" maxlength="10"  value="'.$le->telephone.'"></p>
+                        <p>Mail de l\'employe : <input type="text"  value="'.$le->mail.'"></p>
+                        <a onclick="modifieremploye()" class="btn-classique">Confirmer Modification</a>
+                    </row>
+                </bloc>';
+      }
+      $return=$return.'</bloc></div>';
+      return $return;
+  }
+ 
+  
+  /* ************************************************************************************************************************************* */
+  /* ***************************************FIN*LISTE*DES*EMPLYES****DEBUT*AJOUT*EMPLOYE******************************************** */
+  /* ************************************************************************************************************************************* */
+  
+  
+  public function ajouterEmploye()//Nicolas
+  {
+  $return='page ajouter';
+  return $return;
+  }
+ 
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* *******************************************************FIN*GESTION*EMPLOYE*********************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+  
   
     public function afficheListeArticles()
     {
