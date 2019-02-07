@@ -155,7 +155,9 @@ class page_base {
 	        echo '
             <ul id="btn-deconnexion">
                 <li><a href="'.$this->path.'Deconnexion">Déconnexion</a></li>
-            </ul>';
+            </ul>
+            <p id="infoUser" style="float:right">Vous êtes connecté en tant que : '.$this->user->prenom.' '.$this->user->nom.'</p>
+            ';
 	        $connecte = true;
 	    }
 	    else

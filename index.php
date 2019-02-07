@@ -8,10 +8,7 @@ $request = strtolower($_SERVER['REQUEST_URI']);
 $params = explode('/', trim($request, '/'));
 $params = array_filter($params);
 
-if(isset($_SESSION['id']))
-    $site->user = $controleur->employeConnecte($_SESSION['idEmploye']);
 
-$site->entreprise = $controleur->informationsEntreprise();
 
 if (!isset($params[1]))
 {
@@ -317,6 +314,7 @@ switch ($params[1]) {
     		                switch($params[3])
     		                {
     		                    default:
+    		                        $site->js = "pageDetailsReliquat";
     		                        $site->left_sidebar = $controleur->afficheDetailsReliquat($params[3]);
     		                        break;
     		                }
@@ -390,5 +388,11 @@ switch ($params[1]) {
 	    break;
 	    
 }
+
+if(isset($_SESSION['id']))
+    $site->user = $controleur->employeConnecte($_SESSION['idEmploye']);
+$site->entreprise = $controleur->informationsEntreprise();
+    
+    
 $site->affiche();
 ?>

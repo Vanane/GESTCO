@@ -659,61 +659,72 @@ public function afficheListeDevis()
 	public function afficheDetailsReliquat($idV)
 	{
 	    $v = $this->vpdo->venteParSonId($idV);
-	    $e = $this->vpdo->employeParIdVente($idV)->fetch(PDO::FETCH_OBJ);
-	    $c = $this->vpdo->clientParSonId($v->idClient);	  
-	    $s = $this->vpdo->societeParSonId($c->idSociete);
-	    $lesReliquats = $this->vpdo->listeDetailsReliquatParIdVente($idV);
-	    $retour = '
-        <div class="conteneur border">
-            <div id="details-vente">
-                <row>
-                    <p>Responsable : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
-                </row>
-                <row>
-                    <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
-                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                    <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
-                </row>
-                <row>
-                    <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
-                    <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
-                    <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
-                </row>
-            </div>
-            <div class="div-liste">
-                        
-        ';
-	    
-	    while($r = $lesReliquats->fetch(PDO::FETCH_OBJ))
+	    if($v!=null)
 	    {
-	        $t = $this->vpdo->typeReliquatParSonId($r->typeReliquat);
-	        $retour = $retour.'
-                <bloc>
+    	    $e = $this->vpdo->employeParIdVente($idV)->fetch(PDO::FETCH_OBJ);
+    	    $c = $this->vpdo->clientParSonId($v->idClient);	  
+    	    $s = $this->vpdo->societeParSonId($c->idSociete);
+    	    $lesReliquats = $this->vpdo->listeDetailsReliquatParIdVente($idV);
+    	    $retour = '
+            <div class="conteneur border">
+                <div id="details-vente">
                     <row>
-                        <p>Article : <input type="text" value="'.$r->idArticle.'"></p>
-                        <p>Quantité : <input type="text" value="'.$r->qte.'"></p>
-                        <p>Observation : <input type="text" value="'.$r->observation.'"></p>
-                        <p>Type de conflit : <input type="text" value="'.$t->libelle.'"</p>
-                        <p>Action<select id="Action">
+                        <p>Responsable : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                    </row>
+                    <row>
+                        <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
+                        <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
+                        <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
+                    </row>
+                    <row>
+                        <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
+                        <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
+                        <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                    </row>
+                </div>
+                <div class="div-liste">
+                            
             ';
-	        $lesActions = $this->vpdo->listeTypesAction();
-	        while($a = $lesActions->fetch(PDO::FETCH_OBJ))
-	        {
-	            $retour = $retour.'
-                            <option value="'.$a->idType.'">'.$a->libelle.'</option>
-                    
+    	    
+    	    while($r = $lesReliquats->fetch(PDO::FETCH_OBJ))
+    	    {
+    	        $t = $this->vpdo->typeReliquatParSonId($r->typeReliquat);
+    	        $retour = $retour.'
+                    <bloc>
+                        <row>
+                            <p>Article : <input id="artReliquat" type="text" value="'.$r->idArticle.'" readonly></p>
+                            <p>Quantité : <input type="text" value="'.$r->qte.'" readonly></p>
+                            <p>Type de conflit : <input type="text" value="'.$t->libelle.'" readonly></p>
+                            <p>Action<select id="actReliquat">
                 ';
-	        }
-	        $retour = $retour.'
-                        </select></p>
-                        <p>Montant € : <input type="number" min=0 value=0 step=0.01></p>
-                    </row>                
-                </bloc>
-        ';
-	    }	    
-	    $retour = $retour.'
+    	        $lesActions = $this->vpdo->listeTypesAction();
+    	        while($a = $lesActions->fetch(PDO::FETCH_OBJ))
+    	        {
+    	            $retour = $retour.'
+                                <option value="'.$a->idType.'">'.$a->libelle.'</option>
+                        
+                    ';
+    	        }
+    	        $retour = $retour.'
+                            </select></p>
+                            <p>Montant € : <input id="montReliquat" type="number" min=0 value=0 step=0.01></p>
+                        </row>
+                        <row>
+                            <p>Observation : <sub id="char"></sub></p><textarea id="obsReliquat" maxlength="64">'.$r->observation.'</textarea>
+                        </row>                
+                    </bloc>
+            ';
+    	    }	    
+    	    $retour = $retour.'
+                </div>
             </div>
-        ';
+            <a id="confirmer" class="btn-classique">Valider les reliquats</a>
+            ';
+	    }
+	    else
+	    {
+	        $retour = '<div class="conteneur border">Cette vente n\'existe pas !</div>';
+	    }
 	    return $retour;
 	    
 	}
@@ -1087,7 +1098,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 
     public function listeLivraisons()   
     {
-        $return='<div class="conteneur  div-liste-entreprises">
+        $return='<div class="conteneur border div-liste div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Livraisons.<br>
                         Voici si dessous la totalité des préparation en attente de livraison<br>
@@ -1095,7 +1106,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         <a onclick=\'gestionHistorique()\' class="btn-classique"  id="btn-historique" style="display:block;">Voir Historique</a>
                         <a onclick=\'gestionHistorique()\' class="btn-classique" id="btn-encours" style="display:none;">Voir les livraisons à faire</a>
                         <br><b>Listes des livraisons :</b>
-                    </p><bloc id="encours" style="display:block;"> ';
+                    </p><div id="encours" style="display:block;"> ';
         $llaf = $this->vpdo->listeLivraisonsAFaire();
         $llf = $this->vpdo->listeLivraisonsFaite();
          
@@ -1112,7 +1123,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         </row>
                     </bloc>';
         }   
-        $return=$return.' </bloc><bloc id="historique"  style="display:none;">';
+        $return=$return.' </div><div id="historique"  style="display:none;">';
         while($lf = $llf->fetch(PDO::FETCH_OBJ))
         {
           $vpi = $this->vpdo->venteParSonId($lf->idVente);
@@ -1127,7 +1138,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                     </row>
                 </bloc>';
         }
-        $return=$return.'</bloc></div>';
+        $return=$return.'</div></div>';
         return $return;
     }
   
