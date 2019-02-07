@@ -43,7 +43,7 @@ function toggleDisplay(elmt){
 }
 
 function ajouterlivraison() {
-	if (confirm("Pour confirmer la livraison de cette Livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
+	if (confirm("Pour confirmer la livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
 		let idEmploye= document.getElementById("idEmploye");
 		let idVente = document.getElementById("idVente");

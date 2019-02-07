@@ -33,12 +33,12 @@ switch($_POST['action'])
             
         }
     break;
-    case 'boucleArticle':
+  /*  case 'boucleArticle':
         while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
         {
             $r['result']=$lesDetails;           
         }
-    break;
+    break;*/
 }
 
 die( json_encode($r) );

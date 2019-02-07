@@ -483,10 +483,17 @@ class mypdo extends PDO{
         return $result;
     }
     
+    public function insertEmploye($idEmploye, $idType, $nom, $prenom, $adresse,$telephone, $mail, $mdp)
+    {
+        $q = 'INSERT INTO vente VALUES ('.$idEmploye.',"'.$idType.'","' .$nom.'","' .$prenom.'", "'.$adresse.'","'.$telephone.'","' .$mail.'", "'.$mdp.'");';
+        $result = $this->connexion->query($q);
+        return $result;
+    }
+    
     public function insertDetailDevis($idV, $idA, $idEm, $qte, $tx, $cmup, $marge, $tva, $obs)
     {
         $q = 'INSERT INTO detail_devis VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
-        $result = $this->connexion->query($q);
+        //$result = $this->connexion->query($q);
         return $q;
     }
     
@@ -494,14 +501,14 @@ class mypdo extends PDO{
     public function insertDetailCommande($idV, $idA, $idEm, $qte, $tx, $cmup, $marge, $tva, $obs)
     {
         $q = 'INSERT INTO detail_commande VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
-        $result = $this->connexion->query($q);
+        //$result = $this->connexion->query($q);
         return $q;
     }
     
     public function insertDetailPreparation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup, $marge, $tva, $obs)
     {
         $q = 'INSERT INTO detail_preparation VALUES ('.$idV.',"'.$idA.'", '.$idEm.', '.$qteD.', '.$qteF.', '.$tx.', '.$cmup.', '.$marge.', '.$tva.', "'.$obs.'");';
-        $result = $this->connexion->query($q);
+        //$result = $this->connexion->query($q);
         return $q;
     }
        public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $cmup, $obs)
@@ -514,14 +521,14 @@ class mypdo extends PDO{
     public function insertDetailFacturation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup,$marge,$tva, $obs)
     {
         $q = 'INSERT INTO detail_facture VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', "'.$qteD.'","'.$qteF.'","'.$tx.'","'.$cmup.'","'.$marge.'","'.$tva.'","'.$obs.'");';
-        $result = $this->connexion->query($q);
+        //$result = $this->connexion->query($q);
         return $q;
     }
 
     public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $comp, $obs)
     {
         $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$comp.', "'.$obs.'");';
-        $result = $this->connexion->query($q);
+        //$result = $this->connexion->query($q);
         return $q;
     }
     
@@ -539,14 +546,14 @@ class mypdo extends PDO{
     public function updateTableUneCondition($table, $attr, $value, $col, $id)
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
-        $result=$this->connexion->query($r);
+        //$result=$this->connexion->query($r);
         return $r;
     }
     
     public function updateTableDeuxConditions($table, $attr, $value, $col1, $id1, $col2, $id2)
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col1.' = "'.$id1.'" AND '.$col2.' = "'.$id2.'";';
-        $result=$this->connexion->query($r);
+        //$result=$this->connexion->query($r);
         return $r;
     }
     
@@ -554,19 +561,19 @@ class mypdo extends PDO{
     public function updateSociete($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        $result=$this->connexion->query($r);
+        //$result=$this->connexion->query($r);
         return $r;
     }
     public function updateContactClient($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_client SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        $result=$this->connexion->query($r);
+        //$result=$this->connexion->query($r);
         return $r;
     }
     public function updateContactFournisseur($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_fournisseur SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        $result=$this->connexion->query($r);
+        //$result=$this->connexion->query($r);
         return $r;
     }
 
@@ -733,6 +740,16 @@ class mypdo extends PDO{
             return $result;
         else
             return null;
+    }
+    
+    public function idDernierEmploye()
+    {
+        $r="SELECT  idEmploye FROM employe ORDER BY idEmploye DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
     }
     
     public  function employeParIdVente($idVente)

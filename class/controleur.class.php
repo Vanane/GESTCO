@@ -1050,7 +1050,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Achats.</b><br>
-                        Vous pouvez sur cette page ajoutez un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
+                        Vous pouvez sur cette page ajouter un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
                     </p> ';
       $return = $return.'
                 <bloc>
@@ -1243,7 +1243,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       
       while($le = $les->fetch(PDO::FETCH_OBJ))
       {
-          $te = $this->vpdo->typeEmployeParSonId($le->idType);
+          $te = $this->vpdo->typeEmployeParSonId($le->idType);//identifiant modifiable ??
           $return = $return.'
                 <bloc>
                     <row>
@@ -1275,7 +1275,30 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   
   public function ajouterEmploye()//Nicolas
   {
-  $return='page ajouter';
+      $iE = $this -> vpdo -> idDernierEmploye()+1;
+      // select 1/2/3/4 pour le type
+      $return='<div class="conteneur  div-liste-entreprises">
+                    <p style="margin-left: 1em">
+                        Vous pouvez sur cette page, ajouter un nouvel employé.<br>.<br>
+                    </p><bloc id="encours" style="display:block;"> ';
+      $return = $return.'
+                <bloc>
+                    <row>
+                        <p>Id de l\'employe :<input type="text" readonly maxlength="12" value='.$iE.'></p>
+                        <p>Nom de l\'employe :<input type="text" readonly maxlength="12" value=""></p>
+                    </row>
+                    <row>
+                        <p>Prénom de l\'employe : <input type="text" readonly  value=""></p>
+                        <p>Type de l\'employe :<input type="text" readonly maxlength="12" value="FAIRE UN SELECT"></p>
+                        <p>Adresse de l\'employe :<input type="text"  maxlength="48" value=""></p>
+                    </row>
+                    <row>
+                        <p>Téléphone de l\'employe : <input type="text" maxlength="10"  value=""></p>
+                        <p>Mail de l\'employe : <input type="text"  value=""></p>
+                        <a onclick="ajouterremploye()" class="btn-classique">Ajouter employé</a>
+                    </row>
+                </bloc>';
+  $return=$return.'</bloc></div>';
   return $return;
   }
  
