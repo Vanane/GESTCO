@@ -38,23 +38,14 @@ if(isset($_POST['action']))
             //Pour chaque ligne allant de 1 à lesArticles.Count()
             for($i=1;$i<=$laVente['nbArticles'];$i++)
             {
-                $devis = $pdo->devisParSonId($laVente['idVente'], $lesArticles['idArticle'.$i]);
-                if($devis != null)
-                    //Si la ligne devis pour ce produit existe déjà.
-                    //Permet d'éviter les erreurs de doublons, et cumule alors les deux
-                    //Quantités des deux lignes en conflit
-                    $r['resultDevis'.$i] = $pdo->updateTableDeuxConditions('detail_devis', 'qteDemandee', ($lesArticles['qteArticle'.$i]+$devis->qteDemandee), "idVente", $laVente['idVente'], "idArticle", $lesArticles['idArticle'.$i]);
-                    else
-                    {
-                        //On récupère la TVA, calcule le TTC et insère.                        
-                        $pdo->insertDetailDevis(
-                            $laVente['idVente'], $lesArticles['idArticle'.$i],
-                            $laVente['idEmploye'], $lesArticles['qteArticle'.$i],
-                            $lesArticles['txRemise'.$i], $lesArticles['CMUPArticle'.$i],
-                            $lesArticles['margeArticle'.$i], $lesArticles['tva'.$i],
-                            $lesArticles['obsArticle'.$i]
-                            );
-                    }
+                //On récupère la TVA, calcule le TTC et insère.                        
+                $pdo->insertDetailDevis(
+                    $laVente['idVente'], $lesArticles['idArticle'.$i],
+                    $laVente['idEmploye'], $lesArticles['qteArticle'.$i],
+                    $lesArticles['txRemise'.$i], $lesArticles['CMUPArticle'.$i],
+                    $lesArticles['margeArticle'.$i], $lesArticles['tva'.$i],
+                    $lesArticles['obsArticle'.$i]
+                    );
             }
             break;
             

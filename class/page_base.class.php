@@ -9,8 +9,10 @@ class page_base {
 	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
-	protected $metakeyword=array('logistique','greta','gestion','commande' );
+	protected $metakeyword=array('logistique','greta','gestion','commande');
 	protected $path="http://localhost/GESTCO/";
+	protected $entreprise;
+	protected $user;
 	
 	public function __construct() {
 		$numargs = func_num_args();
@@ -54,7 +56,13 @@ class page_base {
 			    $this->footer = $this->footer.$valeur;
 			    break;
 			}
+			case 'entreprise' :
+			    $this->entreprise = $valeur;
+			    break;
 			default:
+			case 'user':
+			    $this->user = $valeur;
+			    break;
 			{
 				$trace = debug_backtrace();
 				trigger_error(
@@ -117,11 +125,11 @@ class page_base {
 	/****************************** Affichage de la partie entete ***************************************/	
 	protected function afficheEntete() {
 		echo'
-           <header>
-				
-				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/logo.png" alt="logo"/></a><br>
-				<h1 id="titre-gestco">
-					GestCo
+           <header>				
+				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/'.$this->entreprise->logo.'" alt="logo"/></a>
+				<h1 id="titre-entreprise">
+                   <br>
+					'.$this->entreprise->nom.'
 				</h1>
 				<h3>
 					<strong>Bienvenue</strong> sur l\'application web de gestion de commandes GESTCO.
@@ -129,10 +137,46 @@ class page_base {
              </header>
 		';
 	}
+	
+	
+	/****************************** Affichage en-tête du menu ***************************************/
+	
+	
+	
 	/****************************** Affichage du menu ***************************************/	
 	
-	protected function afficheMenu() {		
-	    $lesMenus=array(	        
+	
+	protected function afficheMenuConnexion()
+	{
+	    $connecte = false;
+	    echo '<div id="bandeau_connexion" class="menu_horizontal">';
+	    if(isset($_SESSION['id']) && isset($_SESSION['type']))
+	    {	     
+	        echo '
+            <ul id="btn-deconnexion">
+                <li><a href="'.$this->path.'Deconnexion">Déconnexion</a></li>
+            </ul>';
+	        $connecte = true;
+	    }
+	    else
+	    {	        
+	        echo '
+				<ul id="btn-connexion">
+					<li><a href="'.$this->path.'Connexion">Connexion</a></li>
+				</ul>';	        
+	    }
+	    echo '</div>';
+	    return $connecte;
+	}
+	
+	
+	
+	protected function afficheMenuVentes()
+	{
+	    echo '<div class="menu_horizontal">';
+	    $lesMenus=array(
+	        'titre'=>'
+                <h4>Ventes</h4>',
 	        'devis'=>'
                 <ul>
         	        <li><a href="'.$this->path.'Ventes/Devis/">Devis</a></li>
@@ -143,38 +187,86 @@ class page_base {
     	        </ul>',
 	        'preparations'=>'
 				<ul>
-					<li><a  href="'.$this->path.'Preparations/">Préparations</a></li>
-				</ul>',	        
+					<li><a  href="'.$this->path.'Ventes/Preparations/">Préparations</a></li>
+				</ul>',
 	        'factures'=>'
                 <ul>
     	            <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
     	        </ul>',
 	        'livraisons'=>'
                 <ul>
-                    <li><a href="'.$this->path.'Livraisons/">Livraisons</a></li>
-                </ul>',	        	       
+                    <li><a href="'.$this->path.'Ventes/Livraisons/">Livraisons</a></li>
+                </ul>',
 	        'reliquats'=>'
                 <ul>
     	            <li><a href="'.$this->path.'Ventes/Reliquats/">Reliquats</a></li>
-    	        </ul>',
-	        
-	        
+    	        </ul>'
+	    );
+	    switch($_SESSION['type'])
+	    {
+	        case 1:   //Cas utilisateur est commercial
+	            echo $lesMenus['titre'].
+	            $lesMenus['devis'].
+	            $lesMenus['commandes'].
+	            $lesMenus['factures'].
+	            $lesMenus['reliquats'];
+	            break;
+	        case 2:   //Cas utilisateur est préparateur
+	            echo $lesMenus['titre'].$lesMenus['preparations'];
+	            break;
+	        case 3:   //Cas utilisateur est livreur
+	            echo $lesMenus['titre'].$lesMenus['livraisons'];
+	            break;
+	        case 4:   //Cas utilisateur est informaticien
+	            foreach($lesMenus as $key => $value)
+	            {
+	                echo $value;
+	            }
+	            break;
+	    }
+	    echo '
+		</div>';
+	}
+	
+	
+	protected function afficheMenuAchats()
+	{
+	    echo '<div class="menu_horizontal">';
+	    $lesMenus=array(
+	        'titre'=>'
+                <h4>Achats</h4>',	        
 	        'achats'=>'
-				<ul>
-					<li><a href="'.$this->path.'Achats/">Achats</a></li>
-                </ul>',
-	        
-	        
+                <ul>
+        	        <li><a href="'.$this->path.'Achats/">Achats</a></li>
+    	        </ul>'
+	    );
+	    switch($_SESSION['type'])
+	    {
+	        case 1:   //Cas utilisateur est commercial
+	            echo $lesMenus['titre'].$lesMenus['achats'];
+	            break;
+	        case 4:
+	            foreach($lesMenus as $key => $value)
+	            {
+	                echo $value;
+	            }
+	            break;
+	    }
+	    echo '
+		</div>';
+	}
+	
+	
+	protected function afficheMenuAutres()
+	{
+	    echo '<div class="menu_horizontal">';
+	    $lesMenus=array(
+	        'titre'=>'
+                <h4>Gestion</h4>',	       
 	        'articles'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Articles/">Articles</a></li>
                 </ul>',
-	        
-	        'employes'=>'
-				<ul>
-					<li><a  href="'.$this->path.'Employes/">Employés</a></li>
-                </ul>',
-	        
 	        'clients'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Clients/">Clients</a></li>
@@ -183,64 +275,58 @@ class page_base {
 	        'fournisseurs'=>'
 				<ul>
 					<li><a  href="'.$this->path.'Fournisseurs/">Fournisseurs</a></li>
-                </ul>',	        
-	    );      	       
+                </ul>',
 	        
-		if(!isset($_SESSION['id']) && !isset($_SESSION['type']))
-		{
-		    echo'
-				<ul id="btn-connexion">
-					<li><a href="'.$this->path.'Connexion">Connexion</a></li>
-				</ul>';		  
-		} 
-		else
-		{
-		    echo '
-              <ul id="btn-deconnexion">
-		        <li><a href="'.$this->path.'Deconnexion">Déconnexion</a></li>
-		      </ul>';		    		   
-		    switch($_SESSION['type'])
-		    {
-		        case 1:   //Cas utilisateur est commercial
-		            echo    $lesMenus['devis'].
-        		            $lesMenus['commandes'].
-        		            $lesMenus['factures'].
-        		            $lesMenus['reliquats'].
-        		            $lesMenus['achats'].
-                            $lesMenus['articles'].
-                            $lesMenus['clients'].
-                            $lesMenus['fournisseurs'];
-		            break;
-		        case 2:   //Cas utilisateur est préparateur 
-		            echo $lesMenus['preparations'].$lesMenus['articles'];
-		            break;
-		        case 3:   //Cas utilisateur est livreur
-		            echo $lesMenus['livraisons'].$lesMenus['clients'].$lesMenus['articles'];
-		            break;
-		        case 4:   //Cas utilisateur est informaticien
-		            foreach($lesMenus as $key => $value)
-		            {
-		                echo $value;
-		            }
-		            break;
-		    }
-		}
-	}
-	
-	
-	public function afficheEnteteMenu() {
-		echo '
-		<div class="menu_horizontal">
-				';
-						
-	}
-	public function afficheFooterMenu(){
-		echo '
+	        'employes'=>'
+				<ul>
+					<li><a  href="'.$this->path.'Employes/">Employés</a></li>
+                </ul>'
+	        
+	    );
+	    
+	    switch($_SESSION['type'])
+	    {
+	        case 1:   //Cas utilisateur est commercial
+	            echo $lesMenus['titre'].
+	            $lesMenus['articles'].
+	            $lesMenus['clients'].
+	            $lesMenus['fournisseurs'];
+	            break;
+	        case 2:   //Cas utilisateur est préparateur
+	            echo $lesMenus['titre'].
+	            $lesMenus['articles'];
+	            break;
+	        case 3:   //Cas utilisateur est livreur
+	            echo $lesMenus['titre'].
+	            $lesMenus['clients'];
+	            break;
+	        case 4:   //Cas utilisateur est informaticien
+	            foreach($lesMenus as $key => $value)
+	            {
+	                echo $value;
+	            }
+	            break;
+	    }
+	    echo '
 		</div>';
-
 	}
+	
+	
+	protected function afficheMenu()
+	{
+	    if($this->afficheMenuConnexion() != false)
+	    {
+	        $this->afficheMenuVentes();
+	        echo '<div class="separation_menu"></div>';
+	        $this->afficheMenuAutres();
+	        echo '<div class="separation_menu"></div>';	        
+	        $this->afficheMenuAchats();
+	        
+	    }
+	}
+	
 
-		/****************************************** remplissage affichage colonne ***************************/
+	/****************************************** remplissage affichage colonne ***************************/
 	public function afficheBlocContact() {
 		return'
 
@@ -256,7 +342,18 @@ class page_base {
 				';
 							
 	}
-
+/******************Fonction permettant d'afficher le footer et les informations de l'entreprise******************/
+	
+	public function afficheFooter()
+	{
+	    echo'
+				<p id="copyright">
+                '.$this->entreprise->nom.' - '.$this->entreprise->adresse.' - Tel : '.$this->entreprise->telephone.'
+				<a href="'.$this->entreprise->siteWeb.'">GRETA Nantes</a>
+				</p>
+		';
+	}
+	
 	/********************************************* Fonction permettant l'affichage de la page ****************/
 
 	public function affiche() {
@@ -276,11 +373,10 @@ class page_base {
 				</head>
 				<body>
 					<div class="global">
-
-						<?php $this->afficheEntete(); ?>
-						<?php $this->afficheEnteteMenu(); ?>
-						<?php $this->afficheMenu(); ?>
-						<?php $this->afficheFooterMenu(); ?>
+							<?php $this->afficheEntete(); ?>
+						<div class="bloc_menus">						
+							<?php $this->afficheMenu(); ?>
+						</div>
 						
   						<div style="clear:both;">
     						<div class="left_sidebar">
@@ -292,7 +388,7 @@ class page_base {
   						</div>
 						<div style="clear:both;">
 							<div class="footer">
-								<?php echo $this->footer; ?>
+								<?php $this->afficheFooter(); ?>
 							</div>
 						</div>
 					</div>

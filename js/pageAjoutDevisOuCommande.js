@@ -40,7 +40,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		tr += '<td><input id="ht" type="number" readonly></td>';
 		tr += '<td><input id="tva" type="number" readonly></td>';
 		tr += '<td><input id="ttc" type="number" readonly></td>';
-		tr += '<td><input id="obsArticle" type="text" readonly></td>';
+		tr += '<td><input id="obsArticle" type="text"></td>';
 		tr += '</tr>';		
 		
 		//Ajoute au tableau le HTML écrit au-dessus
@@ -49,8 +49,9 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 		//Affecte au select de la nouvelle ligne, la liste des articles de la première ligne.
 		$("#table-articles #tr1 #idArticle option").each(function(index, option)
 		{ 
-			var text = option.value;
-			$("#tr"+rowCount+" #idArticle").append(new Option(text, text));
+			var text = option.text;
+			var value = option.value;
+			$("#tr"+rowCount+" #idArticle").append(new Option(text, value));
 		});		
 		
 		ajouteListenerChargeArticle(rowCount);
@@ -96,39 +97,61 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 	function ajouteListenerChargeArticle(idTr)
 	{
 		let tr = $("#tr"+idTr);
-		$(tr).find("#idArticle").change(function()
+		$(tr).find("#idArticle").change(function(e)
 		{
-			//Récupérer les élements par leur nom + le numéro du select qui est activé.
-			//Pour cela, on récupère l'id du select, auquel on substring à partir du 
-			let nom =$(tr).find("#nomArticle");
-			let cmup = $(tr).find("#CMUPArticle");
-			let marge = $(tr).find("#margeArticle");
-			let tva = $(tr).find("#tva");
-
-			$.ajax({ //AJAX pour récupérer les infos d'un article.
-		        type: "POST",
-		        dataType: "json",
-		        data:
-		    	{
-		        	'action':'infoArticle',
-		    		'idArticle':$(tr).find("#idArticle").val()
-		    	},
-		        url: "../../ajax/ajoutDevisOuCommandesAjax.php",
-		        success: function(r) {
-					$(nom).val(r['libelle']);
-					$(cmup).val(r['cmup']);
-					$(marge).val(100*r['marge']);
-					$(tva).val(100*r['tva']);
-		        },
-		        error: function (xhr, ajaxOptions, thrownError)
-		        {
-		        	console.log($(this));
-		            console.log(xhr.status);
-		            console.log(thrownError);
-		            console.log(ajaxOptions);
-		    	}
+			let trouve = false;			
+			$("#table-articles tr").each(function(index, value){
+				if($(tr).find("#idArticle").find(":selected").val() == $(this).find("#idArticle").find(":selected").val() &&
+				$(this).attr('id') != $(tr).attr('id') && 
+				!trouve)
+				//Quand select changé : si l'index choisi est égal à au moins l'un des autres indexs des autres selects, 
+				//Et que le select cliqué n'est pas celui auquel on le compare dans le each, 
+				//Et qu'il n'y a pas encore eu de condition trouvée,
+				//Alors on affiche un message d'erreur et on empêche de sélectionner ledit index, pour éviter les doublons.
+				{
+					alert("Vous avez déjà choisi cet article ! Pour ajouter plusieurs exemplaires, modifiez la quantité de l'article.");
+					$(tr).find("#idArticle").val($(tr).find("#idArticle option")[0]);
+					trouve = true;
+				}
+				
 			});
-		});			
+
+			
+			
+			if(!trouve)//Si aucun doublon n'a été trouvé, alors on peut faire l'AJAC
+			{
+				//Récupérer les élements par leur nom + le numéro du select qui est activé.
+				//Pour cela, on récupère l'id du select, auquel on substring à partir du 
+				let nom =$(tr).find("#nomArticle");
+				let cmup = $(tr).find("#CMUPArticle");
+				let marge = $(tr).find("#margeArticle");
+				let tva = $(tr).find("#tva");
+	
+				$.ajax({ //AJAX pour récupérer les infos d'un article.
+			        type: "POST",
+			        dataType: "json",
+			        data:
+			    	{
+			        	'action':'infoArticle',
+			    		'idArticle':$(tr).find("#idArticle").val()
+			    	},
+			        url: "../../ajax/ajoutDevisOuCommandeAjax.php",
+			        success: function(r) {
+						$(nom).val(r['libelle']);
+						$(cmup).val(r['cmup']);
+						$(marge).val(100*r['marge']);
+						$(tva).val(100*r['tva']);
+			        },
+			        error: function (xhr, ajaxOptions, thrownError)
+			        {
+			        	console.log($(this));
+			            console.log(xhr.status);
+			            console.log(thrownError);
+			            console.log(ajaxOptions);
+			    	}
+				});
+			}	
+		});
 	}
 	
 	
@@ -196,7 +219,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
 			        	'dVente':dVente,
 			        	'dArticles':dArticles
 		        	},
-		            url: "../../ajax/ajoutDevisOuCommandesAjax.php",
+		            url: "../../ajax/ajoutDevisOuCommandeAjax.php",
 			        success: function(r) {
 			        	alert("Devis créé avec succès !");
 			        	console.log(r);
@@ -225,7 +248,7 @@ $('document').ready(function(){	//Lorsque le document sera prêt à exécuter le
             	'action':'infoEntreprise',            	
         		'idClient':$('#idClient option:checked').val()
         	},
-            url: "../../ajax/ajoutDevisOuCommandesAjax.php",
+            url: "../../ajax/ajoutDevisOuCommandeAjax.php",
 	        success: function(r) {
 	        	console.log(r);
 	        	$('#idSociete').val(r['idE'] + ' - ' + r['nomE']);

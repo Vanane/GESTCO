@@ -8,6 +8,11 @@ $request = strtolower($_SERVER['REQUEST_URI']);
 $params = explode('/', trim($request, '/'));
 $params = array_filter($params);
 
+if(isset($_SESSION['id']))
+    $site->user = $controleur->employeConnecte($_SESSION['idEmploye']);
+
+$site->entreprise = $controleur->informationsEntreprise();
+
 if (!isset($params[1]))
 {
 	$params[1]='accueil';
@@ -169,13 +174,15 @@ switch ($params[1]) {
 	    break;	
 		
 	case 'ventes' :
-	    if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+	    if($controleur->estConnecte() != false)
 	    {
 		    if(isset($params[2]))//Si l'adresse est /Ventes/xxx
 		    {
     		    switch($params[2])
     		    {
     		        case 'devis' ://Si l'adresse est /Ventes/Devis
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+    		            {
     		                if(isset($params[3]))
     		                {
     		                    switch($params[3])
@@ -197,33 +204,112 @@ switch ($params[1]) {
     		                    $site->titre="Liste Devis";
     		                    $site-> left_sidebar=$controleur->afficheListeDevis();
     		                }
+    		            }
+    		            else
+    		            {
+                            $controleur->afficheNonAcces();
+    		            }
     		            break;
     		        case 'commandes' :
-    		            if(isset($params[3]))
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
     		            {
-    		                switch($params[3])
+        		            if(isset($params[3]))
+        		            {
+        		                switch($params[3])
+        		                {
+        		                    case 'ajouter'://Si l'adresse est /Ventes/Devis/Ajouter
+        		                        $site->js = "pageAjoutDevisOuCommande";
+        		                        $site->left_sidebar = $controleur->afficheAjoutDevisOuCommande();
+        		                        break;
+        		                    default://Si autre
+        		                        $site->js="pageDetailsCommande";
+        		                        $site->titre = "Commande n°".$params[3];
+        		                        $site->left_sidebar =$controleur->afficheDetailsDevisOuCommande($params[3],$params[2]);
+        		                        break;
+        		                }
+        		            }
+        		            else
+        		            {
+        		                $site->titre="Liste Commandes";
+        		                $site->js = "pageListeCommandes";
+        		                $site->left_sidebar = $controleur->afficheListeCommandes();
+        		            }
+    		            }
+    		            else
+    		            {
+    		                $controleur->afficheNonAcces();
+    		            }
+    		            break;
+    		        case 'preparations':
+    		            if($controleur->estConnecte() == 2 || $controleur->estConnecte() == 4)
+    		            {
+    		                if(isset($params[3]))
     		                {
-    		                    case 'ajouter'://Si l'adresse est /Ventes/Devis/Ajouter
-    		                        $site->js = "pageAjoutDevisOuCommande";
-    		                        $site->left_sidebar = $controleur->afficheAjoutDevisOuCommande();
-    		                        break;
-    		                    default://Si autre
-    		                        $site->js="pageDetailsCommande";
-    		                        $site->titre = "Commande n°".$params[3];
-    		                        $site->left_sidebar =$controleur->afficheDetailsDevisOuCommande($params[3],$params[2]);
-    		                        break;
+    		                    switch($params[3])
+    		                    {
+    		                        default:
+    		                            $site->js = "pageDetailsPrepa";
+    		                            $site->left_sidebar = $controleur->afficheDetailsPreparation($params[3]);
+    		                            break;
+    		                    }
+    		                }
+    		                else
+    		                {
+    		                    $site->js = "pageListePrepa";
+    		                    $site->left_sidebar = $controleur->afficheListePreparations();
     		                }
     		            }
     		            else
     		            {
-    		                $site->titre="Liste Commandes";
-    		                $site->js = "pageListeCommandes";
-    		                $site->left_sidebar = $controleur->afficheListeCommandes();
+    		                $site->left_sidebar = $controleur->afficheNonAcces();
     		            }
     		            break;
+    		            
     		        case 'livraisons' :
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 3 || $controleur->estConnecte() == 4 )
+    		            {
+    		                $site->js = "pageLivraisons";
+    		                if(isset($params[3]))
+    		                {
+    		                    if (isset($params[4]))
+    		                    {
+    		                        switch($params[3])
+    		                        {
+    		                            default:
+    		                                $site->left_sidebar = $controleur->detailLivraisonsEnCours($params[3]);
+    		                                break;
+    		                        }
+    		                    }
+    		                    else
+    		                    {
+    		                        switch($params[3])
+    		                        {
+    		                            default:
+    		                                $site->left_sidebar = $controleur->detailLivraisons($params[3]);
+    		                                break;
+    		                        }
+    		                    }
+    		                }
+    		                else
+    		                {
+    		                    $site->left_sidebar = $controleur->listeLivraisons();
+    		                }
+    		            }
+    		            else
+    		            {
+    		                $site->left_sidebar = $controleur->afficheNonAcces();
+    		            }
+    		            
     		            break;
     		        case 'facturations' :
+    		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
+    		            {
+    		                $site->left_sidebar="Page en construction";
+    		            }
+    		            else
+    		            {
+    		                $site->left_sidebar = $controleur->afficheNonAcces();
+    		            }
     		            break;
     		        case 'reliquats' :
     		            if(isset($params[3]))
@@ -231,13 +317,13 @@ switch ($params[1]) {
     		                switch($params[3])
     		                {
     		                    default:
-    		                        $controleur->afficheDetailsReliquat($params[3]);
+    		                        $site->left_sidebar = $controleur->afficheDetailsReliquat($params[3]);
     		                        break;
     		                }
     		            }
     		            else
     		            {
-                            $controleur->afficheListeReliquats();
+    		                $site->left_sidebar = $controleur->afficheListeReliquats();
     		            }
     		            break;		            		        
 		        }
@@ -253,67 +339,6 @@ switch ($params[1]) {
 	    }
 	    break;	
 	    
-	case 'preparations':
-	    if($controleur->estConnecte() == 2 || $controleur->estConnecte() == 4)
-	    {
-	        if(isset($params[2]))
-	        {
-	            switch($params[2])
-	            {
-	                default:
-	                    $site->js = "pageDetailsPrepa";
-	                    $site->left_sidebar = $controleur->afficheDetailsPreparation($params[2]);
-	                    break;
-	            }
-	        }
-	        else
-	        {
-                $site->js = "pageListePrepa";
-	            $site->left_sidebar = $controleur->afficheListePreparations();
-	        }
-	    }
-	    else
-	    {
-	        $site->left_sidebar = $controleur->afficheNonAcces();
-	    }
-	    break;
-	    
-	case 'livraisons':
-	    if($controleur->estConnecte() == 3 || $controleur->estConnecte() == 4 || $controleur->estConnecte() == 1)
-	    {
-	        $site->js = "pageLivraisons";
-	        if(isset($params[2]))
-	        {
-	            if (isset($params[3]))
-	            {
-	                switch($params[3])
-	                {
-	                 default:
-	                     $site->left_sidebar = $controleur->detailLivraisonsEnCours($params[3]);
-	                 break;    
-	                }
-	            }
-	            else
-	            {
-	            switch($params[2])
-	            {
-	                   default:
-	                   $site->left_sidebar = $controleur->detailLivraisons($params[2]);
-	                   break;
-	            }
-	            }
-	        }
-	        else
-	        {
-	            $site->left_sidebar = $controleur->listeLivraisons();
-	        }
-	    }
-	    else
-	    {
-	        $site->left_sidebar = $controleur->afficheNonAcces();
-	    }
-	    break;
-   
 	case 'articles':
 	    if($controleur->estConnecte()!= false)
 	    {    		       
@@ -348,7 +373,5 @@ switch ($params[1]) {
 	    break;
 	    
 }
-
-$site->footer = $controleur->afficheFooter();
 $site->affiche();
 ?>

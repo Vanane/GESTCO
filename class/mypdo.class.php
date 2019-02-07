@@ -30,11 +30,21 @@ class mypdo extends PDO{
     			}
     	}
     }
-    
+    /* --- Fonctions à part --- */
     
     public function laDateAujourdhui()
     {
         return $this->connexion->query("SELECT NOW() as now")->fetch(PDO::FETCH_OBJ)->now;
+    }
+    
+    public function arrondirDate($d)
+    //Procédure qui retourne une date sans le temps.
+    {        
+        $q = 'CALL arrondirDate("'.$d.'");';
+        $result = $this->connexion->query($q);
+        if($result)
+        return $result->fetch(PDO::FETCH_OBJ)->date;
+        else return null;
     }
     
     /*------------------------------------------------------------------------------------------------------------------*/
@@ -118,6 +128,19 @@ class mypdo extends PDO{
         else
             return null;
     }
+    
+    
+    public function listeTypesAction()
+    {
+        $requete='SELECT * FROM type_action;';
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+        else
+            return null;
+    }
+    
+    
     public  function listeContactFournisseursParID($id){
         $requete='SELECT c.* FROM contact_FOURNISSEUR c, Societe s WHERE s.idSociete=c.idSociete AND s.idSociete='.$id.';';
         $result=$this->connexion->query($requete);
@@ -230,6 +253,18 @@ class mypdo extends PDO{
                 return null;
     }
     
+
+    public function listeVentesAvecReliquat()
+    {
+        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_reliquat);";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    
     public function listePreparationsAFaire($idEmp)
     {
         $r="SELECT * FROM vente WHERE idVente IN (SELECT idVente FROM detail_preparation WHERE idEmploye IS NULL OR idEmploye = '".$idEmp."') AND datePrepa IS NULL;";
@@ -307,6 +342,19 @@ class mypdo extends PDO{
         else
             return null;
     }
+    
+    
+    public function listeDetailsPreparationParArticle($id)
+    {
+        $requete='SELECT * FROM detail_preparation WHERE idArticle = "'.$id.'";';
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return ($result);
+            else
+                return null;
+    }
+        
+    
     public function listeDetailsLivraisonParIdVente($idV)
     {
         $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
@@ -318,15 +366,18 @@ class mypdo extends PDO{
         return null;
     }
     
-    public function listeDetailsPreparationParArticle($id)
+    
+    public function listeDetailsReliquatParIdVente($idV)
     {
-        $requete='SELECT * FROM detail_preparation WHERE idArticle = "'.$id.'";';        
+        $requete='SELECT * FROM detail_reliquat WHERE idVente = "'.$idV.'";';
         $result=$this->connexion->query($requete);
         if ($result)
+        {
             return ($result);
-        else
-            return null;
+        }
+        return null;
     }
+    
 
     public function listeEmployes()
     {
@@ -612,13 +663,25 @@ class mypdo extends PDO{
     public function employeParSonId($id)
     {
         $r='SELECT * FROM employe WHERE idEmploye = "'.$id.'";';
-        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        $result=$this->connexion->query($r);
         if($result)
-            return $result;
+            return $result->fetch(PDO::FETCH_OBJ);
+        else
+            return null;
+    }
+
+    
+    public function typeReliquatParSonId($id)
+    {
+        $r='SELECT * FROM type_reliquat WHERE idType = "'.$id.'";';
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result->fetch(PDO::FETCH_OBJ);
             else
                 return null;
     }
-
+    
+    
     public function idDerniereVente()
     {
         $r="SELECT idVente FROM VENTE ORDER BY idVente DESC";

@@ -96,15 +96,22 @@ strong {
 }
 
 
-.footer
+/* --- STYLES POUR CERTAINS CONTENUS DES GABARITS --- */
+
+header
 {
 	display:block;
-	position: relative;
-	float:right;
+	position:relative;
 	width:100%;
+	height:auto;
+	overflow:hidden;	
 }
 
-/* --- STYLES POUR CERTAINS CONTENUS DES GABARITS --- */
+header img
+{
+	max-width:25%;
+}
+
 
 pre, code {
 	font-size: 100%;
@@ -123,6 +130,18 @@ pre strong {
 	font-weight: normal;
 	color: black;
 }
+
+input, select
+{
+	border:none;
+	font-size:1em;
+}
+
+*[readonly]
+{
+	background:#e9e9e9;
+}
+
 #copyright {
 	margin: 20px 0 5px 0;
 	text-align: right;
@@ -142,7 +161,6 @@ pre strong {
 	display:none;
 }
 
-
 /* --- STYLES DE MISE EN PAGE --- */
 
 #img-greta
@@ -160,10 +178,24 @@ pre strong {
 	width:100%;
 }
 
+.bloc_menus
+{
+	position:relative;
+	width:100%;
+	overflow:hidden;
+}
+
+.bloc_menus div
+{
+	position:relative;
+	float:left;
+}
+
 .conteneur
 {
 	position:relative;	
 	width:100%;
+	
 	box-sizing:border-box;
 	overflow:hidden;
 }	
@@ -187,6 +219,15 @@ pre strong {
 {
 	position:relative;
 	float:left;
+	width:100%;
+}
+
+
+.footer
+{
+	display:block;
+	position: relative;
+	float:right;
 	width:100%;
 }
 
@@ -234,7 +275,7 @@ pre strong {
 /* --- STYLE MENU --- */
 .menu_horizontal
 {
-	width:auto;	
+	width:30%;	
 }
 
 .menu_horizontal ul
@@ -242,7 +283,7 @@ pre strong {
 	display:block;
 	position:relative;
 	float:left;	
-	width:33%;
+	width:100%;
 	height:auto;
 }
 
@@ -258,11 +299,6 @@ pre strong {
 	margin:0;
 	padding:0;
 	box-sizing:border-box;				
-}
-
-.menu_horizontal ul:nth-child(3n+2) /*Permet de prendre 100% de l'écran au lieu de 99%, avec 3 boutons.*/
-{
-	width:34%;
 }
 
 .menu_horizontal ul:hover
@@ -298,31 +334,67 @@ pre strong {
 	background-color: #E95122 !important;	
 }
 
-/* --- STYLE SOUS-MENU --- */
-.sous-menu
+.separation_menu
 {
-	height:6.4em;
-	width:auto;
+	overflow:hidden;
+	padding: 2.5%;
+	
 }
 
-.sous-menu ul
+#bandeau_connexion
 {
-	width:25% !important;
+	position:fixed;
+	top:0;
+	right:0;
+	width:200px;
+	height:50px;
+	z-index:999;
 }
 
-.sous-menu ul li a
+#bandeau_connexion a
 {
-	margin:0;
-	padding:0;
+	padding:0.5em;	
+	width:200px;
+	right:0;
+}
+
+
+/* --- STYLE BASE LISTES --- */
+
+.div-liste bloc
+{
 	display:block;
-	padding:1em;
+	position:relative;
+	background:#B2C3C0;
+	width:100%;
+	overflow:hidden;
+	border-top:solid 1px black;	
 }
 
-.sous-menu p
-{
-	text-align:center;
-	margin:1em;
+ .div-liste row
+ {
+	position:relative;
+	width:98%;	
+	margin:1%;
 }
+
+.div-liste row p
+{
+	display:block;
+	float:left;
+	width:33%;
+	margin: 1em 0;
+}
+
+.div-liste row p input, .div-liste row p select
+{
+	display:block;
+	float:right;
+	text-align:center;
+	font-size:1em;
+	width:50%;
+}
+
 
 /* --- STYLE IHM AJOUT DEVIS --- */
 
@@ -343,6 +415,8 @@ pre strong {
 	padding:0.8em 0;
 	margin:0;
 	width:100%;
+	min-width:1500px;
+	float:left;
 }
 
 .btn-classique:hover
@@ -353,41 +427,34 @@ pre strong {
 #details-articles-devis input, #details-articles-devis select
 {
 	width:100%;
-	height:2em;
+	text-align:center;
+	font-size:1em;
 }
+
+
+#details-articles-devis table
+{
+	min-width:1500px;
+}
+#details-articles-devis table th
+{
+	position:relative;
+	width:5%;
+	border-right:solid 1px black;
+}
+#details-articles-devis table th[text]
+{
+	width:20%;
+}
+
+#details-articles-devis table td
+{
+	border-right:solid 1px black;	
+}
+
 
 /* --- STYLE IHM LISTE DEVIS --- */
 	
- .div-liste-devis row
- {
-	position:relative;
-	width:100%;	
-	background:#B2C3C0;
-}
-
-.div-liste-devis bloc
-{
-	display:block;
-	background:#B2C3C0;
-	width:100%;
-	overflow:hidden;
-	border-top:solid 1px black;	
-}
-
-.div-liste-devis row p
-{
-	display:block;
-	float:left;
-	width:33%;
-	margin: 1em 0;
-}
-
-.div-liste-devis row p input
-{
-	display:block;
-	float:right;
-}
-
 .div-filtres
 {
 	position:relative;
@@ -448,6 +515,8 @@ pre strong {
 {
 	float:right;
 	width:50%;	
+	text-align:center;
+	font-size:1em;
 }
 
 
@@ -464,11 +533,9 @@ pre strong {
 #details-articles-devis
 {
 	position:relative;
-	width:100%;
-	height:250px;
 	box-sizing:border-box;
-	overflow-y:scroll;	
-	overflow-x:hidden;
+	height:250px;
+	overflow:auto;
 }
 
 #details-articles-devis select option:first-child
@@ -478,36 +545,6 @@ pre strong {
 
 
 /* --- STYLE IHM LISTE PREPARATIONS --- */
-
-.div-liste-preparations bloc
-{
-	position:relative;
-	display:block;
-	width:100%;
-	overflow:hidden;
-	border-top:solid 1px black;
-	
-}
-
-.div-liste-preparations row
-{
-	width:98%;
-	padding:1%;
-	overflow:hidden;
-	background:#B2C3C0;	
-}
-
-.div-liste-preparations row p
-{
-	width:50%;
-	float:left;	
-}
-
-.div-liste-preparations row p input
-{
-	width:50%;
-	float:right;
-}
 
 
 /* --- STYLE IHM DETAILS PREPARATION --- */
@@ -532,6 +569,7 @@ pre strong {
 #details-preparation-articles row p input
 {
 	display:block;
+	width:50%;
 	float:right;
 }
 
@@ -543,6 +581,16 @@ pre strong {
 
 /* --- STYLE IHM DETAILS LIVRAISON --- */
 
+
+
+
+/* --- STYLE IHM LISTE RELIQUATS --- */
+
+
+.liste-reliquats row p, .liste-reliquats row p input
+{
+	width:50%;
+}
 
 
 /* --- STYLE IHM DETAIL ENTREPRISE --- */
@@ -582,80 +630,12 @@ pre strong {
 	width:40%;
 }
 	
-
-
-#details-articles-devis table td, #details-articles-devis table th
-{	
-	max-width:10%;
-	box-sizing:border-box;
-	border-left:solid 1px black;
-}
-
 /* --- STYLE IHM LISTE FOURNISSEURS ET CLIENTS --- */
-
- .div-liste-entreprises row
- {
-	position:relative;
-	width:100%;	
-	background:#B2C3C0;
-}
-
-.div-liste-entreprises bloc
-{
-	display:block;
-	background:#B2C3C0;
-	width:100%;
-	overflow:hidden;
-	border-top:solid 1px black;
-}
-
-.div-liste-entreprises row p
-{
-	display:block;
-	float:left;
-	width:33%;
-	margin: 1em 0;
-}
-
-.div-liste-entreprises row p input
-{
-	display:block;
-	float:right;
-}
 
 
 /* --- STYLE IHM LISTE ARTICLES --- */
 
-.div-liste-articles row
-{
-	position:relative;
-	width:98%;
-	padding:1%;	
-}
-.div-liste-articles bloc
-{
-	display:block;
-	background:#B2C3C0;
-	width:100%;
-	overflow:hidden;
-	border-top:solid 1px black;
-}
 
-
-.div-liste-articles bloc row p
-{
-	display:block;
-	float:left;
-	width:50%;	
-	margin: 0.5em 0;
-}
-
-
-.div-liste-articles bloc row p input
-{
-	float:right;
-	overflow:hidden;
-}
 
 
 .div-liste-articles bloc row p input[type=number]
@@ -830,13 +810,15 @@ pre strong {
 	#img-greta
 	{
 		display:block;
+		position:relative;
 		padding:0px 0px 0px 0px;
-		margin-left:20%;
-		width:60%;
+		margin:auto;
+		width:100%;
+		float:none;
 		top:0;
 	}
 	
-	#titre-gestco
+	#titre-entreprise
 	{
 	display:none;
 	}
@@ -853,7 +835,14 @@ pre strong {
 		width:100%;
 		text-align:center;
 	}
+	
+	/* --- STYLE MENU SMARTPHONE --- */
 		
+	.menu_horizontal 
+	{
+		width:100%;
+	}
+	
 	.menu_horizontal ul
 	{
 		width:50% !important;
@@ -861,17 +850,27 @@ pre strong {
 		border:solid 3px white;
 		background-color: #EEE;	
 	}
+	.separation_menu
+	{
+		display:none;		
+	}
 		
 	#btn-connexion, #btn-deconnexion
 	{
 		width:100% !important;
 	}
 		
-	.sous-menu
+	#bandeau_connexion
 	{
-		height:10.8em;
+		position:relative;
+		width:100%;
+		height:auto;
+		overflow:hidden;
 	}	
-	
+	#bandeau_connexion a
+	{
+		padding:0.5em;	
+	}
 	
 		
 	/* --- STYLE IHM ARTICLES SMARTPHONE --- */
@@ -958,6 +957,12 @@ pre strong {
 	}
 	
 	#details-preparation-articles row p
+	{
+		width:100%;
+		margin:0;
+	}
+	
+	#details-preparation-articles row p input
 	{
 		width:100%;
 		margin:0;

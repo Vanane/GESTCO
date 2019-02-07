@@ -28,8 +28,9 @@ $("document").ready(function(){
 			}
 			else
 			{
-				$("#btnArticle"+inc).css('background', '#55dddd');//Sinon couleur = rouge
-				$("#rowArticle"+inc).find("#qteFournie").prop("readonly", true);//Et on bloque l'input pour la quantité.			
+				$("#btnArticle"+inc).css('background', '#dd5555');//Sinon couleur = rouge
+				$("#rowArticle"+inc).find("#qteFournie").prop("readonly", true);//Et on bloque l'input pour la quantité.	
+				alert("Code erroné ! Vérifiez votre saisie.");
 			}
 		});
 		
@@ -58,7 +59,10 @@ $("document").ready(function(){
 			{
 				if(parseInt($("#rowArticle"+i).find("#qteFournie").val()) < parseInt($("#rowArticle"+i).find("#qteDemandee").val()))
 				{
-					alert("L'article "+$("#btnArticle"+i).html()+" n'a pas été remis en quantité suffisante. Souhaitez-vous continuer ?");
+					if(confirm("L'article "+$("#btnArticle"+i).html()+" n'a pas été remis en quantité suffisante. Souhaitez-vous continuer ?"))
+						error = false;
+					else
+						error = true;
 				}
 			}
 			else
@@ -89,7 +93,7 @@ $("document").ready(function(){
 		        	'action':'validePrepa',
 		    		'datas':datas
 		    	},
-		        url: "../ajax/detailsPrepaAjax.php",
+		        url: "../../ajax/detailsPrepaAjax.php",
 		        success: function(r) {
 		        	alert("Préparation enregistrée !");
 		        	console.log(r);
@@ -97,6 +101,7 @@ $("document").ready(function(){
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
 		        {
+		        	alert("erreur");
 		            console.log(xhr.status);
 		            console.log(thrownError);
 		            console.log(ajaxOptions);

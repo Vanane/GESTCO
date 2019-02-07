@@ -85,7 +85,7 @@ public function afficheListeDevis()
 {
 	    
     $retour='
-            <div class="conteneur border div-liste-devis">
+            <div class="conteneur border div-liste div-liste-devis">
                 <p style="margin-left: 1em">
                     Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
                     Vous pouvez accéder au detail de chaque devis en cliquant sur "Voir Détail".<br>
@@ -118,7 +118,8 @@ public function afficheListeDevis()
         $s=$this->vpdo->entrepriseParIdVente($v->idVente);
         $c=$v->idClient;
         $p=$this->vpdo->totalDevisparIdVente($v->idVente);
-                
+        $date=$this->vpdo->arrondirDate($v->dateDevis);//Récupérer la date sans les heures et les minutes
+                       
         //on prévoit des variables pour nos appels
         // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
         //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
@@ -132,12 +133,12 @@ public function afficheListeDevis()
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
                         <p>Code Employé :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date devis :<input type="text" readonly value="'.$v->dateDevis.'"></p>
+                        <p>Date devis :<input type="text" readonly value="'.$date.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
                         <p>Code client :<input type="text" readonly value='.$c.'></p>
-                        <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
+                        <p>Prix Total :<input type="text" readonly value="'.$p->prixTotal.' €"></p>
                     </row>
                     <row>
                        <a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
@@ -155,7 +156,7 @@ public function afficheListeDevis()
 	public function afficheListeCommandes()
 	{
 	    $retour='
-            <div class="conteneur border div-liste-devis">
+            <div class="conteneur border div-liste div-liste-devis">
                 <p>
                     Voici l\'outil de gestion des commandes. Ci-dessous se trouve la liste des commandes existantes.
                 </p>
@@ -183,6 +184,7 @@ public function afficheListeDevis()
 	        $e=$this->vpdo->employeParSonId($e->idEmploye);
 	        $s=$this->vpdo->entrepriseParIdVente($v->idVente);
 	        $p=$this->vpdo->totalCommandeParIdVente($v->idVente);
+	        $date=$this->vpdo->arrondirDate($v->dateCommande);//Récupérer la date sans les heures et les minutes
 	        
 	        $retour = $retour.'
                 <bloc';
@@ -199,12 +201,12 @@ public function afficheListeDevis()
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
                         <p>Responsable :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date commande :<input type="text" readonly value="'.$v->dateDevis.'"></p>
+                        <p>Date commande :<input type="text" readonly value="'.$date.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
                         <p>Code client :<input type="text" readonly value='.$v->idClient.'></p>
-                        <p>Prix Total :<input type="text" readonly value='.$p->prixTotal.'></p>
+                        <p>Prix Total :<input type="text" readonly value="'.$p->prixTotal.' €"></p>
                     </row>
                     <row>
                        <a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
@@ -378,7 +380,7 @@ public function afficheListeDevis()
 	        $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
 	    }
 	    $return = $return.'</select></p>
-                        <p>Date : <input id="date" type="text" value='.$this->vpdo->laDateAujourdhui().'readonly></p>
+                        <p>Date : <input id="date" type="text" value='.$this->vpdo->laDateAujourdhui().' readonly></p>
                     </row>
                     <row>
                         <p>Société : <input id="idSociete" type="text" readonly></p>
@@ -389,13 +391,14 @@ public function afficheListeDevis()
 	        
                 <div id="details-articles-devis">
                     <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
+                        <tr>    <th text>Code article</th>   <th text>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th text>Oservation</th>   </tr>
                         <tr id="tr1">
                             <td><select id="idArticle">
                                 <option value></option>';
-	    while($e = $lesArticles->fetch(PDO::FETCH_OBJ))
+	    //Les th avec "text" sont marqués pour le CSS, afin d'agrandir les colonnes
+	    while($a = $lesArticles->fetch(PDO::FETCH_OBJ))
 	    {
-	        $return = $return.'<option value="'.$e->idArticle.'">'.$e->idArticle.'</option>';
+	        $return = $return.'<option value="'.$a->idArticle.'"> '.$a->codeBarre.' | '.$a->idArticle.' | '.$a->libelle.' | '.$a->dernierCMUP.'€</option>';
 	    }
 	    $return = $return.'</select></td>
                             <td><input id="nomArticle" type="text" readonly></td>
@@ -421,7 +424,7 @@ public function afficheListeDevis()
 	public function afficheListePreparations()
 	{	    
 	    $return='
-            <div class="conteneur border div-liste-preparations">
+            <div class="conteneur border div-liste div-liste-preparations">
                 <h4>Liste des commandes en préparation :</h4>
                 <p>
                     Voici l\'outil de gestion des préparations de commandes.
@@ -442,6 +445,8 @@ public function afficheListeDevis()
 	        $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
 	        $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente);
 	        $c=$v->idClient;
+	        $date = $this->vpdo->arrondirDate($v->dateCommande);
+	        
 	        
 	        //on prévoit des variables pour nos appels
 	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
@@ -450,7 +455,7 @@ public function afficheListeDevis()
                 <bloc>
                     <row>
                         <p>Code vente :<input id="idV" type="text" readonly value='.$ligneIdVente->idVente.'></p>
-                        <p>Date d\'envoi :<input type="text" readonly value="'.$v->dateCommande.'"></p>
+                        <p>Date d\'envoi :<input type="text" readonly value="'.$date.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
@@ -617,13 +622,100 @@ public function afficheListeDevis()
 	
 	public function afficheListeReliquats()
 	{
-	    $retour ='<div class="conteneur border">aa';
-	    
-	    
-	    
-	    
+	    $lesVentes = $this->vpdo->listeVentesAvecReliquat();
+	    $retour ='
+        <div class="conteneur border div-liste liste-reliquats">';
+	    $retour = $retour.'
+            <h4>Gestion des reliquats</h4>
+            <p style="margin-left:1em">Voici la page de gestion des reliquats.</p>
+            <p style="margin-left:1em">Lorsqu\'une vente est incomplète à la préparation, ou des articles sont dégradés la livraison, un reliquat est généré.
+                <br>Il permet de prendre en compte les pertes dans une commande, et de générer un avoir ou un remboursement pour le client.</p>
+            <p style="margin-left:1em">Pour visualiser les reliquats d\'une vente, cliquez sur "Voir Détails" pour la vente correspondante.</p>
+        ';
+	    while($v = $lesVentes->fetch(PDO::FETCH_OBJ))
+	    {
+	        $c= $this->vpdo->clientParSonId($v->idClient);
+	        $e=$this->vpdo->societeParSonId($c->idSociete);
+	        $lesDetails = $this->vpdo->listeDetailsReliquatParIdVente($v->idVente);
+	        $qte = 0;//Nombre d'articles total à gérer.
+	        while($d = $lesDetails->fetch(PDO::FETCH_OBJ)) $qte += $d->qte;//Pour chaque reliquat, on fait la somme des quantités
+	        
+    	    $retour = $retour.'
+            <bloc>
+                <row><p>ID Vente : <input value='.$v->idVente.' readonly></p><p>Client : <input value="'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p></row>
+                <row><p>Entreprise : <input value="'.$e->idSociete.' - '.$e->nom.'" readonly></p><p>Quantité totale : <input value='.$qte.' readonly></p></row>
+                <row><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></row>
+            </bloc>
+            
+';	       
+	    }
 	    $retour = $retour.'</div>';	    	    	   
 	    return $retour;
+	}
+	
+	
+	
+	
+	public function afficheDetailsReliquat($idV)
+	{
+	    $v = $this->vpdo->venteParSonId($idV);
+	    $e = $this->vpdo->employeParIdVente($idV)->fetch(PDO::FETCH_OBJ);
+	    $c = $this->vpdo->clientParSonId($v->idClient);	  
+	    $s = $this->vpdo->societeParSonId($c->idSociete);
+	    $lesReliquats = $this->vpdo->listeDetailsReliquatParIdVente($idV);
+	    $retour = '
+        <div class="conteneur border">
+            <div id="details-vente">
+                <row>
+                    <p>Responsable : <input type="text" value="'.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'" readonly></p>
+                </row>
+                <row>
+                    <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
+                    <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
+                    <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
+                </row>
+                <row>
+                    <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
+                    <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
+                    <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                </row>
+            </div>
+            <div class="div-liste">
+                        
+        ';
+	    
+	    while($r = $lesReliquats->fetch(PDO::FETCH_OBJ))
+	    {
+	        $t = $this->vpdo->typeReliquatParSonId($r->typeReliquat);
+	        $retour = $retour.'
+                <bloc>
+                    <row>
+                        <p>Article : <input type="text" value="'.$r->idArticle.'"></p>
+                        <p>Quantité : <input type="text" value="'.$r->qte.'"></p>
+                        <p>Observation : <input type="text" value="'.$r->observation.'"></p>
+                        <p>Type de conflit : <input type="text" value="'.$t->libelle.'"</p>
+                        <p>Action<select id="Action">
+            ';
+	        $lesActions = $this->vpdo->listeTypesAction();
+	        while($a = $lesActions->fetch(PDO::FETCH_OBJ))
+	        {
+	            $retour = $retour.'
+                            <option value="'.$a->idType.'">'.$a->libelle.'</option>
+                    
+                ';
+	        }
+	        $retour = $retour.'
+                        </select></p>
+                        <p>Montant € : <input type="number" min=0 value=0 step=0.01></p>
+                    </row>                
+                </bloc>
+        ';
+	    }	    
+	    $retour = $retour.'
+            </div>
+        ';
+	    return $retour;
+	    
 	}
 	
 /*______________________________________________________________________________________________________________________________________*/
@@ -636,7 +728,7 @@ public function afficheListeDevis()
 public function listeSociete($types,$type,$idType)
 {    // je récupère 3 données, type, types et id idType
      //ils me permettent d'adapter ma page en client ou en fournisseur en fonction de l'appel effectuer dans index
-$return='<div class="conteneur div-liste-entreprises"><p style="margin-left: 1em">
+$return='<div class="conteneur div-liste div-liste-entreprises"><p style="margin-left: 1em">
                     <h4>Voici l\'outil de gestion des  '.$types.' </h4><br>
                     Vous pouvez accéder au contact pour chaque societe en cliquant sur <b>"Voir détails"</b>.<br>                  
                     Si vous souhaitez ajouter un contact, vous pouvez cliquez sur <b>"Ajouter un contact"</b>.<br>
@@ -697,7 +789,7 @@ public function listeContact($idSociete, $types,$type, $idType)
     {
         $lccof = $this->vpdo->listeContactFournisseursParId($idSociete);
     }
-    $return='   <div class="conteneur  div-liste-entreprises">
+    $return='   <div class="conteneur div-liste div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existant pour le '.$type.' : <b>'.$s->nom.'</b>.<br>
                         Si vous souhaitez modifier les informations d\'un '.$type.', cliquez sur <b>"Modifier les informations"</b>.<br>                        
@@ -731,7 +823,7 @@ public function listeContact($idSociete, $types,$type, $idType)
 
     while($ligneIdContact = $lccof->fetch(PDO::FETCH_OBJ))
     { 
-     $return = $return.'<div id="conteneur  div-liste-entreprises">
+     $return = $return.'<div id="conteneur div-liste div-liste-entreprises">
     <row> 
         <p>Code du contact : <input type="text" id="id'.$ligneIdContact->$idType.'" required readonly value='.$ligneIdContact->$idType.'></p>
         <p>Nom du contact : <input type="text" id="nom'.$ligneIdContact->$idType.'" maxlength="16" required value='.$ligneIdContact->nom.'></p>
@@ -900,7 +992,7 @@ public function ajouterSociete($type)//je récupère toujours le type
     
    public function listeAchats()
     {
-        $return='<div class="conteneur  div-liste-entreprises">
+        $return='<div class="conteneur div-liste div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Achats.</b><br>
                         Si vous souhaitez ajouter un nouvelle Achat, cliquez sur <b>" Ajouter achat"</b>.<br>
@@ -993,9 +1085,9 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-  public function listeLivraisons()   
-  {
-      $return='<div class="conteneur  div-liste-entreprises">
+    public function listeLivraisons()   
+    {
+        $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Livraisons.<br>
                         Voici si dessous la totalité des préparation en attente de livraison<br>
@@ -1004,24 +1096,25 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         <a onclick=\'gestionHistorique()\' class="btn-classique" id="btn-encours" style="display:none;">Voir les livraisons à faire</a>
                         <br><b>Listes des livraisons :</b>
                     </p><bloc id="encours" style="display:block;"> ';
-      $llaf = $this->vpdo->listeLivraisonsAFaire();
-      $llf = $this->vpdo->listeLivraisonsFaite();
-     
-      while($ll = $llaf->fetch(PDO::FETCH_OBJ))
-      {
-          $vpi = $this->vpdo->venteParSonId($ll->idVente);
-         $return = $return.'
-                <bloc>
-                   	<row>
-                        <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$ll->idVente.'></p>
-                        <p>Date de la préparation :<input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'></p>
-                        <a href="enCours/'.$ll->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
-                    </row>
-                </bloc>';
-      }
-      $return=$return.' </bloc><bloc id="historique"  style="display:none;">';
-      while($lf = $llf->fetch(PDO::FETCH_OBJ))
-      {
+        $llaf = $this->vpdo->listeLivraisonsAFaire();
+        $llf = $this->vpdo->listeLivraisonsFaite();
+         
+        while($ll = $llaf->fetch(PDO::FETCH_OBJ))
+        {
+            $vpi = $this->vpdo->venteParSonId($ll->idVente);
+            $date = $this->vpdo->arrondirDate($v->datePrepa);
+             $return = $return.'
+                    <bloc>
+                       	<row>
+                            <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$ll->idVente.'></p>
+                            <p>Date de la préparation :<input type="text" readonly maxlength="12" value="'.$date.'"></p>
+                            <a href="enCours/'.$ll->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
+                        </row>
+                    </bloc>';
+        }   
+        $return=$return.' </bloc><bloc id="historique"  style="display:none;">';
+        while($lf = $llf->fetch(PDO::FETCH_OBJ))
+        {
           $vpi = $this->vpdo->venteParSonId($lf->idVente);
           $ei=$this->vpdo->employeParSonId($lf->idEmploye);
           $return = $return.'
@@ -1033,10 +1126,10 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         <a href="'.$lf->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
                     </row>
                 </bloc>';
-      }
-      $return=$return.'</bloc></div>';
-      return $return;
-  }
+        }
+        $return=$return.'</bloc></div>';
+        return $return;
+    }
   
   /* ************************************************************************************************************************************* */
   /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
@@ -1129,7 +1222,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
     {
         $lesArticles = $this->vpdo->listeArticles();                
         $retour = '
-                <div class="conteneur div-liste-articles">';
+                <div class="conteneur div-liste div-liste-articles">';
         
         $retour = $retour.'
                     <p>Voici la liste des articles enregistrés dans la base de données.</p>
@@ -1144,6 +1237,8 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         <row>
             <p>ID Article : <input id="idArticle" value="'.$a->idArticle.'" readonly></p>
             <p>Code-barre : <input id="barreArticle" value="'.$a->codeBarre.'" readonly></p>
+        </row>
+        <row>
             <p>Dénomination : <input id="libArticle" value="'.$a->libelle.'" readonly></p>
             <p>Famille : <input id="famArticle" value="'.$f->libelle.'" readonly></p>
         </row>
@@ -1223,7 +1318,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
             <div id="div-on-cmup">
                 <row>
                     <p>Marge % minimale : <input type="number" value="'.(100*$a->txMarge).'" readonly></p>
-                    <p>Marge supplémentaire : <input id="margeSup" type="number" value=0 style="background:#ffaaaa"></p>
+                    <p>Marge supplémentaire : <input id="margeSup" type="number" value=0></p>
                     <p>TVA % : <input type="number" value="'.(100*$a->txTVA).'" readonly></p>
                     <p>Coût Unitaire Moyen Pondéré (CMUP) actuel : <input id="cmupActuel" type="number" value="'.$a->dernierCMUP.'" readonly></p>
                     <p>Prix de Vente TTC : <input type="number" value="'.round($a->dernierCMUP * (1+$a->txMarge) * (1+$a->txTVA),2).'" readonly></p>
@@ -1312,17 +1407,14 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         </div>';
         return $retour;
     }    
-    
-    public function afficheFooter()
+        
+    public function informationsEntreprise()
     {
-        $s = $this->vpdo->infosSociete();
-        $retour = '
-				<p id="copyright">
-                '.$s->nom.' - '.$s->adresse.' - Tel : '.$s->telephone.'
-				<a href="'.$s->siteWeb.'">GRETA Nantes</a>
-				</p>
-		';
-        return $retour;
+        return $this->vpdo->infosSociete();
+    }
+    public function employeConnecte($id)
+    {
+        return $this->vpdo->employeParSonId($id);
     }
 }
 

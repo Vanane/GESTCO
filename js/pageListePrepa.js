@@ -15,13 +15,14 @@ $('document').ready(function(){
 		        	'idV':$(value).find('#idV').val(),
 		    		'idE':$("#idE").val()
 		    	},
-		        url: "../ajax/listePrepaAjax.php",
+		        url: "../../ajax/listePrepaAjax.php",
 		        success: function(r) {
 		        	location+=$(value).find('#idV').val();
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
 		        {
 		        	alert("Erreur inconnue, veuillez réessayer plus tard.");
+		        	console.log()
 		            console.log(xhr.status);
 		            console.log(thrownError);
 		            console.log(ajaxOptions);
