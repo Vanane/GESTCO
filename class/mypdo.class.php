@@ -357,7 +357,7 @@ class mypdo extends PDO{
     
     public function listeDetailsLivraisonParIdVente($idV)
     {
-        $requete='SELECT d.* FROM detail_livraison d JOIN article a ON a.idArticle = d.idArticle WHERE d.idVente = "'.$idV.'";';
+        $requete='SELECT * FROM detail_livraison WHERE idVente = "'.$idV.'";';
         $result=$this->connexion->query($requete);
         if ($result)
         {
@@ -504,12 +504,20 @@ class mypdo extends PDO{
         $result = $this->connexion->query($q);
         return $q;
     }
-       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $remise, $cmup, $obs)
+       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $cmup, $obs)
     {
-        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$remise.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
         return $result;
     }
+
+    public function insertDetailFacturation($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup,$marge,$tva, $obs)
+    {
+        $q = 'INSERT INTO detail_facture VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', "'.$qteD.'","'.$qteF.'","'.$tx.'","'.$cmup.'","'.$marge.'","'.$tva.'","'.$obs.'");';
+        $result = $this->connexion->query($q);
+        return $q;
+    }
+
     public function insertDetailReliquat($idV, $idA, $idEm, $typeR, $typeA, $qte, $comp, $obs)
     {
         $q = 'INSERT INTO detail_reliquat VALUES ("'.$idV.'","'.$idA.'", '.$idEm.', '.$typeR.', '.$typeA.', '.$qte.', '.$comp.', "'.$obs.'");';
@@ -532,20 +540,14 @@ class mypdo extends PDO{
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
         $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
+        return $r;
     }
     
     public function updateTableDeuxConditions($table, $attr, $value, $col1, $id1, $col2, $id2)
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col1.' = "'.$id1.'" AND '.$col2.' = "'.$id2.'";';
         $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
+        return $r;
     }
     
 
@@ -553,28 +555,19 @@ class mypdo extends PDO{
     {
         $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
         $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-        else
-            return null;
+        return $r;
     }
     public function updateContactClient($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_client SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
         $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
+        return $r;
     }
     public function updateContactFournisseur($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_fournisseur SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
         $result=$this->connexion->query($r);
-        if($result)
-            return $result;
-            else
-                return null;
+        return $r;
     }
 
 /*------------------------------------------------------------------------------------------------------------------*/
@@ -590,7 +583,7 @@ class mypdo extends PDO{
             else
                 return null;
     }
-    
+
     
     public function articleParSonId($id)
     {
@@ -680,6 +673,16 @@ class mypdo extends PDO{
             else
                 return null;
     }
+    
+    public function typeEmployeParSonId($id)
+    {
+        $r='SELECT * from type_employe WHERE idType = "'.$id.'";';
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+            else
+                return null;
+    }  
     
     
     public function idDerniereVente()

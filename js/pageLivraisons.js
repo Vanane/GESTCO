@@ -1,3 +1,26 @@
+/*$('document').ready(function(){//Nicolas
+	let idVente = document.getElementById("idVente");
+	let listeIdArticle;
+	$.ajax({ 
+        type: "POST",
+        dataType: "json",
+        data:
+    	{
+        	'action':'boucleArticle,
+        	'idV':idVente.value,
+    	},
+    	url: "../../ajax/detailsLivraisonAjax.php",
+        success: function(r) {
+        	$(listeidArticle).val(r['result']);
+        },
+        error: function (xhr, ajaxOptions, thrownError)
+        {
+            console.log(xhr.status);
+            console.log(thrownError);
+            console.log(ajaxOptions);
+        }
+	});
+});*/
 
 function gestionHistorique(){
 	var elmt = document.getElementById("historique");
@@ -9,7 +32,7 @@ function gestionHistorique(){
 	toggleDisplay(elmt2);
 	toggleDisplay(elmt3);
 }
-	
+
 function toggleDisplay(elmt){		
 	   if(typeof elmt == "string")		
 	      elmt = document.getElementById(elmt);		
@@ -19,26 +42,35 @@ function toggleDisplay(elmt){
 	      elmt.style.display = "none";		
 }
 
-function ajouterlivraison() {// voir ci dessus pour le détail du code
+function ajouterlivraison() {
 	if (confirm("Pour confirmer la livraison de cette Livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
 	{
+		let idEmploye= document.getElementById("idEmploye");
 		let idVente = document.getElementById("idVente");
-		let dateLivraison = document.getElementById("dateLivraison");
-		let observation=document.getElementById("observation");
-		$.ajax({ //AJAX pour transférer de detail_livraison à detail_facturation
+		var redirection =("http://localhost/GESTCO/Livraisons/");
+		
+		/*var qteFournie ={}; //Nicolas
+		while (isset listeIdArticle)
+		boucle des articles de la vente
+		if qteFournie == qteDemandee
+		ajax
+		else
+		rien*/
+		
+		
+		$.ajax({ 
 	        type: "POST",
 	        dataType: "json",
 	        data:
 	    	{
 	        	'action':'ajoutLivraison',
 	        	'idV':idVente.value,
-	        	'dateLivraison':dateLivraison.value,
-	        	'observation':observation.value
+	        	'idEmploye':idEmploye.value,
 	    	},
 	        url: "../../ajax/detailsLivraisonAjax.php",
 	        success: function(r) {
 	        	alert("Livraison confirmer avec succès !");
-	        	console.log(resultLivraison);
+	        	location.href =(redirection);
 	        },
 	        error: function (xhr, ajaxOptions, thrownError)
 	        {
@@ -46,6 +78,8 @@ function ajouterlivraison() {// voir ci dessus pour le détail du code
 	            console.log(thrownError);
 	            console.log(ajaxOptions);
 	        }
-	});}
+		});
+		
+	}
 		
 	}
