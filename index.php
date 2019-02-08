@@ -321,6 +321,7 @@ switch ($params[1]) {
     		            }
     		            else
     		            {
+    		                $site->js = "pageListeReliquats";
     		                $site->left_sidebar = $controleur->afficheListeReliquats();
     		            }
     		            break;		            		        

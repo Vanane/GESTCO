@@ -15,8 +15,7 @@ class controleur {
 					break;
 				}
 			case 'db' :
-				{
-					
+				{					
 					return $this->db;
 					break;
 				}
@@ -622,7 +621,6 @@ public function afficheListeDevis()
 	
 	public function afficheListeReliquats()
 	{
-	    $lesVentes = $this->vpdo->listeVentesAvecReliquat();
 	    $retour ='
         <div class="conteneur border div-liste liste-reliquats">';
 	    $retour = $retour.'
@@ -631,7 +629,9 @@ public function afficheListeDevis()
             <p style="margin-left:1em">Lorsqu\'une vente est incomplète à la préparation, ou des articles sont dégradés la livraison, un reliquat est généré.
                 <br>Il permet de prendre en compte les pertes dans une commande, et de générer un avoir ou un remboursement pour le client.</p>
             <p style="margin-left:1em">Pour visualiser les reliquats d\'une vente, cliquez sur "Voir Détails" pour la vente correspondante.</p>
+            <a id="filtre" class="btn-classique" data-id="1"></a>
         ';
+	    $lesVentes = $this->vpdo->listeVentesAvecReliquatNonResolus();
 	    while($v = $lesVentes->fetch(PDO::FETCH_OBJ))
 	    {
 	        $c= $this->vpdo->clientParSonId($v->idClient);
@@ -640,14 +640,30 @@ public function afficheListeDevis()
 	        $qte = 0;//Nombre d'articles total à gérer.
 	        while($d = $lesDetails->fetch(PDO::FETCH_OBJ)) $qte += $d->qte;//Pour chaque reliquat, on fait la somme des quantités
 	        
-    	    $retour = $retour.'
-            <bloc>
+	        $retour = $retour.'
+            <bloc tags="non-resolu">
                 <row><p>ID Vente : <input value='.$v->idVente.' readonly></p><p>Client : <input value="'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p></row>
                 <row><p>Entreprise : <input value="'.$e->idSociete.' - '.$e->nom.'" readonly></p><p>Quantité totale : <input value='.$qte.' readonly></p></row>
                 <row><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></row>
             </bloc>
-            
-';	       
+            ';
+	    }
+	    $lesVentes = $this->vpdo->listeVentesAvecReliquatResolus();
+	    while($v = $lesVentes->fetch(PDO::FETCH_OBJ))
+	    {
+	        $c= $this->vpdo->clientParSonId($v->idClient);
+	        $e=$this->vpdo->societeParSonId($c->idSociete);
+	        $lesDetails = $this->vpdo->listeDetailsReliquatParIdVente($v->idVente);
+	        $qte = 0;//Nombre d'articles total à gérer.
+	        while($d = $lesDetails->fetch(PDO::FETCH_OBJ)) $qte += $d->qte;//Pour chaque reliquat, on fait la somme des quantités
+	        
+	        $retour = $retour.'
+            <bloc tags="resolu">
+                <row><p>ID Vente : <input value='.$v->idVente.' readonly></p><p>Client : <input value="'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p></row>
+                <row><p>Entreprise : <input value="'.$e->idSociete.' - '.$e->nom.'" readonly></p><p>Quantité totale : <input value='.$qte.' readonly></p></row>
+                <row><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></row>
+            </bloc>
+            ';
 	    }
 	    $retour = $retour.'</div>';	    	    	   
 	    return $retour;
@@ -658,6 +674,10 @@ public function afficheListeDevis()
 	
 	public function afficheDetailsReliquat($idV)
 	{
+	    $valide = false;
+	    //Permet de savoir si les détails sont encore remplir ou non.
+	    //"false" si les détails sont tous pleins, 
+	    //"true" si au moins un détail n'a pas de typeAction
 	    $v = $this->vpdo->venteParSonId($idV);
 	    if($v!=null)
 	    {
@@ -674,12 +694,12 @@ public function afficheListeDevis()
                     <row>
                         <p>N° Vente : <input id="idVente" type="text" value="'.$v->idVente.'" readonly></p>
                         <p>N° Client : <input type="text" value="'.$c->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p>
-                        <p>Date : <input type="text" value="'.$v->dateDevis.'" readonly></p>
+                        <p>Date : <input type="text" value="'.$this->vpdo->arrondirDate($v->dateDevis).'" readonly></p>
                     </row>
                     <row>
                         <p>Entreprise : <input type="text" value="'.$s->idSociete.' - '.$s->nom.'" readonly></p>
                         <p>Adresse : <input type="text" value="'.$s->adresse.'" readonly></p>
-                        <p>Coordonnées : <input type="text" value="'.$s->telephone.'" readonly></p>
+                        <p>Coordonnées : <input type="text" value="'.$this->formeTelephone($s->telephone).'" readonly></p>
                     </row>
                 </div>
                 <div class="div-liste">
@@ -688,7 +708,10 @@ public function afficheListeDevis()
     	    
     	    while($r = $lesReliquats->fetch(PDO::FETCH_OBJ))
     	    {
-    	        $t = $this->vpdo->typeReliquatParSonId($r->typeReliquat);
+    	        if($r->typeAction == null || $r->compensation == null)   
+                    $valide = true;
+                    
+	            $t = $this->vpdo->typeReliquatParSonId($r->typeReliquat);
     	        $retour = $retour.'
                     <bloc>
                         <row>
@@ -699,27 +722,33 @@ public function afficheListeDevis()
                 ';
     	        $lesActions = $this->vpdo->listeTypesAction();
     	        while($a = $lesActions->fetch(PDO::FETCH_OBJ))
-    	        {
+    	        {   
     	            $retour = $retour.'
-                                <option value="'.$a->idType.'">'.$a->libelle.'</option>
-                        
-                    ';
+                                <option value="'.$a->idType.'"';
+    	            if($a->idType == $r->typeAction)
+    	            //Si l'idType de l'action ajoutée = l'idType du reliquat en train d'être défini
+    	            //Alors on sélectionne cette option.
+    	                $retour = $retour.' selected';
+    	            
+	                $retour = $retour.'>'.$a->libelle.'</option>';
     	        }
     	        $retour = $retour.'
                             </select></p>
-                            <p>Montant € : <input id="montReliquat" type="number" min=0 value=0 step=0.01></p>
+                            <p>Montant € : <input id="montReliquat" type="number" min=0 value="'.$r->compensation.'" step=0.01></p>
                         </row>
                         <row>
                             <p>Observation : <sub id="char"></sub></p><textarea id="obsReliquat" maxlength="64">'.$r->observation.'</textarea>
                         </row>                
                     </bloc>
             ';
-    	    }	    
+    	    }	
     	    $retour = $retour.'
                 </div>
-            </div>
-            <a id="confirmer" class="btn-classique">Valider les reliquats</a>
-            ';
+            </div>';
+            if($valide == true)
+        	    $retour = $retour.'<a id="confirmer" class="btn-classique">Valider les reliquats</a>';
+            else
+                $retour = $retour.'<a class="btn-classique">Reliquats validés</a>';                
 	    }
 	    else
 	    {
@@ -1506,6 +1535,16 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
     public function employeConnecte($id)
     {
         return $this->vpdo->employeParSonId($id);
+    }
+    public function formeTelephone($tel)
+    {
+        $retour ='';
+        for($i=0;$i<10;$i=$i+2)
+        {
+            $retour = $retour.substr($tel,$i, 2);
+            $retour = $retour.' ';
+        }
+        return $retour;
     }
 }
 

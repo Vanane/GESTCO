@@ -254,9 +254,19 @@ class mypdo extends PDO{
     }
     
 
-    public function listeVentesAvecReliquat()
+    public function listeVentesAvecReliquatResolus()
     {
-        $r="SELECT * from vente WHERE idVente IN(SELECT DISTINCT idVente FROM detail_reliquat);";
+        $r="SELECT DISTINCT v.* from vente v JOIN detail_reliquat d ON v.idVente = d.idVente WHERE d.typeAction IS NOT NULL;";
+        $result=$this->connexion->query($r);
+        if($result)
+            return $result;
+            else
+                return null;
+    }
+    
+    public function listeVentesAvecReliquatNonResolus()
+    {
+        $r="SELECT DISTINCT v.* from vente v JOIN detail_reliquat d ON v.idVente = d.idVente WHERE d.typeAction IS NULL;";
         $result=$this->connexion->query($r);
         if($result)
             return $result;
@@ -546,14 +556,14 @@ class mypdo extends PDO{
     public function updateTableUneCondition($table, $attr, $value, $col, $id)
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
-        //$result=$this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
     
     public function updateTableDeuxConditions($table, $attr, $value, $col1, $id1, $col2, $id2)
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col1.' = "'.$id1.'" AND '.$col2.' = "'.$id2.'";';
-        //$result=$this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
     
@@ -561,19 +571,19 @@ class mypdo extends PDO{
     public function updateSociete($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        //$result=$this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
     public function updateContactClient($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_client SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        //$result=$this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
     public function updateContactFournisseur($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE contact_fournisseur SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-        //$result=$this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
 
