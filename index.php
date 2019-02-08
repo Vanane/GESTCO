@@ -2,13 +2,14 @@
 session_start();
 
 include_once('class/autoload.php');
+//require('class/fpdf.php');
+//require('class/invoice.php');
+
 $site = new page_base();
 $controleur=new controleur();
 $request = strtolower($_SERVER['REQUEST_URI']);
 $params = explode('/', trim($request, '/'));
 $params = array_filter($params);
-
-
 
 if (!isset($params[1]))
 {
@@ -301,7 +302,31 @@ switch ($params[1]) {
     		        case 'facturations' :
     		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 4)
     		            {
-    		                $site->left_sidebar="Page en construction";
+    		                if(isset($params[3]))
+    		                {
+        		                switch($params[3])
+        		                {
+        		                    default:	
+        		                        if(isset($params[4]))
+        		                        {
+        		                            switch($params[4])
+        		                            {            		                                
+            		                            case 'facture':
+            		                                $controleur->genereFacture($params[3]);
+                                                    break;
+        		                            }
+        		                        }
+        		                        else
+        		                        {        		                           
+            		                        $site->js = "pageDetailsFacture";
+            		                        $site->left_sidebar = $controleur->afficheDetailsFacture($params[3]);
+        		                        }
+        		                }
+    		                }
+    		                else
+    		                {    		                    
+    		                    $site->left_sidebar=$controleur->afficheListeFactures();    		                        		                
+    		                }
     		            }
     		            else
     		            {

@@ -6,7 +6,7 @@ class page_base {
 	protected $footer;
 	protected $titre;
 	protected $js=array('jquery-3.3.1.min', 'tooltipster.main.min', 'tooltipster.bundle.min');
-	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min');
+	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min', 'fpdf.css');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande');
