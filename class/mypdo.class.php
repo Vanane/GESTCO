@@ -57,11 +57,10 @@ class mypdo extends PDO{
         
         $requete='SELECT * FROM detail_livraison ORDER BY idVente DESC;';
         $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
+if ($result)
+return $result->fetch(PDO::FETCH_OBJ);
+else
+return null;
     }
      
     public  function listeAjoutdeStock()
@@ -189,17 +188,7 @@ class mypdo extends PDO{
         else
             return null;
     }
-    
-    public function familleParSonId($id)
-    {
-        $q='SELECT * FROM famille_article WHERE idFam = "'.$id.'";';   
-        $result=$this->connexion->query($q)->fetch(PDO::FETCH_OBJ);
-        if ($result)
-            return ($result);
-        else
-            return null;
-    }
-    
+        
     
     public function listeMouvementsParArticle($id)
     {
@@ -221,18 +210,6 @@ class mypdo extends PDO{
                 return null;
     }
     
-    public  function listeComptes($identifiant,$mdp)
-    {
-        
-        $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
-        
-        $result=$this->connexion->query($requete);
-        if ($result)
-        {
-            return ($result);
-        }
-        return null;
-    }
     
     
     public function listeVentes()
@@ -294,7 +271,8 @@ class mypdo extends PDO{
             return $result;
             else
                 return null;
-    }    
+    }
+    
     
     public function listePreparationsAFaire($idEmp)
     {
@@ -590,6 +568,7 @@ class mypdo extends PDO{
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
         $this->connexion->query($r);
+
         return $r;
     }
     
@@ -604,7 +583,7 @@ class mypdo extends PDO{
     public function updateSociete($attr, $value,$lacondition,$estremplie)
     {
         $r='UPDATE societe SET '.$attr.' = "'.$value.'"WHERE '.$lacondition.' = "'.$estremplie.'";';
-       $this->connexion->query($r);
+        $this->connexion->query($r);
         return $r;
     }
     public function updateContactClient($attr, $value,$lacondition,$estremplie)
@@ -803,6 +782,10 @@ class mypdo extends PDO{
     public function idDernierEmploye()
     {
         $r="SELECT idEmploye FROM employe ORDER BY idEmploye DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
+        $r="SELECT  idEmploye FROM employe ORDER BY idEmploye DESC";
         $result=$this->connexion->query($r);
         if ($result)
             return $result->fetch(PDO::FETCH_OBJ);
@@ -826,10 +809,20 @@ class mypdo extends PDO{
         $result=$this->connexion->query($requete);
         if ($result)
             return $result->fetch(PDO::FETCH_OBJ);
-        else
-            return null;
+            else
+                return null;
     }
 
+    
+    public function infosSociete()
+    {
+        $requete='SELECT * FROM informations_societe';
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return $result->fetch(PDO::FETCH_OBJ);
+            else
+                return null;
+    }
     
 /***********************************************************************/
 /************************ AUTRES FONCTIONS *****************************/
@@ -898,16 +891,6 @@ class mypdo extends PDO{
             $retour = $retour - $d->qteDemandee;
         }        
         return $retour;
-    }
-    
-    public function infosSociete()
-    {
-        $requete='SELECT * FROM informations_societe';
-        $result=$this->connexion->query($requete);
-        if ($result)
-            return $result->fetch(PDO::FETCH_OBJ);
-            else
-                return null;
-    }
+    }    
 }
 ?>
