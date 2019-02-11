@@ -617,7 +617,10 @@ p#infoUser
 
 /* --- STYLE IHM DETAILS LIVRAISON --- */
 
-
+.div-liste-details-livraison bloc row p
+{
+	width:50%;
+}
 
 
 /* --- STYLE IHM LISTE RELIQUATS --- */
@@ -672,11 +675,15 @@ p#infoUser
 /* --- STYLE IHM LISTE ARTICLES --- */
 
 
-
-
 .div-liste-articles bloc row p input[type=number]
 {
 	  width:25%;
+}
+
+
+.div-liste-articles bloc row p
+{
+	  width:50%;
 }
 
 
@@ -831,6 +838,10 @@ p#infoUser
 	float:right;
 	width:50%;
 }
+
+
+
+
 
 /* --- STYLE SMARTPHONE --- */	
 

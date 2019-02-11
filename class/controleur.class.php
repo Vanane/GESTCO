@@ -120,7 +120,7 @@ public function afficheListeDevis()
         $c=$v->idClient;
         $p=$this->vpdo->totalDevisparIdVente($v->idVente);
         $date=$this->vpdo->arrondirDate($v->dateDevis);//Récupérer la date sans les heures et les minutes
-                       
+       // $d = new DateTime()               
         //on prévoit des variables pour nos appels
         // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
         //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
@@ -1023,21 +1023,25 @@ public function ajouterContact($idSociete, $type)
                         Si vous souhaitez ajouter un contact pour une entreprise déjà existante, veuillez vous diriger vers la liste des entreprises.  
                     </p> ';
     $return = $return.'
- <row>
-        <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
-        <p>Nom du contact(*) : <input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
-        <p>Prenom du contact(*) : <input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
-    </row>
-    <row>
-        <p>Téléphone du contact(*) : <input type="text" id="tel'.$type.'" maxlength="10" required  value=""></p>
-        <p>Mail du contact(*) : <input type="text" id="mail'.$type.'" maxlength="40" required value=""></p>
-        <p>id société '.$infoSociete.' : <input type="text" readonly required id="societe'.$type.'" value="'.$idSociete.'"></p>
-     </row>
-     <row>
-        <a onclick=\'ajoutercontact("'.$type.'")\' class="btn-classique">
-        <span class="tooltip" id="ttInsertContactInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
-        Valider le contact</a>  
-    </row>
+    <bloc>
+        <row>
+            <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
+            <p>Nom du contact(*) : <input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
+        </row>
+        <row>
+            <p>Prenom du contact(*) : <input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
+            <p>Téléphone du contact(*) : <input type="text" id="tel'.$type.'" maxlength="10" required  value=""></p>
+         </row>
+         <row>
+            <p>Mail du contact(*) : <input type="text" id="mail'.$type.'" maxlength="40" required value=""></p>
+            <p>id société '.$infoSociete.' : <input type="text" readonly required id="societe'.$type.'" value="'.$idSociete.'"></p>
+         </row>
+         <row>
+            <a onclick=\'ajoutercontact("'.$type.'")\' class="btn-classique">
+            <span class="tooltip" id="ttInsertContactInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
+            Valider le contact</a>  
+        </row>
+    </bloc>
 </div>';
 	
 	return $return;// J'affiche les cases qui doivent être remplie. Encore une fois js appellé pour effectuer une requete ajax. 
@@ -1290,7 +1294,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
        $vpi = $this->vpdo->venteParSonId($idVente);
        if($vpi != null)
        {
-       $return='<div class="conteneur border div-liste-devis">
+       $return='<div class="conteneur border div-liste div-liste-details-livraison">
                     <p style="margin-left: 1em">
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
                         Si dessous, voici la liste des articles pour cette Vente.<br>
@@ -1302,23 +1306,29 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
        $epsi=$this->vpdo->employeParSonId($ep);
        $pttcu=$this->vpdo->totalCommandeParIdVente($idVente);
        $dateL = $this->vpdo->arrondirDate($vpi->dateLivraison);
-       $return=$return.'<p>Date de la livraison : <input type="text" readonly maxlength="12" value='.$dateL.'> 
-                         Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'">
-                         Prix total TTC: <input type="text" readonly maxlength="12" value='.$pttcu->prixTotal.'>€</p>';
+       $return=$return.'
+        <bloc>
+            <row>
+                <p>Date de la livraison : <input type="text" readonly maxlength="12" value='.$dateL.'> </p>
+                <p>Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'"></p>
+                <p>Prix total TTC: <input type="text" readonly maxlength="12" value='.$pttcu->prixTotal.'>€</p>
+            </row>
+        </bloc>
+';
        while($ll = $ldval->fetch(PDO::FETCH_OBJ))
           {
               $return = $return.'
-                        <bloc>
-                           	<row>
-                                <p>id Article :<input type="text" readonly maxlength="12" value='.$ll->idArticle.'></p>
-                                <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
-                                <p>Quantité fournie :<input type="text" readonly maxlength="12" value='.$ll->qteFournie.'></p>
-                            </row>
-                            <row>                        
-                                <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>
-                                <p>Observation :<input type="text" readonly maxlength="12" value='.$ll->observation.'></p>
-                            </row>
-                        </bloc>';
+        <bloc>
+           	<row>
+                <p>id Article :<input type="text" readonly maxlength="12" value='.$ll->idArticle.'></p>
+                <p>Quantité demandée :<input type="text" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
+                <p>Quantité fournie :<input type="text" readonly maxlength="12" value='.$ll->qteFournie.'></p>
+            </row>
+            <row>                        
+                <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$idVente.'></p>
+                <p>Observation :<input type="text" readonly maxlength="12" value='.$ll->observation.'></p>
+            </row>
+        </bloc>';
           }   
 
       // signature
