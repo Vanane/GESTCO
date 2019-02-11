@@ -75,6 +75,18 @@ return null;
         return null;
     }
     
+    public  function listeTypeEmploye()
+    {
+        
+        $requete='SELECT * FROM type_employe;';
+        $result=$this->connexion->query($requete);
+        if ($result)
+        {
+            return ($result);
+        }
+        return null;
+    }
+    
     public  function listeDetailsDevis()
     {
         
@@ -494,9 +506,9 @@ return null;
     
     public function insertEmploye($idEmploye, $idType, $nom, $prenom, $adresse,$telephone, $mail, $mdp)
     {
-        $q = 'INSERT INTO vente VALUES ('.$idEmploye.',"'.$idType.'","' .$nom.'","' .$prenom.'", "'.$adresse.'","'.$telephone.'","' .$mail.'", "'.$mdp.'");';
+        $q = 'INSERT INTO employe VALUES ('.$idEmploye.',"'.$idType.'","identifiant","' .$nom.'","' .$prenom.'", "'.$adresse.'","'.$telephone.'","' .$mail.'", "'.$mdp.'");';
         $result = $this->connexion->query($q);
-        return $result;
+        return $q;
     }
     
     public function insertDetailDevis($idV, $idA, $idEm, $qte, $tx, $cmup, $marge, $tva, $obs)
@@ -556,6 +568,7 @@ return null;
     {
         $r='UPDATE '.$table.' SET '.$attr.' = "'.$value.'" WHERE '.$col.' = "'.$id.'";';
         $this->connexion->query($r);
+
         return $r;
     }
     
@@ -778,6 +791,10 @@ return null;
     
     public function idDernierEmploye()
     {
+        $r="SELECT idEmploye FROM employe ORDER BY idEmploye DESC";
+        $result=$this->connexion->query($r)->fetch(PDO::FETCH_OBJ);
+        if($result)
+            return $result;
         $r="SELECT  idEmploye FROM employe ORDER BY idEmploye DESC";
         $result=$this->connexion->query($r);
         if ($result)
