@@ -14,7 +14,9 @@ if(isset($_POST['action']))
             for($i=1;$i<=$r['nbArticles'];$i++)//Pour i allant de 1 à nb d'articles
             {                
                 //UPDATE detail_preparation SET qteFournie = "qte"+i WHERE idVente = x AND idArticle = "idA"+i
-                $pdo->updateTableDeuxConditions('detail_preparation', 'qteFournie', $r['qteF'.$i], 'idVente', $r['idV'], 'idArticle', $r['idA'.$i]);                
+                $pdo->updateTableDeuxConditions('detail_preparation', 'qteFournie', $r['qteF'.$i], 'idVente', $r['idV'], 'idArticle', $r['idA'.$i]);
+                $d = $pdo->preparationParSonId($r['idV'], $r['idA'.$i]);
+                $pdo->insertDetailLivraison($r['idV'], $r['idA'.$i], $r['idE'], $r['qteD'.$i], $r['qteF'.$i], $d->txRemise, $d->CMUP, $d->marge, $d->tva, $d->observation);
                 if($r['qteF'.$i] != $r['qteD'.$i])
                 {
                     $r['reliquat'] = true;

@@ -2,8 +2,6 @@
 session_start();
 
 include_once('class/autoload.php');
-//require('class/fpdf.php');
-//require('class/invoice.php');
 
 $site = new page_base();
 $controleur=new controleur();

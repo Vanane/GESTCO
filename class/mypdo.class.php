@@ -520,9 +520,9 @@ return null;
         $result = $this->connexion->query($q);
         return $q;
     }
-       public function insertDetailLivraison($idV, $idA, $idEm, $qte, $tx, $cmup, $obs)
+       public function insertDetailLivraison($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup, $marge, $tva, $obs)
     {
-        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qte.'", "'.$tx.'", "'.$cmup.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qteD.'","'.$qteF.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
         return $result;
     }
@@ -595,7 +595,7 @@ return null;
         $requete='SELECT * FROM employe WHERE identifiant = "'.$identifiant.'" and mdp = "'.$mdp.'";';
         $result=$this->connexion->query($requete);
         if($result)
-            return $result;
+            return $result->fetch(PDO::FETCH_OBJ);
             else
                 return null;
     }    
@@ -646,6 +646,16 @@ return null;
     public function commandeParSonId($idV, $idA)
     {
         $r='SELECT * from detail_commande WHERE idVente = "'.$idV.'" AND idArticle = "'.$idA.'";';
+        $result=$this->connexion->query($r);
+        if ($result)
+            return $result->fetch(PDO::FETCH_OBJ);
+            else
+                return null;
+    }
+    
+    public function preparationParSonId($idV, $idA)
+    {
+        $r='SELECT * from detail_preparation WHERE idVente = "'.$idV.'" AND idArticle = "'.$idA.'";';
         $result=$this->connexion->query($r);
         if ($result)
             return $result->fetch(PDO::FETCH_OBJ);

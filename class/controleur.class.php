@@ -864,7 +864,7 @@ public function afficheListeDevis()
 	    }
 	    else
 	    {
-	        $retour = '<div class="conteneur border">Cette vente n\'existe pas !</div>';
+	        $retour = '<div class="conteneur">Cette vente n\'existe pas !</div>';
 	    }
 	    return $retour;
 	    
@@ -1288,14 +1288,17 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   /* ************************************************************************************************************************************* */
   
   public function detailLivraisons($idVente)   
-  {    $return='<div class="conteneur  div-liste-entreprises">
+  {    
+       $vpi = $this->vpdo->venteParSonId($idVente);
+       if($vpi != null)
+       {
+       $return='<div class="conteneur  div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
                         Si dessous, voici la liste des articles pour cette Vente.<br>
                     </p><bloc id="encours" style="display:block;"> ';
 
        $ldval = $this->vpdo->listeDetailsLivraisonParIdVente($idVente);
-       $vpi = $this->vpdo->venteParSonId($idVente);
        $ep= $this->vpdo->listeDetailsLivraisonParIdVente($idVente)->fetch(PDO::FETCH_OBJ)->idEmploye;
        $epsi=$this->vpdo->employeParSonId($ep);
        $pttcu=$this->vpdo->totalCommandeParIdVente($idVente);
@@ -1320,6 +1323,11 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 
       // signature
           $return=$return.'<p>Signature : <p></div>';
+       }
+       else
+       {
+           $return = '<div class="conteneur">Cette vente n\'existe pas !</div>';
+       }
       return $return;     
   }
   
@@ -1672,73 +1680,78 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
     
     public function genereFacture($idV)
     {
-        $s = $this->informationsEntreprise();
         $v = $this->vpdo->venteParSonId($idV);
-        $c = $this->vpdo->clientParSonId($v->idClient);
-        $sc = $this->vpdo->societeParSonId($c->idSociete);
-        $details = $this->vpdo->listeDetailsFactureParIdVente($idV);
-        $pdf = new PDF_Invoice( 'P', 'mm', 'A4' );
-        $pdf->AddPage();
-        $pdf->addSociete($s->nom,
-            $s->adresse);
-        $pdf->fact_dev("Vente ", $idV);
-        $pdf->temporaire($s->nom);
-        $pdf->addDate($this->vpdo->arrondirDate($v->dateFacture));
-        $pdf->addClient($v->idClient);
-        $pdf->addPageNumber("1");
-        $pdf->addClientAdresse($sc->adresse);
-        $cols=array( "REFERENCE"    => 23,
-            "DESIGNATION"  => 78,
-            "QUANTITE"     => 22,
-            "P.U. HT"      => 26,
-            "MONTANT H.T." => 30,
-            "TVA"          => 11 );
-        $pdf->addCols( $cols);
-        $cols=array( "REFERENCE"    => "L",
-            "DESIGNATION"  => "L",
-            "QUANTITE"     => "C",
-            "P.U. HT"      => "R",
-            "MONTANT H.T." => "R",
-            "TVA"          => "C" );
-        $pdf->addLineFormat($cols);
-        $pdf->addLineFormat($cols);
-        $tot_prods = array();
-        while($d = $details->fetch(PDO::FETCH_OBJ))
-        {
-            $a = $this->vpdo->articleParSonId($d->idArticle);
-            $y = 109;
-            $line = array(
-                "REFERENCE"    => $d->idArticle,
-                "DESIGNATION"  => $a->libelle,
-                "QUANTITE"     => $d->qteDemandee,
-                "P.U. HT"      => $d->CMUP,
-                "MONTANT H.T." => $d->qteDemandee * $d->CMUP,
-                "TVA"          => $d->tva * 100 );
-            $size = $pdf->addLine( $y, $line );
-            $y   += $size + 2;
-            array_push($tot_prods, (array("px_unit" => $d->CMUP, "qte" => $d->qteDemandee, "tva" => $d->tva * 100)));
-            $tab_tva = array( $d->tva * 100 => $d->tva * 100);
+        if($v!=null)
+        {                
+            $s = $this->informationsEntreprise();
+            $c = $this->vpdo->clientParSonId($v->idClient);
+            $sc = $this->vpdo->societeParSonId($c->idSociete);
+            $details = $this->vpdo->listeDetailsFactureParIdVente($idV);
+            $pdf = new PDF_Invoice( 'P', 'mm', 'A4' );
+            $pdf->AddPage();
+            $pdf->addSociete($s->nom,
+                $s->adresse, $s->logo);
+            $pdf->fact_dev("Vente ", $idV);
+            $pdf->temporaire($s->nom);
+            $pdf->addDate($this->vpdo->arrondirDate($v->dateFacture));
+            $pdf->addClient($v->idClient);
+            $pdf->addPageNumber("1");
+            $pdf->addClientAdresse($sc->adresse);
+            $cols=array( "REFERENCE"    => 25,
+                "DESIGNATION"  => 72,
+                "QUANTITE"     => 20,
+                "P.U. HT"      => 20,
+                "MONTANT H.T." => 28,
+                "TVA"          => 11,
+                "REMISE"       => 14
+            );
+            $pdf->addCols( $cols);
+            $cols=array( "REFERENCE"    => "L",
+                "DESIGNATION"  => "L",
+                "QUANTITE"     => "C",
+                "P.U. HT"      => "R",
+                "MONTANT H.T." => "R",
+                "TVA"          => "C",
+                "REMISE"       => "C" );
+            $pdf->addLineFormat($cols);
+            $pdf->addLineFormat($cols);
+            $tot_prods = array();
+            $y = 109;//Position de base de la première ligne, s'incrémente en fonction du nombre de lignes.
+            while($d = $details->fetch(PDO::FETCH_OBJ))
+            {
+                $a = $this->vpdo->articleParSonId($d->idArticle);
+                $line = array(
+                    "REFERENCE"    => $d->idArticle,
+                    "DESIGNATION"  => $a->libelle,
+                    "QUANTITE"     => $d->qteDemandee,
+                    "P.U. HT"      => $d->CMUP * (1+$d->marge),
+                    "MONTANT H.T." => $d->qteDemandee * $d->CMUP * (1+$d->marge),
+                    "TVA"          => $d->tva * 100,
+                    "REMISE"       => $d->txRemise);
+                $size = $pdf->addLine( $y, $line );
+                $y   += $size + 2;
+                $tab_tva = array( $d->tva * 100 => $d->tva * 100);
+                
+                //Ajoute dans le tableau tot_prods le prix et la qte et la tva d'un article, pour chaque article.
+                array_push($tot_prods, (array("px_unit" => $d->CMUP * (1+$d->marge), "qte" => $d->qteDemandee, "tva" => $d->tva * 100)));
+            }
+            $pdf->addCadreTVAs();
             
+            $params  = array(
+                "RemiseGlobale" => 1,
+                "remise_tva"     => 1,       // {la remise s'applique sur ce code TVA}
+                "remise"         => 20,       // {montant de la remise}
+                "remise_percent" => 10,      // {pourcentage de remise sur ce montant de TVA}
+                "FraisPort"     => 0,
+                "AccompteExige" => 0,
+                "accompte"         => 0,     // montant de l'acompte (TTC)
+                "accompte_percent" => 15,    // pourcentage d'acompte (TTC)
+                "Remarque" => "" );
+            
+            $pdf->addTVAs( $params, $tab_tva, $tot_prods);
+            $pdf->addCadreEurosFrancs();
+            $pdf->Output();
         }
-        $pdf->addCadreTVAs();
-        
-        $params  = array(
-            "RemiseGlobale" => 20,
-            "remise_tva"     => 1,       // {la remise s'applique sur ce code TVA}
-            "remise"         => 0,       // {montant de la remise}
-            "remise_percent" => 10,      // {pourcentage de remise sur ce montant de TVA}
-            "FraisPort"     => 1,
-            "portTTC"        => 0,      // montant des frais de ports TTC
-            "portHT"         => 0,       // montant des frais de ports HT
-            "portTVA"        => 0,    // valeur de la TVA a appliquer sur le montant HT
-            "AccompteExige" => 0,
-            "accompte"         => 0,     // montant de l'acompte (TTC)
-            "accompte_percent" => 15,    // pourcentage d'acompte (TTC)
-            "Remarque" => "" );
-        
-        $pdf->addTVAs( $params, $tab_tva, $tot_prods);
-        $pdf->addCadreEurosFrancs();
-        $pdf->Output();
     }
 }
 

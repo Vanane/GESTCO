@@ -3,7 +3,6 @@ include_once('../class/autoload.php');
 $pdo = new mypdo();
 $r = array();
 $idVente = $_POST['idV'];
-$dateCommande = $_POST['dateCommande'];
 $laVente = $pdo->venteParSonId($idVente);
 $lesDetails = $pdo->listeDetailsDevisParIdVente($idVente);
 

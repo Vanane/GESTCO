@@ -1,18 +1,18 @@
 <?php
 require('fpdf.php');
-define('EURO', chr(128) );
+define('EURO',  chr(128));
 define('EURO_VAL', 6.55957 );
 
 // Xavier Nicolay 2004
 // Version 1.02
 //
-// Reste � faire :
+// Reste à faire :
 // + Multipage (gestion automatique sur plusieurs pages)
 // + Ajout de logo
 // 
 
 //////////////////////////////////////
-// fonctions � utiliser (publiques) //
+// fonctions à utiliser (publiques) //
 //////////////////////////////////////
 //  function sizeOfText( $texte, $larg )
 //  function addSociete( $nom, $adresse )
@@ -37,14 +37,14 @@ define('EURO_VAL', 6.55957 );
 //  function addTVAs( $params, $tab_tva, $invoice )
 //  function temporaire( $texte )
 
-class PDF_Invoice extends FPDF
+class PDF_Invoice extends tFPDF
 {
-// variables priv�es
+// variables privées
 var $colonnes;
 var $format;
 var $angle=0;
 
-// fonctions priv�es
+// fonctions privées
 function RoundedRect($x, $y, $w, $h, $r, $style = '')
 {
 	$k = $this->k;
@@ -143,11 +143,13 @@ function sizeOfText( $texte, $largeur )
 // Cette fonction affiche en haut, a gauche,
 // le nom de la societe dans la police Arial-12-Bold
 // les coordonnees de la societe dans la police Arial-10
-function addSociete( $nom, $adresse )
+function addSociete( $nom, $adresse, $logo)
 {
 	$x1 = 10;
-	$y1 = 8;
+	$y1 = 28;
 	//Positionnement en bas
+	$this->Image('image/'.$logo, $x1, 1,null, 20, 'png');
+	
 	$this->SetXY( $x1, $y1 );
 	$this->SetFont('Arial','B',12);
 	$length = $this->GetStringWidth( $nom );
@@ -155,7 +157,7 @@ function addSociete( $nom, $adresse )
 	$this->SetXY( $x1, $y1 + 4 );
 	$this->SetFont('Arial','',10);
 	$length = $this->GetStringWidth( $adresse );
-	//Coordonn�es de la soci�t�
+	//Coordonnées de la société
 	$lignes = $this->sizeOfText( $adresse, $length) ;
 	$this->MultiCell($length, 4, $adresse);
 }
@@ -172,7 +174,7 @@ function fact_dev( $libelle, $num )
     $y2  = $y1 + 2;
     $mid = ($r1 + $r2 ) / 2;
     
-    $texte  = $libelle . " EN " . EURO . " N� : " . $num;    
+    $texte  = $libelle . " EN " . EURO . " : " . $num;    
     $szfont = 12;
     $loop   = 0;
     
@@ -275,7 +277,7 @@ function addClientAdresse( $adresse )
 	$this->MultiCell( 60, 4, $adresse);
 }
 
-// Affiche un cadre avec le r�glement (ch�que, etc...)
+// Affiche un cadre avec le réglement (chéque, etc...)
 // (en haut, a gauche)
 function addReglement( $mode )
 {
@@ -337,13 +339,13 @@ function addNumTVA($tva)
 function addReference($ref)
 {
 	$this->SetFont( "Arial", "", 10);
-	$length = $this->GetStringWidth( "R�f�rences : " . $ref );
+	$length = $this->GetStringWidth( "Références : " . $ref );
 	$r1  = 10;
 	$r2  = $r1 + $length;
 	$y1  = 92;
 	$y2  = $y1+5;
 	$this->SetXY( $r1 , $y1 );
-	$this->Cell($length,4, "R�f�rences : " . $ref);
+	$this->Cell($length,4, "Références : " . $ref);
 }
 
 // trace le cadre des colonnes du devis/facture
@@ -369,7 +371,7 @@ function addCols( $tab )
 	}
 }
 
-// m�morise le format (gauche, centre, droite) d'une colonne
+// mémorise le format (gauche, centre, droite) d'une colonne
 function addLineFormat( $tab )
 {
 	global $format, $colonnes;
@@ -458,7 +460,6 @@ function addCadreTVAs()
 	$this->Line( $r1+43, $y1, $r1+43, $y2);  // avant MT TVA
 	$this->Line( $r1+63, $y1, $r1+63, $y2);  // avant % TVA
 	$this->Line( $r1+75, $y1, $r1+75, $y2);  // avant PORT
-	$this->Line( $r1+91, $y1, $r1+91, $y2);  // avant TOTAUX
 	$this->SetXY( $r1+9, $y1);
 	$this->Cell(10,4, "BASES HT");
 	$this->SetX( $r1+29 );
@@ -468,13 +469,11 @@ function addCadreTVAs()
 	$this->SetX( $r1+63 );
 	$this->Cell(10,4, "% TVA");
 	$this->SetX( $r1+78 );
-	$this->Cell(10,4, "PORT");
-	$this->SetX( $r1+100 );
 	$this->Cell(10,4, "TOTAUX");
 	$this->SetFont( "Arial", "B", 6);
-	$this->SetXY( $r1+93, $y2 - 8 );
+	$this->SetXY( $r1+78, $y2 - 8 );
 	$this->Cell(6,0, "H.T.   :");
-	$this->SetXY( $r1+93, $y2 - 3 );
+	$this->SetXY( $r1+78, $y2 - 3 );
 	$this->Cell(6,0, "T.V.A. :");
 }
 
@@ -482,19 +481,17 @@ function addCadreTVAs()
 function addCadreEurosFrancs()
 {
 	$r1  = $this->w - 70;
-	$r2  = $r1 + 60;
+	$r2  = $r1 + 38;
 	$y1  = $this->h - 40;
 	$y2  = $y1+20;
 	$this->RoundedRect($r1, $y1, ($r2 - $r1), ($y2-$y1), 2.5, 'D');
 	$this->Line( $r1+20,  $y1, $r1+20, $y2); // avant EUROS
 	$this->Line( $r1+20, $y1+4, $r2, $y1+4); // Sous Euros & Francs
-	$this->Line( $r1+38,  $y1, $r1+38, $y2); // Entre Euros & Francs
 	$this->SetFont( "Arial", "B", 8);
 	$this->SetXY( $r1+22, $y1 );
 	$this->Cell(15,4, "EUROS", 0, 0, "C");
 	$this->SetFont( "Arial", "", 8);
 	$this->SetXY( $r1+42, $y1 );
-	$this->Cell(15,4, "FRANCS", 0, 0, "C");
 	$this->SetFont( "Arial", "B", 6);
 	$this->SetXY( $r1, $y1+5 );
 	$this->Cell(20,4, "TOTAL TTC", 0, 0, "C");
@@ -592,56 +589,6 @@ function addTVAs( $params, $tab_tva, $invoice )
 		$y+=4;
 	}
 
-	if ( $params["FraisPort"] == 1 )
-	{
-		if ( $params["portTTC"] > 0 )
-		{
-			$pTTC = sprintf("%0.2F", $params["portTTC"]);
-			$pHT  = sprintf("%0.2F", $pTTC / 1.196);
-			$pTVA = sprintf("%0.2F", $pHT * 0.196);
-			$this->SetFont('Arial','',6);
-			$this->SetXY(85, 261 );
-			$this->Cell( 6 ,4, "HT : ", '', '', '');
-			$this->SetXY(92, 261 );
-			$this->Cell( 9 ,4, $pHT, '', '', 'R');
-			$this->SetXY(85, 265 );
-			$this->Cell( 6 ,4, "TVA : ", '', '', '');
-			$this->SetXY(92, 265 );
-			$this->Cell( 9 ,4, $pTVA, '', '', 'R');
-			$this->SetXY(85, 269 );
-			$this->Cell( 6 ,4, "TTC : ", '', '', '');
-			$this->SetXY(92, 269 );
-			$this->Cell( 9 ,4, $pTTC, '', '', 'R');
-			$this->SetFont('Arial','',8);
-			$totalHT += $pHT;
-			$totalTVA += $pTVA;
-			$totalTTC += $pTTC;
-		}
-		else if ( $params["portHT"] > 0 )
-		{
-			$pHT  = sprintf("%0.2F", $params["portHT"]);
-			$pTVA = sprintf("%0.2F", $params["portTVA"] * $pHT / 100 );
-			$pTTC = sprintf("%0.2F", $pHT + $pTVA);
-			$this->SetFont('Arial','',6);
-			$this->SetXY(85, 261 );
-			$this->Cell( 6 ,4, "HT : ", '', '', '');
-			$this->SetXY(92, 261 );
-			$this->Cell( 9 ,4, $pHT, '', '', 'R');
-			$this->SetXY(85, 265 );
-			$this->Cell( 6 ,4, "TVA : ", '', '', '');
-			$this->SetXY(92, 265 );
-			$this->Cell( 9 ,4, $pTVA, '', '', 'R');
-			$this->SetXY(85, 269 );
-			$this->Cell( 6 ,4, "TTC : ", '', '', '');
-			$this->SetXY(92, 269 );
-			$this->Cell( 9 ,4, $pTTC, '', '', 'R');
-			$this->SetFont('Arial','',8);
-			$totalHT += $pHT;
-			$totalTVA += $pTVA;
-			$totalTTC += $pTTC;
-		}
-	}
-
 	$this->SetXY(114,266.4);
 	$this->Cell(15,4, sprintf("%0.2F", $totalHT), '', '', 'R' );
 	$this->SetXY(114,271.4);
@@ -656,7 +603,7 @@ function addTVAs( $params, $tab_tva, $invoice )
 		{
 			$accompteTTC=sprintf ("%.2F", $params["accompte"]);
 			if ( strlen ($params["Remarque"]) == 0 )
-				$this->addRemarque( "Accompte de $accompteTTC Euros exig� � la commande.");
+				$this->addRemarque( "Accompte de $accompteTTC Euros exigé à la commande.");
 			else
 				$this->addRemarque( $params["Remarque"] );
 		}
@@ -668,12 +615,12 @@ function addTVAs( $params, $tab_tva, $invoice )
 			$accompteTTC=sprintf("%.2F", $totalTTC * $percent);
 			$percent100 = $percent * 100;
 			if ( strlen ($params["Remarque"]) == 0 )
-				$this->addRemarque( "Accompte de $percent100 % (soit $accompteTTC Euros) exig� � la commande." );
+				$this->addRemarque( "Accompte de $percent100 % (soit $accompteTTC Euros) exigé à la commande." );
 			else
 				$this->addRemarque( $params["Remarque"] );
 		}
 		else
-			$this->addRemarque( "Dr�le d'acompte !!! " . $params["Remarque"]);
+			$this->addRemarque( "Drôle d'acompte !!! " . $params["Remarque"]);
 	}
 	else
 	{
@@ -691,11 +638,6 @@ function addTVAs( $params, $tab_tva, $invoice )
 	$this->SetXY( $re, $y1+14.8 );
 	$this->Cell( 17,4, sprintf("%0.2F", $totalTTC - $accompteTTC), '', '', 'R');
 	$this->SetXY( $rf, $y1+5 );
-	$this->Cell( 17,4, sprintf("%0.2F", $totalTTC * EURO_VAL), '', '', 'R');
-	$this->SetXY( $rf, $y1+10 );
-	$this->Cell( 17,4, sprintf("%0.2F", $accompteTTC * EURO_VAL), '', '', 'R');
-	$this->SetXY( $rf, $y1+14.8 );
-	$this->Cell( 17,4, sprintf("%0.2F", ($totalTTC - $accompteTTC) * EURO_VAL), '', '', 'R');
 }
 
 // Permet de rajouter un commentaire (Devis temporaire, REGLE, DUPLICATA, ...)
@@ -704,7 +646,7 @@ function addTVAs( $params, $tab_tva, $invoice )
 function temporaire( $texte )
 {
 	$this->SetFont('Arial','B',50);
-	$this->SetTextColor(203,203,203);
+	$this->SetTextColor(240,240,240);
 	$this->Rotate(45,55,190);
 	$this->Text(55,190,$texte);
 	$this->Rotate(0);

@@ -10,7 +10,7 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande');
-	protected $path="http://localhost/GESTCO/";
+	protected $path="http://192.168.168.187/GESTCO/";
 	protected $entreprise;
 	protected $user;
 	
@@ -191,14 +191,14 @@ class page_base {
 				<ul>
 					<li><a  href="'.$this->path.'Ventes/Preparations/">Préparations</a></li>
 				</ul>',
-	        'factures'=>'
-                <ul>
-    	            <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
-    	        </ul>',
 	        'livraisons'=>'
                 <ul>
                     <li><a href="'.$this->path.'Ventes/Livraisons/">Livraisons</a></li>
                 </ul>',
+	        'factures'=>'
+                <ul>
+    	            <li><a href="'.$this->path.'Ventes/Facturations/">Facturations</a></li>
+    	        </ul>',
 	        'reliquats'=>'
                 <ul>
     	            <li><a href="'.$this->path.'Ventes/Reliquats/">Reliquats</a></li>
