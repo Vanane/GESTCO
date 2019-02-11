@@ -174,7 +174,7 @@ function fact_dev( $libelle, $num )
     $y2  = $y1 + 2;
     $mid = ($r1 + $r2 ) / 2;
     
-    $texte  = $libelle . " EN " . EURO . " : " . $num;    
+    $texte  = $libelle."No : " . $num;    
     $szfont = 12;
     $loop   = 0;
     
@@ -195,7 +195,7 @@ function fact_dev( $libelle, $num )
     $this->Cell($r2-$r1 -1,5, $texte, 0, 0, "C" );
 }
 
-// Genere automatiquement un numero de devis
+// Gere automatiquement un numero de devis
 function addDevis( $numdev )
 {
 	$string = sprintf("DEV%04d",$numdev);

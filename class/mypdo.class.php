@@ -617,7 +617,7 @@ return null;
     public function familleParSonId($id)
     {
         $q='SELECT * FROM famille_article WHERE idFam = "'.$id.'";';
-        $result=$this->connexion->query($q)->fetch(PDO::FETCH_OBJ);
+        $result=$this->connexion->query($q);
         if ($result)
             return $result->fetch(PDO::FETCH_OBJ);
             else
