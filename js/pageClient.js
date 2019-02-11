@@ -172,6 +172,7 @@ function ajoutercontact(type) {
     	},
         url: "../../ajax/clientAjax.php",
         success: function(r) {
+        	alert("Contact ajouté avec succès !");
         	location.href =(redirection);// à la place de reload la page, 
         	//j'envoie l'utilisateur sur la page "Voir Details" de la société pour laquelle elle a effectuer l'ajout du contact 
         },
@@ -201,6 +202,7 @@ function ajoutercontact(type) {
 		    	},
 		        url: "../../ajax/clientAjax.php",
 		        success: function(r) {
+		        	alert("Contact ajouté avec succès !");
 		        	location.href =(redirection);
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
@@ -260,6 +262,7 @@ function ajoutercontactsociete(type) {// voir ci dessus pour le détail du code
     	},
         url: "../ajax/clientAjax.php",
         success: function(r) {
+        	alert("Contact ajouté avec succès !");
         	location.href =(redirection);
         },
         error: function (xhr, ajaxOptions, thrownError)
@@ -289,6 +292,7 @@ function ajoutercontactsociete(type) {// voir ci dessus pour le détail du code
 		    	},
 		        url: "../ajax/clientAjax.php",
 		        success: function(r) {
+		        	alert("Contact ajouté avec succès !");
 		        	location.href =(redirection);
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
@@ -356,6 +360,7 @@ function ajoutersociete(type){// voir ci dessus pour le détail du code
     	},
         url: "../ajax/clientAjax.php",
         success: function(r) {
+        	alert("Société ajouté avec succès !");
         	location.href =(redirection);	
         },
         error: function (xhr, ajaxOptions, thrownError)
@@ -369,57 +374,19 @@ function ajoutersociete(type){// voir ci dessus pour le détail du code
 	}}
 	}
 
-// save
-/*function ajoutersociete(){
-	if (confirm("Si vous souhaietez ajouter une société, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
-	{
-		let id = document.getElementById("idSociete");
-		let nom = document.getElementById("nomSociete");
-		let adresse  = document.getElementById("adresseSociete");
-		let telephone = document.getElementById("telSociete");
-		let fax = document.getElementById("faxSociete");
-		let siteWeb = document.getElementById("siteWebSociete");
-		let raison = document.getElementById("raisonSociete");
-		let mail = document.getElementById("mailSociete");
-		$.ajax({
-		type: "POST",
-        dataType: "json",
-        data:
-    	{
-        	'action':'ajouterSociete',
-        	'id':id.value,
-    		'nom':nom.value,
-    		'adresse':adresse.value,
-    		'telephone':telephone.value,
-    		'fax':fax.value,
-    		'siteWeb':siteWeb.value,
-    		'raison':raison.value,
-    		'mail':mail.value
-    		
-    		
-    		
-    	},
-        url: "../ajax/clientAjax.php",
-        success: function(r) {
-        	location.reload()
-        	
-        },
-        error: function (xhr, ajaxOptions, thrownError)
-        {
-        	console.log(idSociete);
-            console.log(xhr.status);
-            console.log(thrownError);
-            console.log(ajaxOptions);
-    	}
-	});
-	}
-	}*/
 /* ************************************************************************************************************************************* */	
 /* **************************************************************FIN*AJOUT*SOCIETE****************************************************** */	
 /* ************************************************************************************************************************************* */
-/* ************************************************************************************************************************************* */	
-/* *********************************************************DEBUT*GESTION*LISTE*SOCIETE************************************************* */	
-/* ************************************************************************************************************************************* */
+
+function aide(){
+	let elmt = document.getElementById("afficherAide");
+	let elmt1 = document.getElementById("masquerAide");
+	let elmt2 = document.getElementById("aide");
+	toggleDisplay(elmt);
+	toggleDisplay(elmt1);
+	toggleDisplay(elmt2);
+}
+
 
 function toggleDisplay(elmt){		
 		   if(typeof elmt == "string")		
@@ -430,6 +397,3 @@ function toggleDisplay(elmt){
 		      elmt.style.display = "none";		
 }
 
-/* ************************************************************************************************************************************* */	
-/* ******************************************************FIN*GESTION*LISTE*SOCIETE****************************************************** */	
-/* ************************************************************************************************************************************* */
