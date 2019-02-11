@@ -59,11 +59,11 @@ switch ($params[1]) {
 				{
 					case 'ajoutersociete':
 						$site->titre = "Ajouter une Société";
-						$site->left_sidebar = $controleur->ajouterSociete($type);
+						$site->left_sidebar = $controleur->ajouterSociete($type);// je récupère le type
 						break;
 					case 'ajoutercontactsociete':
 					    $site->titre = "Ajouter un Contact Fournisseur";
-					    $site->left_sidebar = $controleur->ajouterContactSociete($type);
+					    $site->left_sidebar = $controleur->ajouterContactSociete($type);// je récupère le type
 					    break;
 					default:
 						if(isset($params[3]))
@@ -263,27 +263,20 @@ switch ($params[1]) {
     		            
     		        case 'livraisons' :
     		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 3 || $controleur->estConnecte() == 4 )
+    		            // accès au personne avec le bon type grâce à estConnecte()
     		            {
     		                $site->js = "pageLivraisons";
     		                if(isset($params[3]))
     		                {
     		                    if (isset($params[4]))
     		                    {
-    		                        switch($params[3])
-    		                        {
-    		                            default:
-    		                                $site->left_sidebar = $controleur->detailLivraisonsEnCours($params[3]);
-    		                                break;
-    		                        }
+    		                                $site->left_sidebar = $controleur->detailLivraisonsEnCours($params[4]);
+    		                                // je récupère l'id de la ventes avec params[4]
     		                    }
     		                    else
     		                    {
-    		                        switch($params[3])
-    		                        {
-    		                            default:
     		                                $site->left_sidebar = $controleur->detailLivraisons($params[3]);
-    		                                break;
-    		                        }
+    		                                // pareil ici
     		                    }
     		                }
     		                else

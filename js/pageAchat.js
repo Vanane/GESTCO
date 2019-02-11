@@ -10,7 +10,22 @@ $('document').ready(function(){
 	});	
 });
 
-
+function aide(){
+	let elmt = document.getElementById("afficherAide");
+	let elmt1 = document.getElementById("masquerAide");
+	let elmt2 = document.getElementById("aide");
+	toggleDisplay(elmt);
+	toggleDisplay(elmt1);
+	toggleDisplay(elmt2);
+}
+function toggleDisplay(elmt){		
+	   if(typeof elmt == "string")		
+	      elmt = document.getElementById(elmt);		
+	   if(elmt.style.display == "none")		
+	      elmt.style.display = "block";		
+	   else		
+	      elmt.style.display = "none";		
+}
 
 function ajouterachat() {// j'affiche un message pour éviter les erreurs de click 
 	if (confirm("Pour valider la création de ce nouvelle achat, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
@@ -26,12 +41,12 @@ function ajouterachat() {// j'affiche un message pour éviter les erreurs de cli
 		let qte = document.getElementById("qte");
 		let commentaire = document.getElementById("commentaire");
 		let type ='1';
-		if (idArticle==0 || prix.value ==0 || qte.value ==0 || idFour ==0)
+		if (idArticle==0 || prix.value ==0 || qte.value ==0 || idFour ==0 || date.value ==0)//je test si des varibales obligatoire sont vides
 		{
-			$('#ttInsertAchatInfo').tooltipster('open');
-			erreur = true;
+			$('#ttInsertAchatInfo').tooltipster('open');// si oui j'execute les tooltip
+			erreur = true;// erreur passe à true
 		}
-		if(!erreur)	
+		if(!erreur)	// en fonction de la valeur d'erreur je lance ou bloque la requête Ajax
 		{
 		$.ajax({
 		type: "POST",
@@ -50,8 +65,9 @@ function ajouterachat() {// j'affiche un message pour éviter les erreurs de cli
     	},
         url: "../ajax/achatAjax.php",
         success: function(r) {
-        	//location.href =("http://localhost/GESTCO/Achats");
-        	console.log('ajout...');
+        	alert("Achat ajouté avec succès !");
+        	location.href =("http://localhost/GESTCO/Achats");
+        	//console.log('ajout...');
         },
         error: function (xhr, ajaxOptions, thrownError)
         {

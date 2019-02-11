@@ -1,4 +1,4 @@
-/*$('document').ready(function(){//Nicolas gestion reliquat
+/*$('document').ready(function(){// NC : début gestion reliquat
 	let idVente = document.getElementById("idVente");
 	let listeIdArticle;
 	$.ajax({ 
@@ -22,6 +22,24 @@
 	});
 });*/
 
+function aide(){
+	let elmt = document.getElementById("afficherAide");
+	let elmt1 = document.getElementById("masquerAide");
+	let elmt2 = document.getElementById("aide");
+	toggleDisplay(elmt);
+	toggleDisplay(elmt1);
+	toggleDisplay(elmt2);
+}
+function toggleDisplay(elmt){		
+	   if(typeof elmt == "string")		
+	      elmt = document.getElementById(elmt);		
+	   if(elmt.style.display == "none")		
+	      elmt.style.display = "block";		
+	   else		
+	      elmt.style.display = "none";		
+}
+
+
 function gestionHistorique(){
 	var elmt = document.getElementById("historique");
 	var elmt1 = document.getElementById("encours");
@@ -33,14 +51,6 @@ function gestionHistorique(){
 	toggleDisplay(elmt3);
 }
 
-function toggleDisplay(elmt){		
-	   if(typeof elmt == "string")		
-	      elmt = document.getElementById(elmt);		
-	   if(elmt.style.display == "none")		
-	      elmt.style.display = "block";		
-	   else		
-	      elmt.style.display = "none";		
-}
 
 function ajouterlivraison() {
 	if (confirm("Pour confirmer la livraison, cliqué sur 'ok', sinon cliquer sur 'annuler'."))
@@ -49,7 +59,7 @@ function ajouterlivraison() {
 		let idVente = document.getElementById("idVente");
 		var redirection =("http://localhost/GESTCO/Livraisons/");
 		
-		/*var qteFournie ={}; //Nicolas
+		/*var qteFournie ={}; // NC: début gestion reliquat
 		while (isset listeIdArticle)
 		boucle des articles de la vente
 		if qteFournie == qteDemandee
