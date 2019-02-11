@@ -1361,12 +1361,11 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         </bloc>'; 
   }
   $return=$return.'             </bloc>
-                                <p> block signature (canvas->Trello)</p>
                                 <a onclick=\'ajouterlivraison()\' class="btn-classique">
                                 <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
                                 Confirmer la livraison</a>
                                 </bloc></div>';
-      return $return;
+  return $return;// <p> block signature (canvas->Trello)</p>
   }
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
