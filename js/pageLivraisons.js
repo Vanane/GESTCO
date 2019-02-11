@@ -1,4 +1,4 @@
-/*$('document').ready(function(){//Nicolas
+/*$('document').ready(function(){//Nicolas gestion reliquat
 	let idVente = document.getElementById("idVente");
 	let listeIdArticle;
 	$.ajax({ 

@@ -784,7 +784,7 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la
 }
 
 /* ************************************************************************************************************************************* */
-/* *****************************************************AUTRE*METHODE*MEME*BUT********************************************************** */
+/* *********************************************************LISE*DES*CONTACTS*********************************************************** */
 /* ************************************************************************************************************************************* */
 
 
@@ -800,7 +800,7 @@ public function listeContact($idSociete, $types,$type, $idType)
     {
         $lccof = $this->vpdo->listeContactFournisseursParId($idSociete);
     }
-    $return='   <div class="conteneur div-liste div-liste-entreprises">
+    $return='   <div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des contacts. Ci-dessous la liste des contacts existant pour le '.$type.' : <b>'.$s->nom.'</b>.<br>
                         Si vous souhaitez modifier les informations d\'un '.$type.', cliquez sur <b>"Modifier les informations"</b>.<br>                        
@@ -874,7 +874,7 @@ public function ajouterContact($idSociete, $type)
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
    
     $infoSociete=$this-> vpdo ->societeParSonId($idSociete)->nom;// je récupère le nom de la société pour afficher le nom dans le texte
-    $return='<div class="conteneur border div-liste-entreprises">
+    $return='<div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts pour <b>'.$infoSociete.'</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
@@ -882,8 +882,7 @@ public function ajouterContact($idSociete, $type)
                         Si vous souhaitez ajouter un contact pour une entreprise déjà existante, veuillez vous diriger vers la liste des entreprises.  
                     </p> ';
     $return = $return.'
-<div id="bloc-liste" class="conteneur div-liste-entreprises">
-    <row>
+ <row>
         <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
         <p>Nom du contact(*) : <input type="text" id="nom'.$type.'" maxlength="16" required value=""></p>
         <p>Prenom du contact(*) : <input type="text" id="prenom'.$type.'" maxlength="16" required  value=""></p>
@@ -917,14 +916,13 @@ public function ajouterContactSociete($type)// je récupère le type
     {$idContact = $this->vpdo->idDernierContactFournisseur()->idFour+1;}
     $lesSocietes = $this->vpdo->listeSociete();//je crée une liste des sociétés
     //$s=$this-> vpdo ->listeSociete();
-    $return='<div class="conteneur border div-liste-entreprises">
+    $return='<div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout des contacts.<br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider le contact"</b>.<br>
                         Les cases <b>"Code du contact"</b> ne peut pas être changées.<br>
                     </p> ';
     $return = $return.'
-<div id="bloc-liste" class="conteneur div-liste-entreprises">
     <row>
         <p>Code du contact : <input type="text" id="id'.$type.'" readonly required value="'.$idContact.'"></p>
         <p>Id & nom société(*) :<span class="tooltip" id="ttInsertContactIdSociete" title="Vous n\'avez pas choisi de société !"></span>
@@ -959,14 +957,13 @@ public function ajouterContactSociete($type)// je récupère le type
 public function ajouterSociete($type)//je récupère toujours le type
     {
         $idSociete = $this->vpdo->idDernierSociete()->idSociete+1;
-        $return='<div class="conteneur border div-liste-entreprises">
+        $return='<div class="conteneur div-liste div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil d\'ajout de nouvelle entreprise.</b><br>
                         Il vous suffit de remplir les cases ci-dessous et cliquez sur <b>"Valider"</b>.<br>
                         La case <b>"id de l\'entreprise"</b> ne peut pas être changé.
                     </p> ';
         $return = $return.'
-<div id="bloc-liste" class="conteneur  div-liste-entreprises">
     <row>
         <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value="'.$idSociete.'"></p>
         <p>  Nom de l\'entreprise : <input type="text" required maxlength="24" id="nomSociete"value=""></p>
@@ -1047,7 +1044,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       $lesFournisseurs= $this->vpdo->listeSocietesFournisseurs();
       $lesArticles= $this->vpdo->listeArticles();
       $idMouv = $this->vpdo->idDernierMouvement()->idMouv+1;
-      $return='<div class="conteneur  div-liste-entreprises">
+      $return='<div class="conteneur div-liste div-liste-entreprises">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des Achats.</b><br>
                         Vous pouvez sur cette page ajouter un achat, pour ce faire, remplissez les cases ci dessous et cliquez sur <b>" Confirmer achat"</b>.<br>                        
@@ -1113,12 +1110,12 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         while($ll = $llaf->fetch(PDO::FETCH_OBJ))
         {
             $vpi = $this->vpdo->venteParSonId($ll->idVente);
-            $date = $this->vpdo->arrondirDate($v->datePrepa);
-             $return = $return.'
+            $dateP = $this->vpdo->arrondirDate($vpi->datePrepa);
+            $return = $return.'
                     <bloc>
                        	<row>
                             <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$ll->idVente.'></p>
-                            <p>Date de la préparation :<input type="text" readonly maxlength="12" value="'.$date.'"></p>
+                            <p>Date de la préparation :<input type="text" readonly maxlength="12" value="'.$dateP.'"></p>
                             <a href="enCours/'.$ll->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
                         </row>
                     </bloc>';
@@ -1127,12 +1124,13 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         while($lf = $llf->fetch(PDO::FETCH_OBJ))
         {
           $vpi = $this->vpdo->venteParSonId($lf->idVente);
+          $dateL = $this->vpdo->arrondirDate($vpi->dateLivraison);
           $ei=$this->vpdo->employeParSonId($lf->idEmploye);
           $return = $return.'
                 <bloc>
                     <row>
                         <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$lf->idVente.'></p>
-                        <p>Date de la livraison :<input type="text" readonly maxlength="12" value='.$vpi->dateLivraison.'></p>
+                        <p>Date de la livraison :<input type="text" readonly maxlength="12" value='.$dateL.'></p>
                         <p>Id Employé : <input type="text" readonly  value="'.$ei->idEmploye.' - '.$ei->nom.'"></p>
                         <a href="'.$lf->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
                     </row>
@@ -1145,9 +1143,10 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   /* ************************************************************************************************************************************* */
   /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
   /* ************************************************************************************************************************************* */
-  
+  //  $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
+ //   $date = $this->vpdo->arrondirDate($v->dateCommande);
   public function detailLivraisons($idVente)   
-  {    $return='<div class="conteneur  div-liste-entreprises">
+  {    $return='<div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
                         Voici l\'outil de détail de la livraison n°'.$idVente.'.<br>
                         Si dessous, voici la liste des articles pour cette Vente.<br>
@@ -1158,9 +1157,10 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
        $ep= $pourIdEmploye->fetch(PDO::FETCH_OBJ)->idEmploye;
        $epsi=$this->vpdo->employeParSonId($ep);
        $pttcu=$this->vpdo->totalCommandeParIdVente($idVente);
-       $return=$return.'<p>Date de la livraison : <input type="text" readonly maxlength="12" value='.$vpi->datePrepa.'> 
+       $dateL = $this->vpdo->arrondirDate($vpi->dateLivraison);
+       $return=$return.'<p>Date de la livraison : <input type="text" readonly maxlength="12" value='.$dateL.'> 
                          Employe responsable : <input type="text" readonly maxlength="12" value="'.$epsi->idEmploye.' - '.$epsi->nom.' '.$epsi->prenom.'">
-                         Prix total TTC de la commande : <input type="text" readonly maxlength="12" value='.$pttcu->prixTotal.'>€</p>';
+                         Prix total TTC: <input type="text" readonly maxlength="12" value='.$pttcu->prixTotal.'>€</p>';
        while($ll = $ldval->fetch(PDO::FETCH_OBJ))
           {
               $return = $return.'
@@ -1194,7 +1194,8 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   $se=$_SESSION['idEmploye'];
   $de = $this->vpdo->employeParSonId($se);
   $d=$this->vpdo->laDateAujourdhui();
-  $return=$return.'<p>Date de la livraison : <input type="text" id="dateLivraison" readonly required  maxlength="10" value="'.$d.'">
+  $date = $this->vpdo->arrondirDate($d);
+  $return=$return.'<p>Date de la livraison : <input type="text" id="dateLivraison" readonly required  maxlength="10" value="'.$date.'">
                    Id de la Vente :<input type="text" readonly id="idVente" maxlength="12" value='.$idVente.'>
                    Id de l\'employe :<input type="text" readonly id="idEmploye" maxlength="12" value='.$se.'>
                    Nom et prenom de l\'employe :<input type="text" readonly id="idVente" maxlength="12" value="'.$de->nom.' '.$de->prenom.'"></p>
@@ -1230,9 +1231,9 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
   
-  public function listeEmploye()//Nicolas
+  public function listeEmploye()//Nicolas, modification ne focntionne pas
   {
-      $return='<div class="conteneur  div-liste-entreprises">
+      $return='<div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
                         Voici l\'outil de gestion des employés.<br>
                         Voici si dessous la totalité des employés de l\'entreprise.<br>
@@ -1243,23 +1244,25 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       
       while($le = $les->fetch(PDO::FETCH_OBJ))
       {
-          $te = $this->vpdo->typeEmployeParSonId($le->idType);//identifiant modifiable ??
+          $te = $this->vpdo->typeEmployeParSonId($le->idType);
           $return = $return.'
                 <bloc>
                     <row>
                         <p>Id de l\'employe :<input type="text" readonly maxlength="12" value='.$le->idEmploye.'></p>
-                        <p>Identifiant de l\'employe :<input type="text" readonly maxlength="12" value='.$le->identifiant.'></p>
-                        <p>Nom de l\'employe :<input type="text" readonly maxlength="12" value='.$le->nom.'></p>
+                        <p>Identifiant :<input type="text" readonly maxlength="12" value='.$le->identifiant.'></p>
+                        <p>Nom :<input type="text" readonly maxlength="12" value='.$le->nom.'></p>
                     </row> 
                     <row>   
-                        <p>Prénom de l\'employe : <input type="text" readonly  value="'.$le->prenom.'"></p>
-                        <p>Type de l\'employe :<input type="text" readonly maxlength="12" value="'.$le->idType.' - '.$te->libelle.'"></p>
-                        <p>Adresse de l\'employe :<input type="text"  maxlength="48" value='.$le->adresse.'></p>
+                        <p>Prénom: <input type="text" readonly  value="'.$le->prenom.'"></p>
+                        <p>Type:<input type="text" readonly maxlength="12" value="'.$le->idType.' - '.$te->libelle.'"></p>
+                        <p>Adresse(*) :<input type="text"  id="adresse'.$le->idEmploye.'" maxlength="48" value="'.$le->adresse.'"></p>                       
                     </row>                      
                     <row>   
-                        <p>Téléphone de l\'employe : <input type="text" maxlength="10"  value="'.$le->telephone.'"></p>
-                        <p>Mail de l\'employe : <input type="text"  value="'.$le->mail.'"></p>
-                        <a onclick="modifieremploye()" class="btn-classique">Confirmer Modification</a>
+                        <p>Téléphone(*) : <input type="text" id="telephone'.$le->idEmploye.'" maxlength="10"  value="'.$le->telephone.'"></p>
+                        <p>Mail(*) : <input type="text"  id="mail'.$le->idEmploye.'" value="'.$le->mail.'"></p>
+                        <a onclick="modifieremploye('.$le->idEmploye.')" class="btn-classique">
+                        <span class="tooltip" id="ttUpdateEmploye'.$le->idEmploye.'" title="Vous n\'avez pas rempli toutes les informations !"></span>
+                        Confirmer Modification</a>
                     </row>
                 </bloc>';
       }
@@ -1269,33 +1272,45 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
  
   
   /* ************************************************************************************************************************************* */
-  /* ***************************************FIN*LISTE*DES*EMPLYES****DEBUT*AJOUT*EMPLOYE******************************************** */
+  /* **************************************FIN*LISTE*DES*EMPLOYES****DEBUT*AJOUT*EMPLOYE******************************************** */
   /* ************************************************************************************************************************************* */
   
   
-  public function ajouterEmploye()//Nicolas
-  {
-      $iE = $this -> vpdo -> idDernierEmploye()+1;
+  public function ajouterEmploye()
+  {   $lesTypesEmployes= $this->vpdo->listeTypeEmploye();
+      $iE=$this->vpdo->idDernierEmploye()->idEmploye+1;
       // select 1/2/3/4 pour le type
-      $return='<div class="conteneur  div-liste-entreprises">
+      $return='<div class="conteneur border div-liste div-liste-devis">
                     <p style="margin-left: 1em">
-                        Vous pouvez sur cette page, ajouter un nouvel employé.<br>.<br>
+                        Vous pouvez sur cette page, ajouter un nouvel employé.<br>
+                        Veulliez remplir les champs obligatoire (marqué d\'un " <b>*</b> ").<br>
+                        Attention, vous devez obligatoirement rentrer une des informations pour contacter l\'employé. 
+                        Soit le mail, l\'adresse ou le téléphone.<br>
+                        Si vous avez fini d\'entrer les informations cliquez sur <b>"Ajouter employé"</b>
                     </p><bloc id="encours" style="display:block;"> ';
       $return = $return.'
                 <bloc>
                     <row>
-                        <p>Id de l\'employe :<input type="text" readonly maxlength="12" value='.$iE.'></p>
-                        <p>Nom de l\'employe :<input type="text" readonly maxlength="12" value=""></p>
+                        <p>Id de l\'employe :<input type="text" readonly maxlength="12" id="idEmploye" value='.$iE.'></p>
+                        <p>Nom(*)  :<input type="text maxlength="12" id="nom" value=""></p>
+                        <p>Prénom(*): <input type="text" id="prenom" value=""></p>
                     </row>
                     <row>
-                        <p>Prénom de l\'employe : <input type="text" readonly  value=""></p>
-                        <p>Type de l\'employe :<input type="text" readonly maxlength="12" value="FAIRE UN SELECT"></p>
-                        <p>Adresse de l\'employe :<input type="text"  maxlength="48" value=""></p>
-                    </row>
-                    <row>
-                        <p>Téléphone de l\'employe : <input type="text" maxlength="10"  value=""></p>
-                        <p>Mail de l\'employe : <input type="text"  value=""></p>
-                        <a onclick="ajouterremploye()" class="btn-classique">Ajouter employé</a>
+                        <p>Type(*)  :<select id="idType"><option selected hidden disabled></option>';
+                        while($tE = $lesTypesEmployes->fetch(PDO::FETCH_OBJ))
+                        {
+                              $return = $return.'<option value="'.$tE->idType.'">'.$tE->idType.' - '.$tE->libelle.'</option>';
+                        }
+                         $return = $return.'</select>
+                        <p>Téléphone  : <input type="text" maxlength="10" id="telephone" value=""></p>
+                        <p>Mail  : <input type="text"  id="mail" value=""></p> 
+                    </row>                       
+                    <row>  
+                        <p>Mots de passe  : <input type="password" id="mdp" value=""></p>    
+                        <p>Adresse:<input type="text"  maxlength="48" id="adresse" value=""></p>
+                        <a onclick="ajouteremploye()" class="btn-classique">
+                        <span class="tooltip" id="ttInsertEmploye" title="Vous n\'avez pas rempli toutes les informations !"></span>
+                        Ajouter employé</a>
                     </row>
                 </bloc>';
   $return=$return.'</bloc></div>';

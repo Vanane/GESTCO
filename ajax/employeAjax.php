@@ -11,11 +11,9 @@ switch ($action)
         $a=$_POST['adresse'];
         $t=$_POST['telephone'];
         $m=$_POST['mail'];
-        $mdp=$_POST['mdp'];
-        $r['result']=$pdo->updateTableUneCondition('employe','telephone',$t,'employe',$idE);
-        $r['result']=$pdo->updateTableUneCondition('employe','adresse',$a,'employe',$idE);
-        $r['result']=$pdo->updateTableUneCondition('employe','mail',$m,'employe',$idE);
-        $r['result']=$pdo->updateTableUneCondition('employe','mdp',$mdp,'employe',$idE);
+        $r['result']=$pdo->updateTableUneCondition('employe','telephone',$t,'idEmploye',$idE);
+        $r['result']=$r['result'].$pdo->updateTableUneCondition('employe','adresse',$a,'idEmploye',$idE);
+        $r['result']=$r['result'].$pdo->updateTableUneCondition('employe','mail',$m,'idEmploye',$idE);
         break;
         
     case 'ajouterEmploye':
@@ -27,9 +25,8 @@ switch ($action)
         $t=$_POST['telephone'];
         $m=$_POST['mail'];
         $mdp=$_POST['mdp'];
-        $r['result']=$pdo->insertEmploye($idE,$idT,$n,$p,$a,$m,$t,$mdp);
+        $r['result']=$pdo->insertEmploye($idE,$idT,$n,$p,$a,$t,$m,$mdp);
         break;
 }
-
 die( json_encode($r) );
 ?>
