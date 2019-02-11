@@ -14,13 +14,12 @@ switch($_POST['action'])
             break;
         else
         {
-            $pdo->updateTableUneCondition('Vente', "dateCommande", $dateCommande, 'idVente', $idVente);//On ajoute la date de transfert commande.            
-            $r['resultCommande'] = "";
+            $r['resultCommande'] = $pdo->updateTableUneCondition('Vente', "dateCommande", $pdo->laDateAujourdhui(), 'idVente', $idVente);//On ajoute la date de transfert commande.            
             while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
             //Pour chaque ligne devis retournée selon idVente,
             //On fait une insertion dans commande.
             {
-                $pdo->insertDetailCommande(
+                $r['resultCommande'] = $r['resultCommande'].$pdo->insertDetailCommande(
                     $l->idVente, $l->idArticle,
                     $l->idEmploye, $l->qteDemandee,
                     $l->txRemise, $l->CMUP,

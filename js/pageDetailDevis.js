@@ -9,17 +9,12 @@ $("document").ready(function(){
 		        data:
 		    	{
 		        	'action':'ajoutCommande',
-		        	'idV':$("#idVente").val(),
-		        	'dateCommande':(new Date().getFullYear()+'-'+
-				    				new Date().getMonth()+1+'-'+
-				    				new Date().getDate()+' '+
-				    				new Date().getHours()+':'+
-				    				new Date().getMinutes()+':'+
-				    				new Date().getSeconds())
-		    	},
+		        	'idV':$("#idVente").val()
+	        	},
 		        url: "../../ajax/detailsDevisAjax.php",
 		        success: function(r) {
 		        	alert("Commande formulée avec succès !");
+		        	history.back();
 		        },
 		        error: function (xhr, ajaxOptions, thrownError)
 		        {
