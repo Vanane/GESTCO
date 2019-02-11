@@ -98,7 +98,7 @@ $("document").ready(function(){
 		}
 	});
 	
-	
+	//Sur changement de la marge supplémentaire, on recalcule le CMUP.
 	$("#margeSup").change(function(){
 		if($(this).val()>100 || $(this).val()<0)
 		{
@@ -108,7 +108,7 @@ $("document").ready(function(){
 		$("#nouveauCMUP").val(CMUPActuel*(1+($(this).val()/100)));//nouveau CMUP = CMUP * taux sup
 	});
 	
-	
+	//Sur clic modifier Article, AJAX pour envoyer les informations actuelles saisies.
 	$("#modifierInfos").click(function(){
 		if(confirm("Voulez-vous vraiment MODIFIER les informations de l'article ?"))
 		{

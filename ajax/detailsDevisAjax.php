@@ -9,9 +9,12 @@ $lesDetails = $pdo->listeDetailsDevisParIdVente($idVente);
 switch($_POST['action'])
 {
     case 'ajoutCommande':
+        //Si la commande a déjà une date de commande, qui est ajoutée lorsqu'on la confirme
+        //Alors on s'arrête là, puisqu'elle est déjà confirmée.
         if($laVente->dateCommande != null)
             break;
         else
+        //Sinon on update pour mettre la date d'aujourd'hui et on l'insère.
         {
             $r['resultCommande'] = $pdo->updateTableUneCondition('Vente', "dateCommande", $pdo->laDateAujourdhui(), 'idVente', $idVente);//On ajoute la date de transfert commande.            
             while($l = $lesDetails->fetch(PDO::FETCH_OBJ))

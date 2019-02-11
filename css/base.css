@@ -882,6 +882,19 @@ p#infoUser
 		width:100%;
 		text-align:center;
 	}
+		
+	/* --- STYLE FORM CONNEXION SMARTPHONE --- */
+	
+	#form-connexion span, #form-connexion input
+	{
+		width:100%;
+		margin:0;
+	}
+	
+	#form-connexion a
+	{
+		margin-top:1em !important;
+	}
 	
 	/* --- STYLE MENU SMARTPHONE --- */
 		

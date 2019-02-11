@@ -8,14 +8,16 @@ if(isset($_POST['action']))
     $action = $_POST['action'];//Récupération de la source de l'AJAX
     switch ($action)
     {
-        case 'validePrepa'://Sur changement du client
+        case 'validePrepa'://Sur validation de la préparation, on insère la prépa et les infos envoyées par JS
             $r = $_POST['datas'];
+            //On change la date de prépa à aujourd'hui
             $pdo->updateTableUneCondition('Vente', 'datePrepa', $pdo->laDateAujourdhui(), 'idVente', $r['idV']);
             for($i=1;$i<=$r['nbArticles'];$i++)//Pour i allant de 1 à nb d'articles
             {                
                 //UPDATE detail_preparation SET qteFournie = "qte"+i WHERE idVente = x AND idArticle = "idA"+i
                 $pdo->updateTableDeuxConditions('detail_preparation', 'qteFournie', $r['qteF'.$i], 'idVente', $r['idV'], 'idArticle', $r['idA'.$i]);
                 $d = $pdo->preparationParSonId($r['idV'], $r['idA'.$i]);
+                //On insère chaque détail de la préparation,en reprenant le CMUP, remise, marge et TVA de la commande correspondante.
                 $pdo->insertDetailLivraison($r['idV'], $r['idA'.$i], $r['idE'], $r['qteD'.$i], $r['qteF'.$i], $d->txRemise, $d->CMUP, $d->marge, $d->tva, $d->observation);
                 if($r['qteF'.$i] != $r['qteD'.$i])
                 {

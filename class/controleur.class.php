@@ -30,8 +30,8 @@ public function formulaireLogin()
 	    return '
         <div class="conteneur">
             <form id="form-connexion" action="confirmation" method="post">
-                <span>Identifiant :</span><input type="text" name="login"><br>
-                <span>Mot de passe :</span><input type="password" name="pwd"><br/>
+                <span>Identifiant :</span><input type="text" name="login">
+                <span>Mot de passe :</span><input type="password" name="pwd">
                 <a class="btn-classique" onclick="$(\'#form-connexion\').submit()"><input type="submit" hidden>Connexion</a>
             </form>';
 }	
@@ -71,6 +71,7 @@ public function estConnecte()
 }
 
 public function afficheNonAcces()
+//Affiche juste un message pour dire que l'user n'a pas accès à ce lien.
 {
     $retour = '
     <div class="conteneur">
@@ -124,6 +125,8 @@ public function afficheListeDevis()
         //on prévoit des variables pour nos appels
         // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
         //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
+        
+        //Pour chaque ligne vente, on affiche un <bloc> avec des <row> à l'intérieur, mis en forme par le CSS.
         $retour = $retour.'
                 <bloc';
         if($v->dateCommande != null)
@@ -235,6 +238,7 @@ public function afficheListeDevis()
 	    $retour = '';
 	    $v = $this->vpdo->venteParSonId($idVente);
         if($v!=null)
+        //Si l'id vente a été trouvé, on affiche les détails.
         {
     	    $c = $this->vpdo->clientParSonId($v->idClient);
     	    $s = $this->vpdo->societeParSonId($c->idSociete);
@@ -306,6 +310,7 @@ public function afficheListeDevis()
     	    }
         }
 	    else
+	        //Sinon on dit tout simplement que la vente n'a pas été trouvée dans la BDD.
 	        $retour = $retour.'<p>Cette vente n\'existe pas !</p>';                    
         return $retour;	               
 	}
@@ -313,6 +318,11 @@ public function afficheListeDevis()
 	    
 	public function afficheAjoutDevisOuCommande()
 	{
+	    //Tout comme details devis ou commande et l'AJAX et le JS, 
+	    //Les pages ajout devis et ajout commande sont fusionnées dans le même code
+	    //Puisqu'elles sont quasiment identiques. 
+	    //Ce qui permet de différencier les deux est le lien : 
+	    //GESTCO/Ventes/Devis/Ajouter, ou bien /Commandes/Ajouter.
 	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
 	    $emp = $this->vpdo->employeParSonId($_SESSION['idEmploye']);
 	    $lesClients = $this->vpdo->listeClients();
@@ -327,7 +337,7 @@ public function afficheListeDevis()
                         <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
                         <p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"></span><select id="idClient">
                                         <option selected hidden disabled></option>';//Ajoute une option vide pour forcer l'utilisateur à choisir.
-	    
+	    //Boucle pour ajouter chaque client au select Client. 
 	    while($e = $lesClients->fetch(PDO::FETCH_OBJ))
 	    {
 	        $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
@@ -349,6 +359,7 @@ public function afficheListeDevis()
                             <td><select id="idArticle">
                                 <option value></option>';
 	    //Les th avec "text" sont marqués pour le CSS, afin d'agrandir les colonnes
+	    //Boucle pour ajouter chaque article au select Article.
 	    while($a = $lesArticles->fetch(PDO::FETCH_OBJ))
 	    {
 	        $return = $return.'<option value="'.$a->idArticle.'"> '.$a->codeBarre.' | '.$a->idArticle.' | '.$a->libelle.' | '.$a->dernierCMUP.'€</option>';
@@ -665,71 +676,7 @@ public function afficheListeDevis()
 	        $retour = '<p>Cette vente n\'existe pas !</p>';
         return $retour;
 	}
-	
-	
-	public function afficheAjoutDevis()
-	{
-	    $idVente = $this->vpdo->idDerniereVente()->idVente+1;
-	    $emp = $this->vpdo->employeParSonId($_SESSION['idEmploye']);	  
-	    $lesClients = $this->vpdo->listeClients();
-	    $lesArticles = $this->vpdo->listeArticles();
-	    $return = '
-            <div class="conteneur border">
-                <div id="details-vente">
-                    <row>
-                        <p>Responsable Devis : <input id="resp" type="text" value="'.$emp->idEmploye.' - '.$emp->prenom.' '.$emp->nom.'" readonly></input></p>
-                    </row>
-                    <row>
-                        <p>N° Vente : <input id="idVente" type="text" value="'.$idVente.'" readonly></p>
-                        <p>N° Client :<span class="tooltip" id="ttIdClient" title="Vous n\'avez pas choisi de client !"></span><select id="idClient">
-                                        <option selected hidden disabled></option>';//Ajoute une option vide pour forcer l'utilisateur à choisir.
-        
-        while($e = $lesClients->fetch(PDO::FETCH_OBJ))
-        {
-            $return = $return.'<option value="'.$e->idClient.'">'.$e->idClient.' - '.$e->nom.' '.$e->prenom.'</option>';
-        }
-        $return = $return.'</select></p>
-                        <p>Date : <input id="dateDevis" type="text" readonly></p>
-                    </row>
-                    <row>
-                        <p>Société : <input id="idSociete" type="text" readonly></p>
-                        <p>Adresse : <input id="adrSociete" type="text" readonly></p>
-                        <p>Coordonnées : <input id="coordSociete" type="text" readonly></p>
-                    </row>
-                </div>
-	        
-                <div id="details-articles-devis">
-                    <table id="table-articles">
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Remise % TTC</th>   <th>Remise € TTC</th>   <th>Total HT</th>   <th>TVA %</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>
-                        <tr>
-                            <td><span class="tooltip" id="ttIdArticle" title="Sélectionnez au moins un article !"><select id="idArticle1">
-                                <option value></option>';
-        while($e = $lesArticles->fetch(PDO::FETCH_OBJ))
-        {
-            $return = $return.'<option value="'.$e->idArticle.'">'.$e->idArticle.'</option>';
-        }        
-        $return = $return.'</select></span></td>
-                            <td><input id="nomArticle1" type="text" readonly></td>
-                            <td><input id="CMUPArticle1" type="number" readonly></td>
-                            <td><input id="margeArticle1" type="number" readonly></td>
-                            <td><input id="qteArticle1" type="number" min=1 value=1></td>
-                            <td><input id="txArticle1" type="number" min=0 max=100 step=0.5 value=0></td>
-                            <td><input id="remise1" type="number" value=0 readonly></td>
-                            <td><input id="ht1" type="number" value=0 readonly></td>
-                            <td><input id="tva1" type="number" value=0 readonly></td>
-                            <td><input id="ttc1" type="number" value=0 readonly></td>
-                            <td><input id="obsArticle1" type="text"></td>
-                      </tr>
-                    </table>
-                    <a id="ajouteLigne" class="btn-classique btn-plusLigne">+</a>
-                </div>
-            </div>
-	    <a id="enregistrer" class="btn-classique">Enregistrer le devis</a>';
-	    return $return;
-	}
-	
-	
-	
+
 	
 	public function afficheListeReliquats()
 	{

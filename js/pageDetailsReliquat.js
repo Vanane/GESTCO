@@ -1,9 +1,11 @@
 $('document').ready(function(){
 	var dReliquats = {};//Tableau JSON qui sera renvoyé en AJAX avec les informations de chaque reliquat
+	
+	//On stocke le nombre de blocs dans rowCount
 	var rowCount = $('.div-liste bloc').length;
 	
 	$('.div-liste bloc').each(function(index, value){
-		
+	//Pour chaque élément bloc de la page, on affecte au textarea de ce bloc un compteur de caractères.
 		let bloc = $(value);
 		let text = $(bloc).find("#obsReliquat");
 		$(bloc).find('sub').html("("+($(text).prop('maxlength') - $(text).val().length)+" signes restants)");
@@ -15,7 +17,7 @@ $('document').ready(function(){
 		$(bloc).find
 	});
 	
-	
+	//Sur clic bouton Confirmer, on regarde si les valesurs entrées sont valides, et on envoie un AJAX si valides. Sinon message d'erreur
 	$("#confirmer").click(function(){
 		let erreur = false;		
 		$('.div-liste bloc').each(function(index, value)
@@ -28,6 +30,7 @@ $('document').ready(function(){
 			}		
 			else
 			{
+				//On met les données saisies dans un tableau qu'on passera par AJAX ensuite.
 				dReliquats['rowCount'] = rowCount;
 				$('.div-liste bloc').each(function(i, v)
 				{

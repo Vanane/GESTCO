@@ -1,5 +1,5 @@
 $("document").ready(function(){
-	
+	//Sur clic bouton confirmer, AJAX pour valider la commande et la transférer en prépa.
 	$("#confirmer").click(function(){
 		if(confirm("Voulez-vous vraiment PASSER cette commande en préparation ?"))
 		{

@@ -1,6 +1,8 @@
 ﻿<?php
 
 class page_base {
+    
+    //Attributs de la classe
 	protected $right_sidebar;
 	protected $left_sidebar;
 	protected $footer;
@@ -10,11 +12,12 @@ class page_base {
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande');
-	protected $path="http://192.168.168.187/GESTCO/";
+	protected $path="http://localhost/GESTCO/";
 	protected $entreprise;
 	protected $user;
 	
 	public function __construct() {
+	//Constructeur
 		$numargs = func_num_args();
 		$arg_list = func_get_args();
         if ($numargs == 1) {
@@ -23,6 +26,7 @@ class page_base {
 	}
 
 	public function __set($propriete, $valeur) {
+	//Setters. Fonction propre à PHP
 		switch ($propriete) {
 			case 'css' : {
 				$this->css[count($this->css)+1] = $valeur;
@@ -77,6 +81,8 @@ class page_base {
 		}
 	}
 	public function __get($propriete) {
+    //Setters. Fonction propre à PHP
+	    
 		switch ($propriete) {
 			case 'titre' :
 				{
@@ -124,6 +130,7 @@ class page_base {
 	}	
 	/****************************** Affichage de la partie entete ***************************************/	
 	protected function afficheEntete() {
+	//Affiche avec echo l'en-tête du site, le logo, le titre.
 		echo'
            <header>				
 				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/'.$this->entreprise->logo.'" alt="logo"/></a>
@@ -147,10 +154,12 @@ class page_base {
 	
 	
 	protected function afficheMenuConnexion()
+	//Echo le menu de connexion : bouton Connexion si déconnecté, bouton Déconnexion si connecté.
 	{
-	    $connecte = false;
+	    $connecte = false;//Retourne si un user est connecté. On considère de base que non.
 	    echo '<div id="bandeau_connexion" class="menu_horizontal">';
 	    if(isset($_SESSION['id']) && isset($_SESSION['type']))
+	    //Si les variables sessions id et type sont existantes
 	    {	     
 	        echo '
             <ul id="btn-deconnexion">
@@ -158,9 +167,10 @@ class page_base {
             </ul>
             <p id="infoUser" style="float:right">Vous êtes connecté en tant que : '.$this->user->prenom.' '.$this->user->nom.'</p>
             ';
-	        $connecte = true;
+	        $connecte = true;//Connecté = vrai
 	    }
 	    else
+	    //Sinon
 	    {	        
 	        echo '
 				<ul id="btn-connexion">
@@ -174,6 +184,8 @@ class page_base {
 	
 	
 	protected function afficheMenuVentes()
+	//Menu de gauche. Selon le rôle de la personne connectée, stockée dans la SESSION 'type', on affiche
+	//Ou non certains liens dans le menu.
 	{
 	    echo '<div class="menu_horizontal">';
 	    $lesMenus=array(
@@ -232,6 +244,8 @@ class page_base {
 	
 	
 	protected function afficheMenuAchats()
+	//Menu de droite. Identiquement à celui de gauche, on affiche les liens en fonction
+	//Du role du connecté.
 	{
 	    echo '<div class="menu_horizontal">';
 	    $lesMenus=array(
@@ -260,6 +274,7 @@ class page_base {
 	
 	
 	protected function afficheMenuAutres()
+	//Menu du milieu, identique aux deux autres.
 	{
 	    echo '<div class="menu_horizontal">';
 	    $lesMenus=array(
@@ -315,6 +330,8 @@ class page_base {
 	
 	
 	protected function afficheMenu()
+	//Permet de regrouper les fonctions de menu en une seule, et de les exécuter si
+	//L'utilisateur est connecté.
 	{
 	    if($this->afficheMenuConnexion() != false)
 	    {
@@ -326,32 +343,16 @@ class page_base {
 	        
 	    }
 	}
-	
 
-	/****************************************** remplissage affichage colonne ***************************/
-	public function afficheBlocContact() {
-		return'
-
-			
-				<article>
-					<h3>GRETA de Loire-Atlantique</h3>
-										<p>16 Rue Dufour</br>
-										44000 Nantes</br>
-										Tel : 02 40 14 56 56</br>
-                                        </p>									
-										<a  href="Contact" class="button">Contact</a>
-                </article>
-				';
-							
-	}
-/******************Fonction permettant d'afficher le footer et les informations de l'entreprise******************/
+    /******************Fonction permettant d'afficher le footer et les informations de l'entreprise******************/
 	
 	public function afficheFooter()
+	//Footer de la page, avec l'adresse, le numero, le site internet de l'entreprise.
 	{
 	    echo'
 				<p id="copyright">
                 '.$this->entreprise->nom.' - '.$this->entreprise->adresse.' - Tel : '.$this->entreprise->telephone.'
-				<a href="'.$this->entreprise->siteWeb.'">GRETA Nantes</a>
+				 - <a href="'.$this->entreprise->siteWeb.'">Site Internet</a>
 				</p>
 		';
 	}
@@ -359,7 +360,9 @@ class page_base {
 	/********************************************* Fonction permettant l'affichage de la page ****************/
 
 	public function affiche() {
-		
+	//Permet d'appeler toutes les méthodes au-dessus pour afficher
+	//Chacune à leur tour leur contenu en fonction des données, 
+	//Imbriqués dans la page HTML.
 		
 		?>
 			<!DOCTYPE html>

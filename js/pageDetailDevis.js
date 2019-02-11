@@ -1,5 +1,5 @@
 $("document").ready(function(){
-	
+	//Sur clic bouton confirmer, on passe le devis en commande.
 	$("#confirmer").click(function(){
 		if(confirm("Voulez-vous vraiment FORMULER une commande à partir de ce devis ?"))
 		{

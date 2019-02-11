@@ -52,28 +52,35 @@ $("document").ready(function(){
 	$("#validePrepa").click(function(){
 		let error = false;
 		let i = 0;
+		//Boucle while pour chaque élément d'id rowArticleX.
 		while(i<=rowCount)
 		{
 			i++;
+			//Si le code-barre de l'article = le code-barre scanné/saisi, alors
 			if($("#rowArticle"+i).find("#codeArticle").val() == $("#rowArticle"+i).find("#codeScan").val())
 			{
+				//Si le nombre d'articles entré est inférieur au nombre demandé, alors
 				if(parseInt($("#rowArticle"+i).find("#qteFournie").val()) < parseInt($("#rowArticle"+i).find("#qteDemandee").val()))
 				{
+					//Si l'user répond "Oui" à la question s'il est sûr de vouloir poursuivre, alors erreur = false;
 					if(confirm("L'article "+$("#btnArticle"+i).html()+" n'a pas été remis en quantité suffisante. Souhaitez-vous continuer ?"))
 						error = false;
 					else
+						//Sinon erreur = true, ce qui empêchera l'AJAX de se faire.
 						error = true;
 				}
 			}
 			else
 			{
+				//Si les codes-barre ne sont pas identiques, erreur = tru et message d'erreur.
 				alert("L'article "+$("#btnArticle"+i).html()+" n'a pas été prix en compte ! Vérifiez le code scan entré.");				
 				error = true;
 			}
 		}
-		
+		//Si aucune erreur au-dessus n'a eu lieu
 		if(!error)
 		{		
+			//Alors on remplit un tableau JSON des valeurs de chaque préparation
 			datas['idV'] = parseInt($('#idVente').val());
 			datas['nbArticles'] = rowCount;
 			datas['idE'] = $("#idE").attr('data-ide');
@@ -85,6 +92,7 @@ $("document").ready(function(){
 				datas['qteF'+inc] = parseInt($("#rowArticle"+inc).find("#qteFournie").val());				
 			}
 			
+			//Qu'on envoie par AJAX.
 			$.ajax({ //AJAX pour valider la préparation.
 		        type: "POST",
 		        dataType: "json",
@@ -110,6 +118,7 @@ $("document").ready(function(){
 		}
 	});
 });
+
 
 function toggleCSS(el,c,v1,v2)//Inverse les propriétés si l'une est présente
 {
