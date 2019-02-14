@@ -91,10 +91,6 @@ class controleur {
                 Vous pouvez accéder au detail de chaque devis en cliquant sur <b>"Voir détail"</b>.<br>
                 Si vous souhaitez ajouter un devis, cliquez sur le bouton <b>"Ajouter un devis"</b>.
             </p>
-            <p style="margin-left: 1em">
-                Vous pouvez choisir quels devis afficher ou non, en changeant la sélection dans "Filtrer".<br>
-                Les devis confirmés en commandes sont affichés lorsque "Validés" est coché.<br>
-            </p>
         ';
             // Légère explication pour l'utilisateur
             
