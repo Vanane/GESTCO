@@ -9,10 +9,11 @@ RUN \
 	echo "mysqld_safe &" > /tmp/config && \
 	echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config && \
 	echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
-	a2ensite example.com && \
-	systemctl reload apache2 && \
 	bash /tmp/config && \
 	rm -f /tmp/config
 
+
+#	a2ensite example.com && \
+#	systemctl reload apache2 && \
 	
 EXPOSE 3306
