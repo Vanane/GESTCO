@@ -1,10 +1,8 @@
 FROM ubuntu:latest
 
 RUN \
-	su && \
-	echo "root" && \
+	sudo apt-get update && \
 	echo "" && \ 
-	apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server apache2 php libapache2-mod-php php-mysql php-curl php-gd php-intl php-json php-mbstring php-xml php-zip && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
