@@ -1,6 +1,4 @@
 
-	
-}
 /* --- STYLES DE BASE POUR LE TEXTE ET LES PRINCIPAUX ÉLÉMENTS --- */
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 /* Page */
@@ -40,7 +38,7 @@ h4
     text-decoration: underline;
 }
 
-a, p, td, th{font-size:1.2em;}
+a, p, th{font-size:1.2em;}
 
 
 /* Listes */
@@ -1049,5 +1047,42 @@ p#infoUser
 	{
 		display:block;
 	}	
+	
+		
+	#table_wrapper #table_filter
+	{
+		width:100%;
+		margin:0;
+		text-align:center;
+	}
+	
+	#table_wrapper #table_filter label input
+	{
+		width:100%;
+		font-size:1.5em;
+		margin:0;
+	}
+	
+	#table_wrapper #table_length
+	{
+		display:none;
+	}
 }
+
+
+
+.dataTable tr
+{
+	height:5em;
+}
+
+.dataTable td
+{
+	border-bottom:solid 1px black;
+	background:#B2C3C0;
+	text-align:center;		
+}
+
+
+
 

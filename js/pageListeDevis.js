@@ -1,44 +1,28 @@
 $('document').ready(function(){
-	$("bloc").each(function(i, v){
-	//Pour chaque <bloc>, on masque.
-		$(v).css('display', 'none');			
-	});
-		$("bloc#valide").each(function(i, v){	
-		//Pour chaque <bloc> avec id valide, on l'affiche. On n'obtient que les devis validés.
-			$(v).css('display', 'block');			
-	});
-		
-	
-	//Pour chaque bouton radio dans la div fitre, on affecte un evenement click.
-	$.each($("#filtre p input"), function(index, value){
-		//Lorsqu'on clique, l'id du bouton cliqué sert de switch.
-		$(value).click(function(){
-			switch($(value).attr('value'))
-			{
-			case 'filtreV':
-				//Si l'id est "filtreV", on affiche les blocs avec id "valide"				
-				$("bloc").each(function(i, v){
-					let el = v;
-					$(v).css('display', 'none');
-				});
-				
-				$("bloc#valide").each(function(i, v){		
-					$(v).css('display', 'block');
-				});
-				break;
-			case 'filtreNonV':
-				//Si l'id est "filtreNonV", on affiche les blocs sans id.				
-				$("bloc").each(function(i, v){
-					let el = v;
-					$(v).css('display', 'block');
-				});
-				
-				$("bloc#valide").each(function(i, v){		
-					$(v).css('display', 'none');
-				});
-				
-				break;
-			}
-		});
-	});
+	$('#table').DataTable({
+		"language": {
+			 "sProcessing": "Traitement en cours...",
+			 "sSearch": "Rechercher&nbsp;:",
+			 "sLengthMenu": "Afficher _MENU_ &eacute;l&eacute;ments",
+			 "sInfo": "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+			 "sInfoEmpty": "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+			 "sInfoFiltered": "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+			 "sInfoPostFix": "",
+			 "sLoadingRecords": "Chargement en cours...",
+			 "sZeroRecords": "Aucun &eacute;l&eacute;ment &agrave; afficher",
+			 "sEmptyTable": "Aucune donn&eacute;e disponible dans le tableau",
+			 "oPaginate": {
+			 "sFirst": "Premier&nbsp;&nbsp;",
+			 "sPrevious": "Pr&eacute;c&eacute;dent&nbsp;&nbsp;",
+			 "sNext": "Suivant",
+			 "sLast": "&nbsp;&nbsp;Dernier"
+			 },
+			 "oAria": {
+			 "sSortAscending": ": activer pour trier la colonne par ordre croissant",
+			 "sSortDescending": ": activer pour trier la colonne par ordre d&eacute;croissant"
+			 }
+		},
+	scrollX:true,
+	"autoWidth": false
+	});	
 });
