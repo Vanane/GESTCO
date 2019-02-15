@@ -14,16 +14,9 @@ switch($_POST['action'])
          break;
         else
         {
-           /* if ($QteDemandee==$QteFournie)//Nicolas géré par article
-            {
-                $qteR=$qteDemandee-$QteFournie;
-                $pdo->insertDetailReliquat($idVente,$l->idArticle,'NULL','NULL','NULL', $qteR,'NULL',$l->observation);
-            }*/
             $e=$_POST['idEmploye'];
             $pdo->updateTableUneCondition('Vente', "dateLivraison", $pdo->laDateAujourdhui(), 'idVente', $idVente);//On ajoute la date de transfert livraison.            
             while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
-            //Pour chaque ligne livraison retournée selon idVente,
-            //On fait un update dans Livraison. 
             {
                 $pdo->updateTableDeuxConditions('detail_livraison', 'idEmploye', $e,'idVente', $idVente,'idArticle',$l->idArticle);
                 $pdo->updateTableDeuxConditions('detail_livraison', 'qteFournie',$l->qteDemandee,'idVente', $idVente,'idArticle',$l->idArticle);
@@ -33,12 +26,11 @@ switch($_POST['action'])
             
         }
     break;
-  /*  case 'boucleArticle':
-        while($l = $lesDetails->fetch(PDO::FETCH_OBJ))
-        {
-            $r['result']=$lesDetails;           
-        }
-    break;*/
+    case 'ajoutReliquat':
+        $idA = $_POST['idA'];
+        $qte = $_POST['qte'];
+        $pdo->insertDetailReliquat($idVente, $idA, 'NULL', "2", 'NULL', $qte, 'NULL', 'NULL');
+        break;
 }
 
 die( json_encode($r) );

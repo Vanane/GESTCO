@@ -18,7 +18,7 @@ $('document').ready(function(){
 	});
 	
 	//Sur clic bouton Confirmer, on regarde si les valesurs entrées sont valides, et on envoie un AJAX si valides. Sinon message d'erreur
-	$("#confirmer").click(function(){
+	$("#confirmer").click(function(){ 
 		let erreur = false;		
 		$('.div-liste bloc').each(function(index, value)
 		{		

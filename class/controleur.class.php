@@ -267,7 +267,7 @@ public function afficheListeDevis()
                             
                 <div id="details-articles-devis">
                     <table>
-                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Total HT</th>    <th>Remise %</th>   <th>Remise €</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Oservation</th>   </tr>';
+                        <tr>    <th>Code article</th>   <th>Nom</th>   <th>Prix unitaire</th>   <th>Marge %</th>   <th>Quantité</th>   <th>Total HT</th>    <th>Remise %</th>   <th>Remise €</th>   <th>TVA</th>   <th>Total TTC</th>   <th>Observation</th>   </tr>';
     	    
     	    $lesDetails = $this->vpdo->listeDetailsDevisParIdVente($v->idVente);
     	    while($d = $lesDetails->fetch(PDO::FETCH_OBJ))
@@ -863,7 +863,7 @@ while($ls = $lscof->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la
                     <row>
                         <p>Téléphone :<input type="text" readonly maxlength="12" value='.$ls->telephone.'></p>
                         <p>Adresse :<input type="text" readonly maxlength="64" value="'.$ls->adresse.'"> </p>
-                        <p>Raison sociale :<input type="text" readonly maxlength="12" value='.$ls->raison.'></p>
+                        <p>Forme juridique :<input type="text" readonly maxlength="12" value='.$ls->formeJur.'></p>
                     </row>
                     <row>
                         <p>Mail :<input type="text" readonly value='.$ls->mail.'></p>
@@ -909,7 +909,7 @@ public function listeContact($idSociete, $types,$type, $idType)
                         <row>    
                         <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly required value='.$s->idSociete.'></p>
                         <p>  Nom de l\'entreprise : <input type="text" maxlength="24" id="nomSociete" required value='.$s->nom.'> </p>
-                        <p>  Raison sociale : <input type="text" id="raisonSociete" maxlength="12" required value='.$s->raison.'> </p>
+                        <p>  Forme juridique : <input type="text" id="formeJurSociete" maxlength="12" required value='.$s->formeJur.'> </p>
                      </row>
                      <row>
                         <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" maxlength="48" required value='.$s->siteWeb.'> </p>  
@@ -1081,7 +1081,7 @@ public function ajouterSociete($type)//je récupère toujours le type
     <row>
         <p> Code de l\'entreprise : <input type="text" id="idSociete" readonly value="'.$idSociete.'"></p>
         <p>  Nom de l\'entreprise : <input type="text" required maxlength="24" id="nomSociete"value=""></p>
-        <p>  Raison sociale : <input type="text" id="raisonSociete" required maxlength="12" value=""> </p>
+        <p>  Forme juridique : <input type="text" id="formeJurSociete" required maxlength="12" value=""> </p>
    </row>
     <row>
          <p>  Site web de l\'entreprise : <input type="text" id="siteWebSociete" required maxlength="48" value=""> </p>  
@@ -1175,6 +1175,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         <b>"idAchat"</b> ne peut être modifié.                       
                     </p> ';
       $return = $return.'
+
                 <bloc>
                    	<row>
                         <p>Id Achat: <input type="text" id="idAchat" readonly maxlength="24" required value="'.$idMouv.'"></p>
@@ -1198,8 +1199,6 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
                         }
                          $return = $return.'</select></p></row> 
                         <p>Observation : <sub id="char"></sub></p><textarea id="commentaire" maxlength="48"></textarea> 
-                        <i>(48 caractères maximum)</i>
-                        
                         <a onclick=\'ajouterachat()\' class="btn-classique">
                         <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
                         Confirmer achat</a>
@@ -1207,8 +1206,11 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       
       $return=$return.'</div></div>';// les informations, avec un select pour les fournisseur
                                     //Et une vérification que les cases obligatoires soit bien remplit.
-      return $return;//<p>Commentaire : <input type="text" id="commentaire"  required  value=""></p>
+      return $return;
   }
+
+  
+  
   
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
@@ -1273,8 +1275,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
         }
         $return=$return.'</div></div>';
         return $return;
-    }
-  
+    }  
   /* ************************************************************************************************************************************* */
   /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
   /* ************************************************************************************************************************************* */
@@ -1330,7 +1331,11 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
       return $return;     
   }
   
-  public function detailLivraisonsEnCours($idVente)//NC: géré reliquat, géré signature
+  /* ************************************************************************************************************************************* */
+  /* ***********************************************************GESTION*LIVRAISON********************************************************* */
+  /* ************************************************************************************************************************************* */
+  
+  public function detailLivraisonsEnCours($idVente)//NC: géré signature
   {   
       $return='
                     <a onclick="aide()" class="btn-classique" id="afficherAide" style="display:block">Afficher l\'aide</a>
@@ -1348,6 +1353,7 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
   $de = $this->vpdo->employeParSonId($se);
   $d=$this->vpdo->laDateAujourdhui();
   $date = $this->vpdo->arrondirDate($d); 
+  $nbArticle=0;
   $return=$return.'<p>Date de la livraison : <input type="text" id="dateLivraison" readonly required  maxlength="10" value="'.$date.'">
                    Id de la Vente :<input type="text" readonly id="idVente" maxlength="12" value='.$idVente.'>
                    Id de l\'employe :<input type="text" readonly id="idEmploye" maxlength="12" value='.$se.'>
@@ -1359,18 +1365,27 @@ $return=$return.'<p><b> Liste des articles de la commande :</b></p>'; // j'affic
       $return = $return.'
                         <bloc>
                            	<row>
-                                <p>id Article :<input type="text" id="idArticle" readonly maxlength="12"  value='.$ll->idArticle.'></p>
-                                <p>Quantité demandée :<input type="text" id="qteDemandee" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
-                                <p>Quantité fournie(*) :<input type="text" id="qteFournie" maxlength="12" required value='.$ll->qteDemandee.'></p>                               
+                                <p>id Article :<input type="text" id="idArticle'.$nbArticle.'" readonly maxlength="12"  value='.$ll->idArticle.'></p>
+                                <p>Quantité demandée :<input type="text" id="qteDemandee'.$nbArticle.'" readonly maxlength="12" value='.$ll->qteDemandee.'></p>
+                                <p>Quantité fournie(*) :<input type="text" id="qteFournie'.$nbArticle.'" maxlength="12" required value='.$ll->qteDemandee.'></p>                               
                             </row>
                         </bloc>'; 
+ 
+   $nbArticle+=1;
   }
+  $return=$return.'<input type="text" id="nbArticle" style="display:none"value="'.$nbArticle.'">';
   $return=$return.'             </bloc></bloc></div>
+                                <p>signature: <h5>(optimisation de la signature en cours : veuillez effectuer la signature lentement en attendant la mise à jour.)</h5></p>
+                                <p>
+                                <canvas id="mon_canvas"></canvas>
                                 <a onclick=\'ajouterlivraison()\' class="btn-classique">
                                 <span class="tooltip" id="ttInsertAchatInfo" title="Vous n\'avez pas rempli toutes les informations !"></span>
-                                Confirmer la livraison</a>
+                                Confirmer la livraison</a></p>
                                 '; // j'affiche les info des chaque article de la vente
   return $return;// <p> block signature (canvas->Trello)</p>
+  
+  
+
   }
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 /* ************************************************************************************************************************************* */
@@ -1483,7 +1498,66 @@ $return=$return.'<p><b> Liste des articles de la commande :</b></p>'; // j'affic
 /* *******************************************************FIN*GESTION*EMPLOYE*********************************************************** */
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+/* ************************************************************************************************************************************* */
+/* *****************************************************DEBUT*TEST*CODE*BARRE*********************************************************** */
+/* ************************************************************************************************************************************* */
+/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
   
+  public function testCodeBarre()
+  {//NC:revoir le fichier pi_barcode.class.php
+      /* *****************************************
+       * exemple d'utilisation de pi_barcode.php
+       * par pitoo.com
+       * ***************************************** */
+      include'pi_barcode.class.php';
+      
+      // instanciation
+      $bc = new pi_barcode();
+      
+      // Le code a générer
+      $bc->setCode('123456789012');
+      // Type de code : EAN, UPC, C39...
+      $bc->setType('EAN');
+      // taille de l'image (hauteur, largeur, zone calme)
+      //    Hauteur mini=15px
+      //    Largeur de l'image (ne peut être inférieure a
+      //        l'espace nécessaire au code barres
+      //    Zones Calmes (mini=10px) à gauche et à droite
+      //        des barres
+      $bc->setSize(80, 150, 10);
+      
+      // Texte sous les barres :
+      //    'AUTO' : affiche la valeur du codes barres
+      //    '' : n'affiche pas de texte sous le code
+      //    'texte a afficher' : affiche un texte libre
+      //        sous les barres
+      $bc->setText('AUTO');
+      
+      // Si elle est appelée, cette méthode désactive
+      // l'impression du Type de code (EAN, C128...)
+      $bc->hideCodeType();
+      
+      // Couleurs des Barres, et du Fond au
+      // format '#rrggbb'
+      $bc->setColors('#123456', '#F9F9F9');
+      // Type de fichier : GIF ou PNG (par défaut)
+      $bc->setFiletype('PNG');
+      
+      // envoie l'image dans un fichier
+      $return ='<bloc><p><input type "text"></p></bloc>';
+      $bc->writeBarcodeFile('barcode.png');
+      // ou envoie l'image au navigateur
+      // $bc->showBarcodeImage();
+      return $return;
+  }
+  
+  /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
+  /* ************************************************************************************************************************************* */
+  /* *******************************************************FIN*TEST*CODE*BARRE*********************************************************** */
+  /* ************************************************************************************************************************************* */
+  /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
   
     public function afficheListeArticles()
     {

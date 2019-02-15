@@ -21,9 +21,9 @@ function modificationSociete() {// j'affiche un message pour éviter les erreurs
 		let tel = document.getElementById("telSociete");
 		let adresse = document.getElementById("adresseSociete");
 		let fax = document.getElementById("faxSociete");
-		let raison = document.getElementById("raisonSociete");
+		let formeJur = document.getElementById("formeJurSociete");
 		let mail = document.getElementById("mailSociete");
-		if (nom.value ==0 || adresse.value ==0 || raison.value ==0)//je vérifie si ses 3 éléments ne sont pas vides
+		if (nom.value ==0 || adresse.value ==0 || formeJur.value ==0)//je vérifie si ses 3 éléments ne sont pas vides
 		{
 			$('#ttModifSocieteInfo').tooltipster('open');// si oui j'affiche le pop-up
 			erreur = true;//et je change la valeur de la viriable erreur.
@@ -42,7 +42,7 @@ function modificationSociete() {// j'affiche un message pour éviter les erreurs
     		'tel':tel.value,
     		'adresse':adresse.value,
     		'fax':fax.value,
-    		'raison':raison.value,
+    		'formeJur':formeJur.value,
     		'mail':mail.value
     	},
         url: "../ajax/clientAjax.php",//je précise quel chemin il doit suivre pour trouver la page Ajax.
@@ -324,7 +324,7 @@ function ajoutersociete(type){// voir ci dessus pour le détail du code
 		let telephone = document.getElementById("telSociete");
 		let fax = document.getElementById("faxSociete");
 		let siteWeb = document.getElementById("siteWebSociete");
-		let raison = document.getElementById("raisonSociete");
+		let formeJur = document.getElementById("formeJurSociete");
 		let mail = document.getElementById("mailSociete");
 		if(type=="client")
 			{
@@ -336,7 +336,7 @@ function ajoutersociete(type){// voir ci dessus pour le détail du code
 			var redirection = "http://localhost/GESTCO/Fournisseurs/"+id.value;	
 			}
 		console.log(redirection);
-		if (nom.value ==0 || adresse.value ==0 || raison.value ==0)
+		if (nom.value ==0 || adresse.value ==0 || formeJur.value ==0)
 		{
 			$('#ttInsertSocieteInfo').tooltipster('open');
 			erreur = true;
@@ -355,7 +355,7 @@ function ajoutersociete(type){// voir ci dessus pour le détail du code
     		'telephone':telephone.value,
     		'fax':fax.value,
     		'siteWeb':siteWeb.value,
-    		'raison':raison.value,
+    		'formeJur':formeJur.value,
     		'mail':mail.value
     	},
         url: "../ajax/clientAjax.php",

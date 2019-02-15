@@ -1,4 +1,8 @@
-$('document').ready(function(){
+//On stocke le nombre de blocs dans rowCount
+	var rowCount = $('.div-liste bloc').length;
+	
+
+$('document').ready(function(){//au lancement de la page
 
 	$('.tooltip').tooltipster //code pour utiliser tooltipster
 	({
@@ -8,9 +12,18 @@ $('document').ready(function(){
 			click:true
 		}
 	});	
+	let bloc = $('.div-liste bloc');
+	let text = $(bloc).find("#commentaire"); // je récupère le commentaire dans le bloc.
+	$(bloc).find('sub').html("("+($(text).prop('maxlength') - $(text).val().length)+" signes restants)");
+	//j'affiche le nombre de signes restant grâce à maxlength
+	$(text).keydown(function(){ // et je le réaffiche à chaque fois qu'un nouveau caractère est entré dedans.
+		$(bloc).find('sub').html("("+($(text).prop('maxlength') - $(text).val().length)+" signes restants)");			
+	});			
+	$(bloc).find
+
 });
 
-function aide(){
+function aide(){// fonction pour activer l'aide ou non
 	let elmt = document.getElementById("afficherAide");
 	let elmt1 = document.getElementById("masquerAide");
 	let elmt2 = document.getElementById("aide");
@@ -18,7 +31,7 @@ function aide(){
 	toggleDisplay(elmt1);
 	toggleDisplay(elmt2);
 }
-function toggleDisplay(elmt){		
+function toggleDisplay(elmt){	//fonction pour rendre invisible un élément	
 	   if(typeof elmt == "string")		
 	      elmt = document.getElementById(elmt);		
 	   if(elmt.style.display == "none")		

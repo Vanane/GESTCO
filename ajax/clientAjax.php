@@ -19,14 +19,14 @@ switch ($action)
         $t=$_POST['tel'];
         $f=$_POST['fax'];
         $a=$_POST['adresse'];
-        $ra=$_POST['raison'];
+        $fj=$_POST['formeJur'];
         $m=$_POST['mail'];
         $r['result']=$pdo->updateSociete('nom',$n,'idSociete',$i);
         $r['result']=$pdo->updateSociete('siteWeb',$sw,'idSociete',$i);
         $r['result']=$pdo->updateSociete('telephone',$t,'idSociete',$i);
         $r['result']=$pdo->updateSociete('fax',$f,'idSociete',$i);
         $r['result']=$pdo->updateSociete('adresse',$a,'idSociete',$i);
-        $r['result']=$pdo->updateSociete('raison',$ra,'idSociete',$i);
+        $r['result']=$pdo->updateSociete('formeJur',$fj,'idSociete',$i);
         $r['result']=$pdo->updateSociete('mail',$m,'idSociete',$i);
 
         break;
@@ -38,9 +38,9 @@ switch ($action)
         $t=$_POST['telephone'];
         $f=$_POST['fax'];
         $s=$_POST['siteWeb'];
-        $r=$_POST['raison'];
+        $fj=$_POST['formeJur'];
         $m=$_POST['mail'];
-        $pdo->insertSociete($i,$n,$a,$t,$f,$s,$r,$m);
+        $pdo->insertSociete($i,$n,$a,$t,$f,$s,$fj,$m);
         break; 
         
     case 'modifierContactClient':
