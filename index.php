@@ -315,7 +315,8 @@ switch ($params[1]) {
         		                }
     		                }
     		                else
-    		                {    		                    
+    		                {    
+    		                    $site->js = "pageListeFactures";
     		                    $site->left_sidebar=$controleur->afficheListeFactures();    		                        		                
     		                }
     		            }

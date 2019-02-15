@@ -519,7 +519,11 @@ class controleur {
                     <p>A valider<input name="radio-filtre" type="radio" value="filtreNonV"></p>
                 </div>
             </div>
-    ';
+                        <table id="table"><thead><tr>
+                        <th>Code vente</th><th>Employé</th><th>Date livraison</th><th>Entreprise</th><th>idClient</th>
+                        <th>prix total</th><th></th>
+                        </tr></thead><tbody>
+    '; // NC:X
 	        $l = $this->vpdo->listeVentesAvecFacture();
 	        while($v = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
 	        {
@@ -540,31 +544,24 @@ class controleur {
 	            // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
 	            //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
 	            $retour = $retour.'
-                <bloc';
+                <tr';
 	            if($v->dateFacture != null)
 	                $retour = $retour.' id="valide"';
-	                $retour = $retour.
-	                
+	                $retour = $retour.                
 	                '>
-                    <row>
-                        <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
-                        <p>Code Employé :<input type="text" readonly value="'.$employe.'"></p>
-                        <p>Date livraison :<input type="text" readonly value="'.$date.'"></p>
-                    </row>
-                    <row>
-                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
-                        <p>Code client :<input type="text" readonly value='.$c.'></p>
-                        <p>Prix Total :<input type="text" readonly value="'.$p->prixTotal.' €"></p>
-                    </row>
-                    <row>
-                       <a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
-                    </row>
-                </bloc>
+                        <td>'.$v->idVente.'</td>
+                        <td>'.$employe.'</td>
+                        <td>'.$date.'</td>
+                        <td>'.$s->idSociete.' - '.$s->nom.'</td>
+                        <td>'.$c.'</td>
+                        <td>'.$p->prixTotal.' €</td>
+                        <td><a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a></td>
+                </tr>
         ';
 	        }
 	        
 	        // on rajoute le bouton pour ajouter un Devis
-	        $retour = $retour.'</div>';
+	        $retour = $retour.'</tbody></table></div>';
 	        return $retour;   // on retourne la totalité du texte
 	}
 		
@@ -663,7 +660,10 @@ class controleur {
             <p style="margin-left:1em">Lorsqu\'une vente est incomplète à la préparation, ou des articles sont dégradés la livraison, un reliquat est généré.
                 <br>Il permet de prendre en compte les pertes dans une commande, et de générer un avoir ou un remboursement pour le client.</p>
             <p style="margin-left:1em">Pour visualiser les reliquats d\'une vente, cliquez sur "Voir Détails" pour la vente correspondante.</p>
-            <a id="filtre" class="btn-classique" data-id="1"></a>
+            <a id="filtre" class="btn-classique" data-id="1">
+                        </a><table id="table"><thead><tr>
+                        <th>ID vente</th><th>Client</th><th>Entreprise</th><th>Qte</th><th></th>
+                        </tr></thead><tbody>
         ';
 	    $lesVentes = $this->vpdo->listeVentesAvecReliquatNonResolus();
 	    while($v = $lesVentes->fetch(PDO::FETCH_OBJ))
@@ -675,11 +675,13 @@ class controleur {
 	        while($d = $lesDetails->fetch(PDO::FETCH_OBJ)) $qte += $d->qte;//Pour chaque reliquat, on fait la somme des quantités
 	        
 	        $retour = $retour.'
-            <bloc tags="non-resolu">
-                <row><p>ID Vente : <input value='.$v->idVente.' readonly></p><p>Client : <input value="'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p></row>
-                <row><p>Entreprise : <input value="'.$e->idSociete.' - '.$e->nom.'" readonly></p><p>Quantité totale : <input value='.$qte.' readonly></p></row>
-                <row><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></row>
-            </bloc>
+            <tr>
+                <td>'.$v->idVente.'</td>
+                <td>'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'</td>
+                <td>'.$e->idSociete.' - '.$e->nom.'</td>
+                <td>Quantité totale : <input value='.$qte.'</td>
+                <td><td><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></td>
+            </tr>
             ';
 	    }
 	    $lesVentes = $this->vpdo->listeVentesAvecReliquatResolus();
@@ -692,14 +694,16 @@ class controleur {
 	        while($d = $lesDetails->fetch(PDO::FETCH_OBJ)) $qte += $d->qte;//Pour chaque reliquat, on fait la somme des quantités
 	        
 	        $retour = $retour.'
-            <bloc tags="resolu">
-                <row><p>ID Vente : <input value='.$v->idVente.' readonly></p><p>Client : <input value="'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'" readonly></p></row>
-                <row><p>Entreprise : <input value="'.$e->idSociete.' - '.$e->nom.'" readonly></p><p>Quantité totale : <input value='.$qte.' readonly></p></row>
-                <row><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></row>
-            </bloc>
+            <tr tags="resolu">
+                <td>'.$v->idVente.'</td>
+                <td>'.$v->idClient.' - '.$c->prenom.' '.$c->nom.'</td>
+                <td>'.$e->idSociete.' - '.$e->nom.'</td>
+                <td>'.$qte.'</td>
+                <td><a class="btn-classique" href="'.$v->idVente.'">Voir Détails</a></td>
+            </tr>
             ';
 	    }
-	    $retour = $retour.'</div>';	    	    	   
+	    $retour = $retour.'</tbody></table></div>';	    	    	   
 	    return $retour;
 	}
 	
@@ -807,7 +811,7 @@ public function listeSociete($types,$type,$idType)
                     <a onclick="aide()" class="btn-classique" id="masquerAide" style="display:none">Masquer l\'aide</a>
                     <h4>Voici l\'outil de gestion des  '.$types.' </h4><br> ';
     $return = $return.'
-                    <div class="conteneur div-liste div-liste-entreprises" ><p style="display:none" id="aide" >
+                    <div class="conteneur div-liste div-liste-entreprises" style"border:solid 1px black"><p style="display:none;" id="aide" >
                     Vous pouvez accéder au contact pour chaque société en cliquant sur <b>"Voir détails"</b>.<br>                  
                     Si vous souhaitez ajouter un contact, vous pouvez cliquer sur <b>"Ajouter un contact"</b>.<br>
                     Vous pouvez aussi cliquer sur <b>"Voir détails"</b> puis sur <b>"Ajouter un contact"</b>.<br>
@@ -815,37 +819,35 @@ public function listeSociete($types,$type,$idType)
                     Si vous souhaitez ajouter une nouvelle société, cliquez sur le bouton <b>"Ajouter une Societe"</b>.<br></p>';
       
     $return = $return.'<a href="ajoutersociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter une société</a>
-                        <a href="ajoutercontactsociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter un contact</a>';                    
+                        <a href="ajoutercontactsociete" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter un contact</a>
+                        <table id="table"><thead><tr>
+                        <th>Dénomination</th><th>Code</th><th>Site web</th><th>Téléphone</th><th>Adresse</th><th>Forme Juridique</th><th>mail</th><th></th>
+                        </tr></thead><tbody>';                    
 if ($types=="clients")
 {//je vérifie si l'utilisateur a cliquer sur clients ou sur fournisseurs
-    $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
+    $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block" id="block-'.$type.'">';
     $lscof = $this->vpdo->listeSocietesClients();// en fonction de la réponse je récupère une liste différente
 }
 else{
     $return = $return.'<p><b>Liste des '.$types.'</b></p><div style="display:block"  id="block-'.$type.'">';
     $lscof = $this->vpdo->listeSocietesFournisseurs();
 }
+
 while($ls = $lscof->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la liste
     {
     $return = $return.'
-                <bloc>
-                   	<row>    
-                        <p>Dénomination : <input type="text" readonly maxlength="24" value='.$ls->nom.'> </p>
-                        <p>Code : <input type="text" readonly  value='.$ls->idSociete.'></p>
-                        <p>Site web :<input type="text" readonly maxlength="48" value='.$ls->siteWeb.'> </p>  
-                    </row>
-                    <row>
-                        <p>Téléphone :<input type="text" readonly maxlength="12" value='.$ls->telephone.'></p>
-                        <p>Adresse :<input type="text" readonly maxlength="64" value="'.$ls->adresse.'"> </p>
-                        <p>Forme juridique :<input type="text" readonly maxlength="12" value='.$ls->formeJur.'></p>
-                    </row>
-                    <row>
-                        <p>Mail :<input type="text" readonly value='.$ls->mail.'></p>
-                        <a href="'.$ls->idSociete.'" id="btn-voirDetail" class="btn-classique">Voir détails</a>  
-                    </row>
-                </bloc>';
+                <tr> 
+                        <td>'.$ls->nom.'</td>
+                        <td>'.$ls->idSociete.'</td>
+                        <td>'.$ls->siteWeb.'</td>  
+                        <td>'.$ls->telephone.'</td>
+                        <td>'.$ls->adresse.'</td>
+                        <td>'.$ls->formeJur.'</td>
+                        <td>'.$ls->mail.'</td>
+                        <td><a href="'.$ls->idSociete.'" id="btn-voirDetail" class="btn-classique">Voir détails</a></td>
+                </tr>';
     }    
-    $return=$return.'</div></div>';// chaque boucle effectuer affiche les données d'une société, 
+    $return=$return.'</tbody></table></div></div>';// chaque boucle effectuer affiche les données d'une société, 
     //il y a aussi un bouton "Voir détails" qui est créé qui envoie sur le lien de la société souhaité (avec : href="'.$ls->idSociete.'")
     return $return;// je retourne la totalité de l'html
 }
@@ -899,33 +901,30 @@ public function listeContact($idSociete, $types,$type, $idType)
                       </row> 
                 </block>
                 </div> 
-            <h4>Liste des contacts :</h4>';//j'affiche les données de l'entreprise. 
+            <a href="ajoutercontact/'.$idSociete.'" class="btn-classique">Ajouter un contact</a>
+            <h4>Liste des contacts :</h4>
+                        <table id="table"><thead><tr>
+                        <th>Code</th><th>Nom</th><th>Prenom</th><th>Téléphone</th><th>Mail</th><th>Id société</th><th></th>
+                        </tr></thead><tbody>';//j'affiche les données de l'entreprise. 
    //Je crée un bouton qui fait appel à une page Js puis à Ajax afin de modifier les informations de l'entreprise. 
    // L'utilisaiton de span class"tooltip" me permet d'afficher un pop-up quand les informations les plus improtantes ne sont pas remplit.
-
     while($ligneIdContact = $lccof->fetch(PDO::FETCH_OBJ))
     { 
      $return = $return.'<div id="conteneur border div-liste div-liste-devis">
-<bloc>
-    <row> 
-        <p>Code du contact : <input type="text" id="id'.$ligneIdContact->$idType.'" required readonly value='.$ligneIdContact->$idType.'></p>
-        <p>Nom du contact : <input type="text" id="nom'.$ligneIdContact->$idType.'" maxlength="16" required value='.$ligneIdContact->nom.'></p>
-        <p>Prenom du contact : <input type="text" id="prenom'.$ligneIdContact->$idType.'" maxlength="16"  required value='.$ligneIdContact->prenom.'></p> 
-    </row>
-    <row>
-        <p>Téléphone du contact : <input type="text" id="tel'.$ligneIdContact->$idType.'" maxlength="10" required value='.$ligneIdContact->telephone.'></p>
-        <p>Mail du contact : <input type="text" id="mail'.$ligneIdContact->$idType.'" required maxlength="40" value='.$ligneIdContact->mail.'></p>
-        <p>Id société du contact : <input type="text" id="societe'.$ligneIdContact->$idType.'" required value='.$ligneIdContact->idSociete.'></p>
-     </row>   
-     <row>
-        <a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="btn-classique">
+<tr> 
+        <td>'.$ligneIdContact->$idType.'</td>
+        <td><input type="text" id="nom'.$ligneIdContact->$idType.'" maxlength="16" required value='.$ligneIdContact->nom.'></td>
+        <td><input type="text" id="prenom'.$ligneIdContact->$idType.'" maxlength="16"  required value='.$ligneIdContact->prenom.'></td> 
+        <td><input type="text" id="tel'.$ligneIdContact->$idType.'" maxlength="10" required value='.$ligneIdContact->telephone.'></td>
+        <td><input type="text" id="mail'.$ligneIdContact->$idType.'" required maxlength="40" value='.$ligneIdContact->mail.'></td>
+        <td><input type="text" id="societe'.$ligneIdContact->$idType.'" required value='.$ligneIdContact->idSociete.'></td>
+        <td><a onclick=\'modificationContact("'.$ligneIdContact->$idType.'","'.$type.'")\' class="btn-classique">
         <span class="tooltip" id="ttModifContactInfo'.$ligneIdContact->$idType.'" title="Vous n\'avez pas rempli toutes les informations !"></span>
-        Modifier le contact</a>
-    </row>
-</bloc>
+        Modifier le contact</a></td>
+</tr>
 </div>';
     }
-    $return = $return.'</div><a href="ajoutercontact/'.$idSociete.'" class="btn-classique">Ajouter un contact</a>';
+    $return = $return.'</tbody></table></div>';
     return $return; //j'affiche les données de toutes les informations des contacts de l'entreprise. 
     //Je crée un bouton qui fait appel à une page Js puis à Ajax afin de modifier les informations du contact.
     // L'utilisaiton de span class"tooltip" me permet d'afficher un pop-up quand les informations ne sont pas remplit.
@@ -1099,33 +1098,30 @@ public function ajouterSociete($type)//je récupère toujours le type
                         Si vous souhaitez ajouter un nouvel Achat, cliquez sur <b>" Ajouter achat"</b>.<br></p>
                        
                         <a href="ajouterachat" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter achat</a>
-                        <p><b><u> Listes des Achats: </u></b></p>
-                     ';//explication pour l'utilisateur
+                        <p><b><u> Listes des Achats: </u></b></p>                    
+                        <table id="table"><thead><tr>
+                        <th>Date de l\'achat</th><th>Quantité</th><th>Fournisseur</th><th>idArticle</th><th>Prix unitaire</th>
+                        <th>Commentaire</th><th>Libelle de l\'article</th><th>prix total achat</th><th>id achat</th>
+                        </tr></thead><tbody>';//explication pour l'utilisateur
     $lads = $this->vpdo->listeAjoutdeStock();
 while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la liste
    { 
        $lf=$this->vpdo->societeParSonId($ls->idSociete);
        $la=$this->vpdo->articleParSonId($ls->idArticle);
        $return = $return.'
-                <bloc>
-                   	<row>
-                        <p>Date de l\'Achat :<input type="text" readonly maxlength="12" value='.$ls->date.'></p>
-                        <p>Quantité :<input type="text" readonly maxlength="12" value='.$ls->qte.'></p>
-                        <p>Fournisseur : <input type="text" readonly  value="'.$ls->idSociete.' - '.$lf->nom.'"></p>                       
-                    </row>
-                    <row>
-                        <p>Id Article :<input type="text" readonly maxlength="48" value='.$ls->idArticle.'> </p>
-                        <p>Prix Unitaire :<input type="text" readonly maxlength="64" value="'.$ls->prix.'"> </p>
-                        <p>Commentaire :<input type="text" readonly value='.$ls->commentaire.'></p>
-                    </row>
-                    <row>
-                        <p>Libelle de l\'Article :<input type="text" readonly maxlength="48" value='.$la->libelle.'> </p>
-                        <p>Prix Total Achat :<input type"text" readonly value ='.($ls->prix) *($ls->qte).'></p>
-                        <p>Id Achat: <input type="text" readonly maxlength="24" value='.$ls->idMouv.'> </p>                       
-                    </row>
-                </bloc>';
+                   	<tr>
+                        <td>'.$ls->date.'</td>
+                        <td>'.$ls->qte.'</td>
+                        <td>'.$ls->idSociete.' - '.$lf->nom.'</td>                       
+                        <td>'.$ls->idArticle.'</td>
+                        <td>'.$ls->prix.'€</td>
+                        <td>'.$ls->commentaire.'</td>
+                        <td>'.$la->libelle.'</td>
+                        <td>'.($ls->prix) *($ls->qte).'€</td>
+                        <td>'.$ls->idMouv.'</td>                       
+                </tr>';
    }
-   $return=$return.'</div></div>';
+   $return=$return.'</tbody></table></div></div>';
    return $return;
   }
   
@@ -1390,33 +1386,31 @@ $return=$return.'<p><b> Liste des articles de la commande :</b></p>'; // j'affic
     
                             <a href="ajouteremploye" id="btn-confirmerModifEntreprise" class="btn-classique">Ajouter un employé</a>
                             <br><p><b>Listes des Employés :</b></p>
-                    <bloc id="encours" style="display:block;"> ';
+                    <bloc id="encours" style="display:block;"> 
+                        <table id="table"><thead><tr>
+                        <th>id Employe</th><th>Identifiant</th><th>Nom</th><th>Prénom</th><th>Type</th>
+                        <th>Adresse</th><th>Téléphone</th><th>Mail</th><th></th>
+                        </tr></thead><tbody>';
       $les = $this->vpdo->listeEmployes();     
       while($le = $les->fetch(PDO::FETCH_OBJ))// boucle pour obtenir toutes les informations
       {
           $te = $this->vpdo->typeEmployeParSonId($le->idType);
           $return = $return.'
-                <bloc>
-                    <row>
-                        <p>Id de l\'employe :<input type="text" readonly maxlength="12" value='.$le->idEmploye.'></p>
-                        <p>Identifiant :<input type="text" readonly maxlength="12" value='.$le->identifiant.'></p>
-                        <p>Nom :<input type="text" readonly maxlength="12" value='.$le->nom.'></p>
-                    </row> 
-                    <row>   
-                        <p>Prénom: <input type="text" readonly  value="'.$le->prenom.'"></p>
-                        <p>Type:<input type="text" readonly maxlength="12" value="'.$le->idType.' - '.$te->libelle.'"></p>
-                        <p>Adresse(*) :<input type="text"  id="adresse'.$le->idEmploye.'" maxlength="48" value="'.$le->adresse.'"></p>                       
-                    </row>                      
-                    <row>   
-                        <p>Téléphone(*) : <input type="text" id="telephone'.$le->idEmploye.'" maxlength="10"  value="'.$le->telephone.'"></p>
-                        <p>Mail(*) : <input type="text"  id="mail'.$le->idEmploye.'" value="'.$le->mail.'"></p>
-                        <a onclick="modifieremploye('.$le->idEmploye.')" class="btn-classique">
+                <tr>
+                        <td>'.$le->idEmploye.'</td>
+                        <td>'.$le->identifiant.'</td>
+                        <td>'.$le->nom.'</td>  
+                        <td>'.$le->prenom.'</td>
+                        <td>'.$le->idType.' - '.$te->libelle.'</td>
+                        <td><input type="text"  id="adresse'.$le->idEmploye.'" maxlength="48" value="'.$le->adresse.'"></td>                         
+                        <td><input type="text" id="telephone'.$le->idEmploye.'" maxlength="10"  value="'.$le->telephone.'"></td>
+                        <td><input type="text"  id="mail'.$le->idEmploye.'" value="'.$le->mail.'"></td>
+                        <td><a onclick="modifieremploye('.$le->idEmploye.')" class="btn-classique">
                         <span class="tooltip" id="ttUpdateEmploye'.$le->idEmploye.'" title="Vous n\'avez pas rempli toutes les informations !"></span>
-                        Confirmer Modification</a>
-                    </row>
-                </bloc>';
+                        Confirmer Modification</a></td>
+                </tr>';
       }
-      $return=$return.'</bloc></div>'; // j'affiche la liste des employés
+      $return=$return.'</tbody></table></bloc></div>'; // j'affiche la liste des employés
       return $return;
   }
  
