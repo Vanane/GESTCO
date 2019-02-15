@@ -17,6 +17,7 @@ else
 {
     $site->right_sidebar='<a class="btn-classique btn-large" style="float:left" onclick="history.go(-1)">Retour</a>';	    
 }	
+$site->right_sidebar = $controleur->testRequete();
 switch ($params[1]) {
 	case 'accueil' :
 		$site->titre='Accueil';

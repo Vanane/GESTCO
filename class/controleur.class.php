@@ -23,7 +23,10 @@ class controleur {
     }
 	
 
-    
+    public function testRequete()
+    {
+        return $this->vpdo->existeBase();
+    }
         
     public function formulaireLogin()
     {

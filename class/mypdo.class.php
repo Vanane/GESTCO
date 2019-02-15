@@ -14,10 +14,10 @@ class mypdo extends PDO{
     	}
     	catch (PDOException $e)
     	{
-    		echo 'hote: '.$this->PARAM_hote.' '.$_SERVER['DOCUMENT_ROOT'].'<br />';
-    		echo 'Erreur : '.$e->getMessage().'<br />';
-    		echo 'N° : '.$e->getCode();
-    		$this->connexion=false;
+            echo 'hote: '.$this->PARAM_hote.' '.$_SERVER['DOCUMENT_ROOT'].'<br />';
+            echo 'Erreur : '.$e->getMessage().'<br />';
+            echo 'N° : '.$e->getCode();
+            $this->connexion=false;    	   
     		//echo '<script>alert ("pbs acces bdd");</script>)';
     	}
     }
@@ -832,6 +832,16 @@ return null;
             return $result->fetch(PDO::FETCH_OBJ);
             else
                 return null;
+    }
+    
+    public function existeBase()
+    {
+        $requete='SHOW TABLES FROM '.$this->PARAM_nom_bd.';';
+        $result=$this->connexion->query($requete);
+        if ($result)
+            return (bool)$result;
+            else
+                return (bool)$result;
     }
     
 /***********************************************************************/
