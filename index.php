@@ -265,7 +265,7 @@ switch ($params[1]) {
     		            if($controleur->estConnecte() == 1 || $controleur->estConnecte() == 3 || $controleur->estConnecte() == 4 )
     		            // accès au personne avec le bon type grâce à estConnecte()
     		            {
-    		                $site->js = "pageLivraisons";
+    		                $site->js = "pageListeLivraisons";
     		                if(isset($params[3]))
     		                {
     		                    if (isset($params[4]))

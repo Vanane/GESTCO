@@ -534,7 +534,7 @@ return null;
     }
        public function insertDetailLivraison($idV, $idA, $idEm, $qteD, $qteF, $tx, $cmup, $marge, $tva, $obs)
     {
-        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", "'.$idEm.'", "'.$qteD.'","'.$qteF.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
+        $q = 'INSERT INTO detail_livraison VALUES ('.$idV.',"'.$idA.'", '.$idEm.', "'.$qteD.'","'.$qteF.'", "'.$tx.'", "'.$cmup.'", "'.$marge.'", "'.$tva.'", "'.$obs.'");';
         $result = $this->connexion->query($q);
         return $result;
     }

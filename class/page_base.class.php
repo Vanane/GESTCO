@@ -7,12 +7,12 @@ class page_base {
 	protected $left_sidebar;
 	protected $footer;
 	protected $titre;
-	protected $js=array('jquery-3.3.1.min', 'tooltipster.main.min', 'tooltipster.bundle.min');
-	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min', 'fpdf.css');
+	protected $js=array('jquery-3.3.1.min', 'tooltipster.main.min', 'tooltipster.bundle.min', 'jquery.dataTables.min', 'dataTables.responsive.min');
+	protected $css=array('base', 'tooltipster.main.min', 'tooltipster.bundle.min', 'fpdf.css', 'jquery.dataTables.min', 'responsive.dataTables.min');
 	protected $page;
 	protected $metadescription="Site de gestion de plateforme logistique à destination du GRETA.";
 	protected $metakeyword=array('logistique','greta','gestion','commande');
-	protected $path="http://localhost/GESTCO/";
+	protected $path="http://192.168.168.187/GESTCO/";
 	protected $entreprise;
 	protected $user;
 	
@@ -133,13 +133,13 @@ class page_base {
 	//Affiche avec echo l'en-tête du site, le logo, le titre.
 		echo'
            <header>				
-				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/'.$this->entreprise->logo.'" alt="logo"/></a>
+				<a href="'.$this->path.'Accueil"><img  id="img-greta" src="'.$this->path.'image/logo.png" alt="logo"/></a>
 				<h1 id="titre-entreprise">
                    <br>
-					'.$this->entreprise->nom.'
+					Application GESTCO
 				</h1>
 				<h3>
-					<strong>Bienvenue</strong> sur l\'application web de gestion de commandes GESTCO.
+					Bienvenue sur l\'application web de gestion de commandes GESTCO.
 				</h3>
              </header>
 		';
@@ -382,9 +382,9 @@ class page_base {
 						<div class="bloc_menus">						
 							<?php $this->afficheMenu(); ?>
 						</div>
-						
+						<script>location.hash="#content"</script>
   						<div style="clear:both;">
-    						<div class="left_sidebar">
+    						<div id="content" class="left_sidebar">
      							<?php echo $this->left_sidebar; ?>
     						</div>
     						<div class="right_sidebar" >

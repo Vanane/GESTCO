@@ -24,140 +24,126 @@ class controleur {
 	
 
     
-public function formulaireLogin()
-{
-	    
-	    return '
+        
+    public function formulaireLogin()
+    {
+    	    
+    	    return '
+            <div class="conteneur">
+                <form id="form-connexion" action="confirmation" method="post">
+                    <span>Identifiant :</span><input type="text" name="login">
+                    <span>Mot de passe :</span><input type="password" name="pwd">
+                    <a class="btn-classique" onclick="$(\'#form-connexion\').submit()"><input type="submit" hidden>Connexion</a>
+                </form>';
+    	    //crée l'inerface de connexion classique, avec un identifiant, un mots de passe et un bouton connexion.
+    }	
+    	
+    
+    public function confirmationLogin($login,$mdp)
+    {  // verifie si l'identifiant et le mots de passe est valide
+    	    $mdp=md5($mdp);
+    	    $result = $this->vpdo->compteParSesIds($login,$mdp);
+    	    $retour = '';
+    	    if($result != null)
+    	    {
+    	        // on enregistre les parametres du visiteur comme variables de session
+    	        $_SESSION['id'] = $result->identifiant;// son identifiant
+    	        $_SESSION['idEmploye'] = $result->idEmploye; //Son id de base de données 
+    	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
+    	        // on redirige notre visiteur vers une page de notre section membre
+    	        
+    	        //Le visiteur pourra seulement rejoindre les pages ou son type (son rôle dans l'entreprise) le lui permet
+    	        // l'envoi sur la page accueil afin qu'il puisse se diriger vers la page qu'il souhaite
+    	    }
+    	    else {
+    	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
+    	        $retour =  '<script>alert(\'Identifiant ou mots de passe incorrect ! \')</script>';
+    	    }
+    	    // puis on le redirige vers la page d'accueil	
+    	    $retour = $retour."<script>location = 'Accueil'</script>";
+    	    return $retour;
+    }
+    	
+    
+    public function estConnecte()
+    {
+            if(isset($_SESSION['id']) && isset($_SESSION['type'])) // on verfie que l'utilisateur a bien un id et un type
+                return $_SESSION['type'];// Si oui on retourne le type qui lui servira à ce connecter aux pages dont il a accès,
+                else return false;// Sinon retourne false et donc a seulement accès au page sans sécurité.
+    }
+    
+    public function afficheNonAcces()
+    //Affiche juste un message pour dire que l'user n'a pas accès à ce lien.
+    {
+        $retour = '
         <div class="conteneur">
-            <form id="form-connexion" action="confirmation" method="post">
-                <span>Identifiant :</span><input type="text" name="login">
-                <span>Mot de passe :</span><input type="password" name="pwd">
-                <a class="btn-classique" onclick="$(\'#form-connexion\').submit()"><input type="submit" hidden>Connexion</a>
-            </form>';
-	    //crée l'inerface de connexion classique, avec un identifiant, un mots de passe et un bouton connexion.
-}	
-	
-
-public function confirmationLogin($login,$mdp)
-{  // verifie si l'identifiant et le mots de passe est valide
-	    $mdp=md5($mdp);
-	    $result = $this->vpdo->compteParSesIds($login,$mdp);
-	    $retour = '';
-	    if($result != null)
-	    {
-	        // on enregistre les parametres du visiteur comme variables de session
-	        $_SESSION['id'] = $result->identifiant;// son identifiant
-	        $_SESSION['idEmploye'] = $result->idEmploye; //Son id de base de données 
-	        $_SESSION['type'] = $result->idType;   //le poste de la personne dans l'entreprise
-	        // on redirige notre visiteur vers une page de notre section membre
-	        
-	        //Le visiteur pourra seulement rejoindre les pages ou son type (son rôle dans l'entreprise) le lui permet
-	        // l'envoi sur la page accueil afin qu'il puisse se diriger vers la page qu'il souhaite
-	    }
-	    else {
-	        // L'identifiant et/ou le mots de passe, est incorrect, on laisse un message au visiteur
-	        $retour =  '<script>alert(\'Identifiant ou mots de passe incorrect ! \')</script>';
-	    }
-	    // puis on le redirige vers la page d'accueil	
-	    $retour = $retour."<script>location = 'Accueil'</script>";
-	    return $retour;
-}
-	
-
-public function estConnecte()
-{
-        if(isset($_SESSION['id']) && isset($_SESSION['type'])) // on verfie que l'utilisateur a bien un id et un type
-            return $_SESSION['type'];// Si oui on retourne le type qui lui servira à ce connecter aux pages dont il a accès,
-            else return false;// Sinon retourne false et donc a seulement accès au page sans sécurité.
-}
-
-public function afficheNonAcces()
-//Affiche juste un message pour dire que l'user n'a pas accès à ce lien.
-{
-    $retour = '
-    <div class="conteneur">
-        <p>Vous n\'avez pas accès à cette page ! </p>
-    </div>';
-    return $retour;   
-}
-
-
-public function afficheListeDevis()
-{
-	   
-    $retour='
-            <div class="conteneur border div-liste div-liste-devis">
-                <p style="margin-left: 1em">
-                    Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
-                    Vous pouvez accéder au detail de chaque devis en cliquant sur <b>"Voir détail"</b>.<br>
-                    Si vous souhaitez ajouter un devis, cliquez sur le bouton <b>"Ajouter un devis"</b>.
-                </p>
-                <p style="margin-left: 1em">
-                    Vous pouvez choisir quels devis afficher ou non, en changeant la sélection dans "Filtrer".<br>
-                    Les devis confirmés en commandes sont affichés lorsque "Validés" est coché.<br>
-                </p>'
-    ;
-    // Légère explication pour l'utilisateur
-    $retour = $retour.'
-            <div class="div-filtres">
-                <div id="filtre">
-                    <h4>Filtrer :</h4>
-                    <p>Validés<input name="radio-filtre" type="radio" value="filtreV" checked></p>
-                    <p>A valider<input name="radio-filtre" type="radio" value="filtreNonV"></p>
-                </div>
-            </div>
-    ';  //Div pour les filtres et les tris  
+            <p>Vous n\'avez pas accès à cette page ! </p>
+        </div>';
+        return $retour;   
+    }
     
-    $retour = $retour.'
-    <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter un Devis</a>';
     
-	$l = $this->vpdo->listeVentesAvecDevis();
-	while($v = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste. 
-    {    
-        $details=$this->vpdo->listeDetailsDevisParIdVente($v->idVente)->fetch(PDO::FETCH_OBJ);
-        //On récupère la première ligne des détails devis de la vente pour
-        //Ensuite récupérer l'employé qui s'est chargé de ce devis.
-        $e=$this->vpdo->employeParSonId($details->idEmploye);        
-        $s=$this->vpdo->entrepriseParIdVente($v->idVente);
-        $c=$v->idClient;
-        $p=$this->vpdo->totalDevisparIdVente($v->idVente);
-        $date=$this->vpdo->arrondirDate($v->dateDevis);//Récupérer la date sans les heures et les minutes
-       // $d = new DateTime()               
-        //on prévoit des variables pour nos appels
-        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête. 
-        //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
-        
-        //Pour chaque ligne vente, on affiche un <bloc> avec des <row> à l'intérieur, mis en forme par le CSS.
-        $retour = $retour.'
-                <bloc';
-        if($v->dateCommande != null)
-            $retour = $retour.' id="valide"';
-        $retour = $retour.
-        
-                '>
-                    <row>
-                        <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
-                        <p>Code Employé :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date devis :<input type="text" readonly value="'.$date.'"></p>
-                    </row>
-                    <row>
-                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
-                        <p>Code client :<input type="text" readonly value='.$c.'></p>
-                        <p>Prix Total :<input type="text" readonly value="'.$p->prixTotal.' €"></p>
-                    </row>
-                    <row>
-                       <a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
-                    </row>
-                </bloc>
+    public function afficheListeDevis()
+    {       
+        $retour='
+        <div class="conteneur border div-liste div-liste-devis">
+            <p style="margin-left: 1em">
+                Voici l\'outil de gestion des devis. Ci-dessous la liste des devis existants.<br>
+                Vous pouvez accéder au detail de chaque devis en cliquant sur <b>"Voir détail"</b>.<br>
+                Si vous souhaitez ajouter un devis, cliquez sur le bouton <b>"Ajouter un devis"</b>.
+            </p>
         ';
-	}
-	
-    // on rajoute le bouton pour ajouter un Devis
-	$retour = $retour.'</div>';
-	return $retour;   // on retourne la totalité du texte
-	}
-	
-			
+            // Légère explication pour l'utilisateur
+            
+        $retour = $retour.'
+        <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter un Devis</a>
+        <table id="table"><thead><tr><th>Code Vente</th><th>Employé</th><th>Date Devis</th><th>Entreprise</th><th>Client</th><th>Prix Total</th><th>État</th><th></th></tr></thead><tbody>
+    
+        ';
+        
+        $l = $this->vpdo->listeVentesAvecDevis();
+        while($v = $l->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
+        {
+            $details=$this->vpdo->listeDetailsDevisParIdVente($v->idVente)->fetch(PDO::FETCH_OBJ);
+            //On récupère la première ligne des détails devis de la vente pour
+            //Ensuite récupérer l'employé qui s'est chargé de ce devis.
+            $e=$this->vpdo->employeParSonId($details->idEmploye);
+            $s=$this->vpdo->entrepriseParIdVente($v->idVente);
+            $c=$this->vpdo->clientParSonId($v->idClient);
+            $p=$this->vpdo->totalDevisparIdVente($v->idVente);
+            $date=$this->vpdo->arrondirDate($v->dateDevis);//Récupérer la date sans les heures et les minutes
+            // $d = new DateTime()
+            //on prévoit des variables pour nos appels
+            $valide = "A confirmer";
+            if($v->dateCommande != null)
+                $valide = "Validé";
+            //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
+            
+            //Pour chaque ligne vente, on affiche un TR, sur lequel on utilise datatables.
+        $retour = $retour.'
+        <tr>
+            <td>'.$v->idVente.'</td>
+            <td>'.$e->prenom.' '.$e->nom.'</td>
+            <td>'.$date.'</td>
+            <td>'.$s->idSociete.' - '.$s->nom.'</td>
+            <td>'.$c->prenom.' '.$c->nom.'</td>
+            <td>'.$p->prixTotal.' €</td>
+            <td>'.$valide.'</td>
+            <td><a class="btn-classique" href="'.$v->idVente.'">Details Devis</a></td>
+        </tr>
+
+        ';
+        
+        }
+        
+        // on rajoute le bouton pour ajouter un Devis
+        $retour = $retour.'</tbody></table></div>';
+        return $retour;   // on retourne la totalité du texte
+    }
+    
+    
+        
+        
 	public function afficheListeCommandes()
 	{
 	    $retour='
@@ -179,56 +165,41 @@ public function afficheListeDevis()
                     <p>A valider<input name="radio-filtre" type="radio" value="filtreNonV"></p>
                 </div>
             </div>
-                <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter une Commande</a>
-
+            <a href="Ajouter" id="btn-ajouter" class="btn-classique">Ajouter une Commande</a>
+            <table id="table"><thead><tr><th>Code Vente</th><th>Employé</th><th>Date Devis</th><th>Entreprise</th><th>Client</th><th>Prix Total</th><th></th></tr></thead><tbody>
 	    ';
 	    $ventes = $this->vpdo->listeVentesAvecCommande();
 	    while($v = $ventes->fetch(PDO::FETCH_OBJ))//boucle tant que..des données sont présentes dans la requête liste.
 	    {
 	        $e=$this->vpdo->listeDetailsCommandeParIdVente($v->idVente)->fetch(PDO::FETCH_OBJ);
 	        //On récupère la première ligne des détails commande de la vente pour
-	        //Ensuite récupérer l'employé qui s'est chargé de cette commande.	        
+	        //Ensuite récupérer l'employé qui s'est chargé de cette commande.	
+	        $c=$this->vpdo->clientParSonId($v->idClient);
 	        $e=$this->vpdo->employeParSonId($e->idEmploye);
 	        $s=$this->vpdo->entrepriseParIdVente($v->idVente);
 	        $p=$this->vpdo->totalCommandeParIdVente($v->idVente);
 	        $date=$this->vpdo->arrondirDate($v->dateCommande);//Récupérer la date sans les heures et les minutes
 	        
 	        $retour = $retour.'
-                <bloc';
-	        if($this->vpdo->listeDetailsPreparationParIdVente($v->idVente)->fetch(PDO::FETCH_OBJ) == false)
-	        //Si la liste des détails preparation pour cette vente est vide, 
-	        //Alors on marque la commande comme non complétée, pour le filtre
-	            $retour = $retour.' id="non-valide"';
-	        else 
-	            $retour = $retour.' id="valide"';
-	            
-	        //on prévoit des variables pour nos appels
-	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
-	        //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
-	        $retour = $retour.'
-                    >
-                    <row>
-                        <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
-                        <p>Responsable :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date commande :<input type="text" readonly value="'.$date.'"></p>
-                    </row>
-                    <row>
-                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
-                        <p>Code client :<input type="text" readonly value='.$v->idClient.'></p>
-                        <p>Prix Total :<input type="text" readonly value="'.$p->prixTotal.' €"></p>
-                    </row>
-                    <row>
-                       <a href="'.$v->idVente.'" id="btn-voirDetail" class="btn-classique">Voir Details</a>
-                    </row>
-                </bloc>
-    ';
+        <tr>
+            <td>'.$v->idVente.'</td>
+            <td>'.$e->prenom.' '.$e->nom.'</td>
+            <td>'.$date.'</td>
+            <td>'.$s->idSociete.' - '.$s->nom.'</td>
+            <td>'.$c->prenom.' '.$c->nom.'</td>
+            <td>'.$p->prixTotal.' €</td>
+            <td><a class="btn-classique" href="'.$v->idVente.'">Details Devis</a></td>
+        </tr>
+                
+        ';
 	    }
 	    // on rajoute le bouton pour ajouter un Devis
-	    $retour = $retour.'</div>';
+	    $retour = $retour.'</tbody></table></div>';
 	    return $retour;   // on retourne la totalité du texte
 	}
 
 	
+
 	public function afficheDetailsDevisOuCommande($idVente, $type)
 	{
 	    //$type permet de déterminer quelle requete utiliser pour les informations.
@@ -387,22 +358,25 @@ public function afficheListeDevis()
 	}
 	
 	
+	
 	public function afficheListePreparations()
-	{	    
-	    $return='
-            <div class="conteneur border div-liste div-liste-preparations">
-                <h4>Liste des commandes en préparation :</h4>
-                <p>
-                    Voici l\'outil de gestion des préparations de commandes.
-                </p>
-                <p>
-                    Vous pouvez ici consulter toutes les commandes en attente de préparation. 
-                    Pour en sélectionner une, il suffit de cliquer sur "Préparer".                    
-                </p>
-                <p>
-                    Vous serez alors renvoyé vers la page détaillant la commande.
-                </p>            
+	{
+	    $retour='
+        <div class="conteneur border div-liste div-liste-preparations">
+            <h4>Liste des commandes en préparation :</h4>
+            <p>
+                Voici l\'outil de gestion des préparations de commandes.
+            </p>
+            <p>
+                Vous pouvez ici consulter toutes les commandes en attente de préparation.
+                Pour en sélectionner une, il suffit de cliquer sur "Préparer".
+            </p>
+            <p>
+                Vous serez alors renvoyé vers la page détaillant la commande.
+            </p>
+            <table id="table"><thead><tr><th>Code Vente</th><th>Date d\'envoi</th><th>Entreprise</th><th>Client</th><th></th></tr></thead><tbody>
 
+	        
 ';//On affiche un message pour que l'utilisateur trouve plus facilement ses marques.
 	    
 	    $l = $this->vpdo->listePreparationsAFaire($_SESSION['idEmploye']);
@@ -410,34 +384,30 @@ public function afficheListeDevis()
 	    {
 	        $v=$this->vpdo->venteParSonId($ligneIdVente->idVente);
 	        $s=$this->vpdo->entrepriseParIdVente($ligneIdVente->idVente);
-	        $c=$v->idClient;
+	        $c=$this->vpdo->clientParSonId($v->idClient);
 	        $date = $this->vpdo->arrondirDate($v->dateCommande);
 	        
 	        
 	        //on prévoit des variables pour nos appels
 	        // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
 	        //On met aussi le bouton "Voir Detail", avec un lien dynamique pour envoyer l'utilisateur sur un lien différent en fonction du bouton sur lequel il clique
-	        $return = $return.'
-                <bloc>
-                    <row>
-                        <p>Code vente :<input id="idV" type="text" readonly value='.$ligneIdVente->idVente.'></p>
-                        <p>Date d\'envoi :<input type="text" readonly value="'.$date.'"></p>
-                    </row>
-                    <row>
-                        <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
-                        <p>Code client :<input type="text" readonly value='.$c.'></p>
-                    </row>
-                    <row>
-                       <a id="btnPrepa'.$v->idVente.'" class="btn-classique" data-idVente="'.$v->idVente.'">Préparer</a>
-                    </row>
-                </bloc>
-    ';
+	        $retour = $retour.'
+        <tr>
+            <td>'.$v->idVente.'</td>
+            <td>'.$date.'</td>
+            <td>'.$s->idSociete.' - '.$s->nom.'</td>
+            <td>'.$c->prenom.' '.$c->nom.'</td>
+            <td><a class="btn-classique" href="'.$v->idVente.'">Préparer</a></td>
+        </tr>
+                
+        ';
 	    }
 	    // on rajoute le bouton pour ajouter un Devis
-	    $return = $return.'</div>
-                       <input hidden id="idE" value="'.$_SESSION['idEmploye'].'">';
-    return $return;   // on retourne la totalité du texte
+	    $retour = $retour.'</tbody></table></div>
+           <input hidden id="idE" value="'.$_SESSION['idEmploye'].'">';
+	    return $retour;   // on retourne la totalité du texte
 	}
+		
 	
 	
 	
@@ -557,10 +527,14 @@ public function afficheListeDevis()
 	            //On récupère la première ligne des détails devis de la vente pour
 	            //Ensuite récupérer l'employé qui s'est chargé de ce devis.
 	            $e=$this->vpdo->employeParSonId($details->idEmploye);
+	            if($e!=null)
+	                $employe =  $e->idEmploye.' - '.$e->prenom.' '.$e->nom;
+	            else
+                    $employe = '';
 	            $s=$this->vpdo->entrepriseParIdVente($v->idVente);
 	            $c=$v->idClient;
 	            $p=$this->vpdo->totalFactureparIdVente($v->idVente);
-	            $date=$this->vpdo->arrondirDate($v->dateDevis);//Récupérer la date sans les heures et les minutes
+	            $date=$this->vpdo->arrondirDate($v->dateLivraison);//Récupérer la date sans les heures et les minutes
 	            
 	            //on prévoit des variables pour nos appels
 	            // on crée un bloc avec les informations qui seront multipliées pour chaque nouvelle ligne de la requête.
@@ -574,8 +548,8 @@ public function afficheListeDevis()
 	                '>
                     <row>
                         <p>Code vente :<input type="text" readonly value='.$v->idVente.'></p>
-                        <p>Code Employé :<input type="text" readonly value='.$e->idEmploye.' - '.$e->prenom.' '.$e->nom.'></p>
-                        <p>Date devis :<input type="text" readonly value="'.$date.'"></p>
+                        <p>Code Employé :<input type="text" readonly value="'.$employe.'"></p>
+                        <p>Date livraison :<input type="text" readonly value="'.$date.'"></p>
                     </row>
                     <row>
                         <p>Entreprise :<input type="text" readonly value='.$s->idSociete.' - '.$s->nom.'></p>
@@ -593,7 +567,7 @@ public function afficheListeDevis()
 	        $retour = $retour.'</div>';
 	        return $retour;   // on retourne la totalité du texte
 	}
-	
+		
 	public function afficheDetailsFacture($idVente)
 	{
 	    $retour ='';
@@ -1224,58 +1198,61 @@ while($ls = $lads->fetch(PDO::FETCH_OBJ))//j'utilise un while pour parcourir la 
 /* ************************************************************************************************************************************* */
 /* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */
 
-    public function listeLivraisons()   
-    {
-        $return='
-                    <a onclick="aide()" class="btn-classique" id="afficherAide" style="display:block">Afficher l\'aide</a>
-                    <a onclick="aide()" class="btn-classique" id="masquerAide" style="display:none">Masquer l\'aide</a>';
-        $return=$return.'<div class="conteneur border div-liste div-liste-entreprises">
-                    <p style="margin-left: 1em; display:none" id="aide">
-                        Voici l\'outil de gestion des Livraisons.<br>
-                        Vous pouvez accéder aux livraisons déjà livré en cliquant sur <b>"Voir Historique"</b><br>
-                        Si vous souhaitez confirmer une livraison, vous devez être sur la liste de <b>"livraison à faire"</b>,
-                        ensuite cliquer sur <b>"Voir détails"</b>.</p>
-                        <p id="btn-historique" style="display:block;"><a onclick=\'gestionHistorique()\' class="btn-classique">Voir Historique</a>
-                        <br><b>Listes des livraisons à faire:</b></p>
-                        <p id="btn-encours" style="display:none;"><a onclick=\'gestionHistorique()\' class="btn-classique">Voir les livraisons à faire</a>
-                        <br><b>Historique des livraisons:</b></p>
-                        <div id="encours" style="display:block;"> ';//présentation de la page, aide utilisateur
-        // j'ai deux bouton qui me permettent de gérer l'affichage des données.
-        $llaf = $this->vpdo->listeLivraisonsAFaire();//liste des livraisons sans idEmployé
-        $llf = $this->vpdo->listeLivraisonsFaite();//liste des livraisons avec idEmployé
-        while($ll = $llaf->fetch(PDO::FETCH_OBJ))// je lance ici la boucle pour les livraisons à faire
-        {
+  public function listeLivraisons()
+  {
+      $return='
+        <a onclick="aide()" class="btn-classique" id="afficherAide" style="display:block">Afficher l\'aide</a>
+        <a onclick="aide()" class="btn-classique" id="masquerAide" style="display:none">Masquer l\'aide</a>';
+      $return=$return.'<div class="conteneur border div-liste div-liste-entreprises">
+        <p style="margin-left: 1em; display:none" id="aide">
+            Voici l\'outil de gestion des Livraisons.<br>
+            Vous pouvez accéder aux livraisons déjà livré en cliquant sur <b>"Voir Historique"</b><br>
+            Si vous souhaitez confirmer une livraison, vous devez être sur la liste de <b>"livraison à faire"</b>,
+            ensuite cliquer sur <b>"Voir détails"</b>.</p>
+            <p id="btn-historique" style="display:block;"><a onclick=\'gestionHistorique()\' class="btn-classique">Voir Historique</a>
+            <br><b>Listes des livraisons à faire:</b></p>
+            <p id="btn-encours" style="display:none;"><a onclick=\'gestionHistorique()\' class="btn-classique">Voir les livraisons à faire</a>
+            <br><b>Historique des livraisons:</b></p>
+        <div id="encours" style="display:block;">
+        <table id="table"><thead><tr><th>Code Vente</th><th>Date Préparation</th><th></th></tr></thead><tbody>
+    ';//présentation de la page, aide utilisateur
+      // j'ai deux bouton qui me permettent de gérer l'affichage des données.
+      $llaf = $this->vpdo->listeLivraisonsAFaire();//liste des livraisons sans idEmployé
+      $llf = $this->vpdo->listeLivraisonsFaite();//liste des livraisons avec idEmployé
+      while($ll = $llaf->fetch(PDO::FETCH_OBJ))// je lance ici la boucle pour les livraisons à faire
+      {
             $vpi = $this->vpdo->venteParSonId($ll->idVente);
             $dateP = $this->vpdo->arrondirDate($vpi->datePrepa);
             $return = $return.'
-                    <bloc>
-                       	<row>
-                            <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$ll->idVente.'></p>
-                            <p>Date de la préparation :<input type="text" readonly maxlength="12" value="'.$dateP.'"></p>
-                            <a href="enCours/'.$ll->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
-                        </row>
-                    </bloc>';
-        }   
-        $return=$return.' </div><div id="historique"  style="display:none;">';
-        while($lf = $llf->fetch(PDO::FETCH_OBJ))//je lance ici la boucle pour les livraisons faite 
+            <tr>
+                <td>'.$vpi->idVente.'</td>
+                <td>'.$dateP.'</td>
+                <td><a class="btn-classique" href="'.$vpi->idVente.'">Voir Details</a></td>
+            </tr>';
+      }
+        $return=$return.'
+        </tbody></table></div><div id="historique" style="display:none;">
+        <table id="table"><thead><tr><th>Code Vente</th><th>Date Livraison</th><th>Employé</th><th></th></tr></thead><tbody>
+        ';
+        while($lf = $llf->fetch(PDO::FETCH_OBJ))//je lance ici la boucle pour les livraisons faite
         //je les met de base en display:none soit cacher
         {
-          $vpi = $this->vpdo->venteParSonId($lf->idVente);
-          $dateL = $this->vpdo->arrondirDate($vpi->dateLivraison);
-          $ei=$this->vpdo->employeParSonId($lf->idEmploye);
-          $return = $return.'
-                <bloc>
-                    <row>
-                        <p>Id de la Vente :<input type="text" readonly maxlength="12" value='.$lf->idVente.'></p>
-                        <p>Date de la livraison :<input type="text" readonly maxlength="12" value='.$dateL.'></p>
-                        <p>Id Employé : <input type="text" readonly  value="'.$ei->idEmploye.' - '.$ei->nom.'"></p>
-                        <a href="'.$lf->idVente.'" id="btn-voirDetail" class="btn-classique">Voir détails</a> 
-                    </row>
-                </bloc>';
+            $vpi = $this->vpdo->venteParSonId($lf->idVente);
+            $dateL = $this->vpdo->arrondirDate($vpi->dateLivraison);
+            $ei=$this->vpdo->employeParSonId($lf->idEmploye);
+            $return = $return.'
+            <tr>
+                <td>'.$vpi->idVente.'</td>
+                <td>'.$dateL.'</td>
+                <td>'.$ei->prenom.' '.$ei->nom.'</td>
+                <td><a class="btn-classique" href="'.$vpi->idVente.'">Voir Details</a></td>
+            </tr>';
         }
-        $return=$return.'</div></div>';
+        $return=$return.'</tbody></table></div></div>';
         return $return;
-    }  
+    }
+  
+
   /* ************************************************************************************************************************************* */
   /* ***************************************FIN*LISTE*DES*LIVRAISONS****DEBUT*DETAIL*LIVRAISON******************************************** */
   /* ************************************************************************************************************************************* */
